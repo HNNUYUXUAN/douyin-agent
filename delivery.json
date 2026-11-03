@@ -1,0 +1,117 @@
+{
+  "schema_version": 1,
+  "name": "douyin-agent",
+  "version": "2.1.0",
+  "files": [
+    ".gitattributes",
+    ".gitignore",
+    "AGENTS.md",
+    "AGENT_INSTALL.md",
+    "LICENSE",
+    "README.en.md",
+    "README.md",
+    "SKILL.md",
+    "THIRD_PARTY_NOTICES.md",
+    "conda-win-64.lock",
+    "docs/agent/en/acquisition.md",
+    "docs/agent/en/install.md",
+    "docs/agent/en/maintenance.md",
+    "docs/agent/en/onboarding.md",
+    "docs/agent/en/recovery.md",
+    "docs/agent/en/workflow.md",
+    "docs/agent/index.json",
+    "docs/agent/zh-CN/acquisition.md",
+    "docs/agent/zh-CN/install.md",
+    "docs/agent/zh-CN/maintenance.md",
+    "docs/agent/zh-CN/onboarding.md",
+    "docs/agent/zh-CN/recovery.md",
+    "docs/agent/zh-CN/workflow.md",
+    "docs/assets/README.md",
+    "docs/assets/case-long-en.png",
+    "docs/assets/case-long-zh.png",
+    "docs/assets/case-note-en.png",
+    "docs/assets/case-note-zh.png",
+    "docs/assets/case-short-en.png",
+    "docs/assets/case-short-zh.png",
+    "docs/assets/demo-en.gif",
+    "docs/assets/demo.gif",
+    "docs/assets/hero-en.png",
+    "docs/assets/hero-zh.png",
+    "docs/assets/scenes-en.png",
+    "docs/assets/scenes-zh.png",
+    "docs/assets/system-en.png",
+    "docs/assets/system-zh.png",
+    "docs/assets/workflow-en.png",
+    "docs/assets/workflow-zh.png",
+    "docs/cases/long.en.md",
+    "docs/cases/long.json",
+    "docs/cases/long.zh.md",
+    "docs/cases/note.en.md",
+    "docs/cases/note.json",
+    "docs/cases/note.zh.md",
+    "docs/cases/short.en.md",
+    "docs/cases/short.json",
+    "docs/cases/short.zh.md",
+    "docs/demo-data.json",
+    "docs/demo.html",
+    "docs/diagram-source.json",
+    "docs/diagrams.md",
+    "docs/render_diagrams.py",
+    "env.template",
+    "install.ps1",
+    "llms.txt",
+    "references/acceptance.md",
+    "references/browser.md",
+    "references/dependency-licenses.json",
+    "references/en/workflow.md",
+    "references/recovery.md",
+    "references/zh-CN/workflow.md",
+    "requirements.lock",
+    "scripts/da.py",
+    "scripts/legacy.py",
+    "scripts/onboarding.py",
+    "scripts/test_da.py",
+    "scripts/test_onboarding.py",
+    "scripts/test_unpack_images.py",
+    "scripts/unpack_images.py",
+    "setup.ps1"
+  ],
+  "requirements": [
+    {
+      "id": "python312",
+      "kind": "rebuild",
+      "handling": "setup.ps1 creates isolated Conda prefix using conda-win-64.lock and requirements.lock"
+    },
+    {
+      "id": "ffmpeg",
+      "kind": "host",
+      "handling": "FFmpeg and FFprobe must be installed on PATH"
+    },
+    {
+      "id": "host-capabilities",
+      "kind": "host",
+      "handling": "Host browser, search, file and media capabilities; connected Chrome preferred on this device"
+    },
+    {
+      "id": "agent-plan",
+      "kind": "configure",
+      "handling": "VOLC_AGENT_API_KEY process env overrides workspace .env; dedicated Plan endpoints"
+    },
+    {
+      "id": "media",
+      "kind": "input",
+      "handling": "User authorized media; never included in distribution"
+    },
+    {
+      "id": "search",
+      "kind": "configure",
+      "handling": "Optional Yuanbao/Bocha keys in process env or workspace .env"
+    }
+  ],
+  "previous_manifests": {
+    "2.0.0": [
+      "3413237b5745e8e940fcf713af2d42cdabcad695027a91a790fcb5d131260248",
+      "c986d9288202bec18aaf46c45a1db2f75fdb5ed3fa17e102aa52ef2bcdb7b129"
+    ]
+  }
+}

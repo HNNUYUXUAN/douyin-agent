@@ -1,0 +1,154 @@
+{
+  "schema_version": 1,
+  "name": "douyin-agent",
+  "default_language": "zh-CN",
+  "entrypoints": {
+    "repository": "../../AGENTS.md",
+    "install": "../../AGENT_INSTALL.md",
+    "skill": "../../SKILL.md",
+    "llms": "../../llms.txt"
+  },
+  "path_base": "directory_containing_this_index",
+  "guides": [
+    {
+      "id": "install",
+      "title": {
+        "zh-CN": "安装与升级",
+        "en": "Install and upgrade"
+      },
+      "paths": {
+        "zh-CN": "zh-CN/install.md",
+        "en": "en/install.md"
+      }
+    },
+    {
+      "id": "onboarding",
+      "title": {
+        "zh-CN": "首次使用与配置恢复",
+        "en": "First use and configuration recovery"
+      },
+      "paths": {
+        "zh-CN": "zh-CN/onboarding.md",
+        "en": "en/onboarding.md"
+      }
+    },
+    {
+      "id": "acquisition",
+      "title": {
+        "zh-CN": "检索、取得与完整性",
+        "en": "Search, acquisition and completeness"
+      },
+      "paths": {
+        "zh-CN": "zh-CN/acquisition.md",
+        "en": "en/acquisition.md"
+      },
+      "keywords": {
+        "zh-CN": [
+          "抖音检索",
+          "站内搜索",
+          "免费解析",
+          "逐张下载受阻",
+          "图文 ZIP",
+          "批量图片",
+          "解包",
+          "unpack_images.py",
+          "owned_artifacts"
+        ],
+        "en": [
+          "Douyin search",
+          "site keyword search",
+          "free parser",
+          "individual image download failure",
+          "image ZIP",
+          "bulk images",
+          "unpack",
+          "unpack_images.py",
+          "owned_artifacts"
+        ]
+      }
+    },
+    {
+      "id": "workflow",
+      "title": {
+        "zh-CN": "理解作品与交付",
+        "en": "Understand and deliver"
+      },
+      "paths": {
+        "zh-CN": "zh-CN/workflow.md",
+        "en": "en/workflow.md"
+      }
+    },
+    {
+      "id": "recovery",
+      "title": {
+        "zh-CN": "恢复、清理与迁移",
+        "en": "Recovery, cleanup and migration"
+      },
+      "paths": {
+        "zh-CN": "zh-CN/recovery.md",
+        "en": "en/recovery.md"
+      }
+    },
+    {
+      "id": "maintenance",
+      "title": {
+        "zh-CN": "维护、验收与发布",
+        "en": "Maintenance, acceptance and release"
+      },
+      "paths": {
+        "zh-CN": "zh-CN/maintenance.md",
+        "en": "en/maintenance.md"
+      }
+    }
+  ],
+  "command_entry": "PYTHON SKILL/scripts/da.py --workspace WORKSPACE COMMAND",
+  "read_only_commands": [
+    "doctor",
+    "status",
+    "onboard --check"
+  ],
+  "local_record_command": "onboard --record FILE",
+  "task_flow": [
+    "cleanup --expired",
+    "adopt",
+    "integrity",
+    "preview",
+    "run",
+    "finalize",
+    "validate"
+  ],
+  "host_operations": [
+    "browser_connection",
+    "douyin_search",
+    "acquisition",
+    "usage_communication",
+    "original_frame_review"
+  ],
+  "local_context_files": [
+    "workspace.json",
+    "onboarding.json",
+    "agent-context.json"
+  ],
+  "constraints": [
+    "Do not expose credentials",
+    "Do not infer cloud readiness from local checks",
+    "Preview before paid calls",
+    "Preserve unresolved request reservations",
+    "Delete only proven task-owned media",
+    "No universal-download guarantee"
+  ],
+  "helper_commands": [
+    {
+      "id": "unpack_images",
+      "kind": "standalone_helper_not_da_subcommand",
+      "script_path": "../../scripts/unpack_images.py",
+      "command_entry": "PYTHON SKILL/scripts/unpack_images.py --archive ABS_ZIP --workspace ABS_WORKSPACE --output NEW_ABS_DIR --expected-images N",
+      "guide_id": "acquisition",
+      "conditions": [
+        "Use only an acquired image ZIP and a new short ASCII workspace subdirectory",
+        "Natural filename order requires host verification against the original work",
+        "Preserve user-imported archives; register only proven task-owned copies"
+      ]
+    }
+  ]
+}

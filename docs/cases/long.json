@@ -1,0 +1,136 @@
+{
+  "schema_version": 1,
+  "case": "long",
+  "source": {
+    "url": "https://www.douyin.com/video/7493866919565610291",
+    "id": "7493866919565610291",
+    "title": "8分钟搞懂“编程的鬼打墙”——递归",
+    "author": "林粒粒呀",
+    "kind": "video"
+  },
+  "model": "doubao-seed-2.1-pro",
+  "actual_submissions": {
+    "requests": 22,
+    "images": 102,
+    "audio_seconds": 506.21678
+  },
+  "billing_verified": false,
+  "status": "completed",
+  "media_retired": true,
+  "integrity": "passed",
+  "text_validation": {
+    "valid": true,
+    "errors": []
+  },
+  "review": {
+    "status": "sampled",
+    "completed_at": "2026-11-03T01:29:28.313540+00:00",
+    "report_sha256": "d76347db20e8bdf9cebba3a9497ae765c2963d3cd3bd26de2a9b3a0dbfe659b8",
+    "scope": {
+      "zh-CN": "4张关键代码/公式帧，加取得阶段首尾检查；原生语音时序核对。抽样复核，未逐帧审看、未编译运行。",
+      "en": "Four critical code/formula frames plus acquisition head/tail checks; native speech timing verified. Sampled review, not every-frame inspection or code execution."
+    }
+  },
+  "evidence": [
+    {
+      "id": "f00065",
+      "kind": "reviewed_frame",
+      "global_time_seconds": 308.084,
+      "sha256": "47206f8fe7aa61823348a355cbc8b9fcc60a7f4966881bc4133b549869eb914e",
+      "observation": {
+        "zh-CN": "通用阶乘关系式可见；这是全局抽帧位置，不是语音原生时间。",
+        "en": "The general factorial relation is visible; this is a global frame position, not a native speech timestamp."
+      }
+    },
+    {
+      "id": "f00072",
+      "kind": "reviewed_frame",
+      "global_time_seconds": 349.162,
+      "sha256": "3313463d7d958472d799feab941657b4b31af9fde2f9573e9c92d4bdb1a3cfd9",
+      "observation": {
+        "zh-CN": "课件基例使用 n == 0。",
+        "en": "The teaching slide uses n == 0 as its base case."
+      }
+    },
+    {
+      "id": "f00080",
+      "kind": "reviewed_frame",
+      "global_time_seconds": 386.132,
+      "sha256": "a7bc0dc54e0de564f8e872be49f3fcd409faa7ee2900f4f55bcf5ebf499ea4f8",
+      "observation": {
+        "zh-CN": "完整演示改用 n <= 0；不能据此宣称作品定义了负数阶乘。",
+        "en": "The complete demonstration uses n <= 0; this does not establish a definition of negative factorials."
+      }
+    },
+    {
+      "id": "f00097",
+      "kind": "reviewed_frame",
+      "global_time_seconds": 484.719,
+      "sha256": "c0dbd3bf3569491a817ff5144e40045fb1e2f074a6c8ebc03cb6ffdf3c44c790",
+      "observation": {
+        "zh-CN": "画面返回链最终显示120；本次没有运行代码。",
+        "en": "The displayed return chain reaches 120; code was not executed in this review."
+      }
+    },
+    {
+      "kind": "native_speech_timing",
+      "segment_index_1based": 56,
+      "chunk_offset_seconds": 300,
+      "native_start_ms": 1640,
+      "native_end_ms": 8720,
+      "global_start_seconds": 301.64,
+      "global_end_seconds": 308.72,
+      "observation": {
+        "zh-CN": "该语音段解释阶乘的递推关系；时间来自服务器字段，未由画面位置倒推。",
+        "en": "This speech segment explains the factorial recurrence; timing comes from server fields, not subtraction from a frame position."
+      }
+    }
+  ],
+  "publication": {
+    "zh-CN": "经宿主修订的公共摘要；不含原媒体、完整转写或完整代码。",
+    "en": "Public summary of the host-corrected result; no original media, full transcript or full code."
+  },
+  "duration_seconds": 506.21678,
+  "audio_coverage": {
+    "chunks_seconds": [
+      [
+        0,
+        300
+      ],
+      [
+        300,
+        506.21678
+      ]
+    ],
+    "native_speech_segments": 94,
+    "timestamp_basis": "server_native_time_plus_chunk_offset"
+  },
+  "summary": {
+    "zh-CN": "通过自调用、终止条件和阶乘调用/返回链解释递归。报告区分教学画面、语音依据与静态边界推断。",
+    "en": "Explains recursion through self-calls, a reachable base case and factorial call/return chains. The result separates teaching visuals, speech evidence and static boundary inferences."
+  },
+  "corrections": [
+    {
+      "zh-CN": "移除把全局抽帧时间减去300秒后冒充ASR原生时间的表述；画面与语音时间分别核对。",
+      "en": "Removed claims that subtracting 300 seconds from a global frame time produced native ASR timing; frame and speech clocks were checked separately."
+    },
+    {
+      "zh-CN": "时间线按真实证据范围修订，教学搜索页面不宣称为实时网页。",
+      "en": "Timeline ranges were corrected to actual evidence, and a teaching search-page visual was not claimed to be a live website."
+    }
+  ],
+  "limitations": {
+    "zh-CN": [
+      "本机实测，不代表异机或所有作品可用。",
+      "模型原始输出可能有错，公共摘要以宿主修订后的报告和复核记录为准。",
+      "实际提交量是本次记录，不是固定成本、速度或平台结算承诺。",
+      "媒体已清理；哈希用于来源追溯，不提供失效本地媒体链接。"
+    ],
+    "en": [
+      "Local evidence does not establish other-device or universal-work support.",
+      "Original model output may be wrong; this summary follows the host-corrected report and review.",
+      "Submitted quantities describe this run, not fixed cost, speed or settled billing.",
+      "Media were removed; hashes support traceability without broken local-media links."
+    ]
+  }
+}

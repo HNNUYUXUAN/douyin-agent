@@ -1,0 +1,160 @@
+{
+  "schema_version": 1,
+  "case": "short",
+  "source": {
+    "url": "https://www.douyin.com/video/7683763028419956019",
+    "id": "7683763028419956019",
+    "title": "递归到底是什么？3分钟看懂递归",
+    "author": "猫小申",
+    "kind": "video"
+  },
+  "model": "doubao-seed-2.1-pro",
+  "duration_seconds": 174.375,
+  "actual_submissions": {
+    "requests": 15,
+    "images": 68,
+    "audio_seconds": 174.375
+  },
+  "request_stages": {
+    "asr": 1,
+    "vision": 11,
+    "merge": 2,
+    "report": 1
+  },
+  "audio_coverage": {
+    "fresh_asr": true,
+    "chunks_seconds": [
+      [
+        0,
+        174.375
+      ]
+    ],
+    "native_speech_segments": 41,
+    "timestamp_basis": "server_native_time_plus_chunk_offset"
+  },
+  "billing_verified": false,
+  "status": "completed",
+  "media_retired": true,
+  "integrity": "passed",
+  "text_validation": {
+    "valid": true,
+    "errors": []
+  },
+  "after_cleanup_validation": {
+    "valid": true,
+    "errors": []
+  },
+  "review": {
+    "status": "sampled",
+    "completed_at": "2026-11-03T02:06:31.829993+00:00",
+    "report_sha256": "090ca05e005036175dd49424c8fdae17f89d5257492e428ada7e20bdd6193585",
+    "scope": {
+      "zh-CN": "6张关键原帧及ASR响应文字核对；抽样审阅，未逐帧审看、未编译运行代码。",
+      "en": "Six key original frames and ASR response text checked; sampled review, not every-frame inspection or code compilation/execution."
+    }
+  },
+  "summary": {
+    "zh-CN": "用5辆车排队的动画解释递归：相同规则缩小问题，到队首取得确定答案，再逐层返回。区分动画类比、可见文字及语音不确定项。",
+    "en": "An animation of five cars explains recursion through smaller same-rule problems, a definite answer at the front, and successive returns. The result separates the analogy, visible text and speech uncertainty."
+  },
+  "evidence": [
+    {
+      "id": "f00007",
+      "kind": "reviewed_frame",
+      "global_time_seconds": 12.75,
+      "sha256": "899527d075fca1eb3aa1a24512fe84d8d0cf51fdfdf400a1dd03d2253d52aa94",
+      "observation": {
+        "zh-CN": "开场队列有5辆车，并给出队尾到队首的角色标签。",
+        "en": "The opening queue shows five cars and labels the roles from the back to the front."
+      }
+    },
+    {
+      "id": "f00032",
+      "kind": "reviewed_frame",
+      "global_time_seconds": 74.738,
+      "sha256": "4447d6ee1e025f19a1a40d2c76b34cc0f8cdbb2cd678a0169281690b41e7bc4f",
+      "observation": {
+        "zh-CN": "队首气泡原文为“我第一啊”，复核修正了不精确转述。",
+        "en": "The front character’s bubble reads “我第一啊”; review corrected an imprecise rendering."
+      }
+    },
+    {
+      "id": "f00046",
+      "kind": "reviewed_frame",
+      "global_time_seconds": 103.669,
+      "sha256": "9eb27b2d4dfa493be1b95b95938c214efc9a5e81e4d602e9dc0bdc9008508350",
+      "observation": {
+        "zh-CN": "画面把当前位置与前一位置加一关联，强调规则不变。",
+        "en": "The visual relates the current position to the previous position plus one, emphasizing an unchanged rule."
+      }
+    },
+    {
+      "id": "f00053",
+      "kind": "reviewed_frame",
+      "global_time_seconds": 125.367,
+      "sha256": "458fe5a2a5343fb190b0d6d0bbad5f9676cc8785ed337dfd29d18e6fdf7266e8",
+      "observation": {
+        "zh-CN": "画面明确标出终止条件，询问在队首停止。",
+        "en": "The image explicitly labels the base case: questioning stops at the front of the queue."
+      }
+    },
+    {
+      "id": "f00065",
+      "kind": "reviewed_frame",
+      "global_time_seconds": 168.764,
+      "sha256": "6ce785580be686e5fd7243ee4365924f9c803576126d62da9c0e979ec4b17c2c",
+      "observation": {
+        "zh-CN": "返回后各车位置确定，说明调用后仍有逐层回传过程。",
+        "en": "Positions are resolved after the return sequence, illustrating work propagated back through the chain."
+      }
+    },
+    {
+      "id": "f00068",
+      "kind": "reviewed_frame",
+      "global_time_seconds": 174.275,
+      "sha256": "eaf0995033e33c2af280cf354b11b31ddf92779c367edc59f98ad1207622dd07",
+      "observation": {
+        "zh-CN": "尾帧仍有5辆车但没有角色标签，不能仅凭尾帧确定角色身份。",
+        "en": "The final frame still shows five cars but no role labels; it cannot establish character identities by itself."
+      }
+    }
+  ],
+  "corrections": [
+    {
+      "zh-CN": "抽帧的全局位置与ASR原生时间分别标注，不把语句范围当作单帧持续时间。",
+      "en": "Global frame positions and native ASR times are distinguished; an utterance range is not a frame duration."
+    },
+    {
+      "zh-CN": "首个视觉请求只有8帧，不代表全任务缺少后续画面；全片实际提交68帧。",
+      "en": "The first vision request contains only eight frames; it does not describe whole-job coverage, which submitted 68 frames."
+    },
+    {
+      "zh-CN": "核对原帧，修正队首对话气泡文字。",
+      "en": "Checked the original frame and corrected the front character’s speech-bubble text."
+    },
+    {
+      "zh-CN": "转写缺字保留为识别不确定项，不能据此断言原视频音频截断。",
+      "en": "Missing ASR words remain recognition uncertainty and do not establish that the source audio was truncated."
+    }
+  ],
+  "limitations": {
+    "zh-CN": [
+      "本机案例，不代表异机或所有作品都能取得。",
+      "动画类比不等于程序实现或正确性证明。",
+      "未完整人工复听；模型原始输出有误时，以修订报告和复核记录为准。",
+      "实际提交量不是固定费用或平台结算账单。",
+      "登记媒体已清理；仅保留摘要、证据哈希和文字观察，不提供失效媒体链接。"
+    ],
+    "en": [
+      "A local case does not establish other-device or universal acquisition support.",
+      "An animated analogy is not an implementation or correctness proof.",
+      "No full manual audio listening; corrected report/review take precedence over erroneous model output.",
+      "Submitted quantities are not fixed costs or settled billing.",
+      "Registered media were removed; summaries, hashes and text observations remain without broken media links."
+    ]
+  },
+  "publication": {
+    "zh-CN": "经宿主修订的公共摘要；不含原媒体、完整转写或私人请求记录。",
+    "en": "Public summary of the host-corrected result, without original media, full transcription or private request records."
+  }
+}

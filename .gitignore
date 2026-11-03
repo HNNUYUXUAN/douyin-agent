@@ -1,0 +1,11 @@
+.env
+envs/
+cache/
+out/
+qa/
+__pycache__/
+*.pending.json
+
+.local/
+agent-context.json
+onboarding.json

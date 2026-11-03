@@ -1,0 +1,918 @@
+{
+  "schema_version": 1,
+  "palette": {
+    "paper": "#FFF9F0",
+    "ink": "#172336",
+    "muted": "#516072",
+    "coral": "#FF725E",
+    "blue": "#2468EF",
+    "yellow": "#FFE18B",
+    "blue_light": "#E8F0FF",
+    "coral_light": "#FFE5DE",
+    "white": "#FFFFFF",
+    "line": "#A9B4BF"
+  },
+  "source_documents": [
+    "AGENT_INSTALL.md",
+    "SKILL.md",
+    "docs/agent/zh-CN/onboarding.md",
+    "docs/agent/zh-CN/workflow.md",
+    "references/recovery.md",
+    "scripts/da.py"
+  ],
+  "diagrams": {
+    "workflow": {
+      "size": [
+        1600,
+        2320
+      ],
+      "title": {
+        "zh": "从一句话，到可追溯的理解",
+        "en": "From a request to traceable understanding"
+      },
+      "subtitle": {
+        "zh": "首次配置一次完成，日常任务按证据前进",
+        "en": "Configure once. Follow the evidence on every task."
+      },
+      "nodes": [
+        {
+          "id": "install",
+          "box": [
+            70,
+            210,
+            970,
+            150
+          ],
+          "color": "coral",
+          "index": "01",
+          "title": {
+            "zh": "自然语言安装",
+            "en": "Install with a natural-language request"
+          },
+          "body": {
+            "zh": [
+              "仓库链接 → Codex 读安装指南 → 检查已有版本"
+            ],
+            "en": [
+              "Repository link → installation guide → existing version"
+            ]
+          }
+        },
+        {
+          "id": "setup",
+          "box": [
+            70,
+            425,
+            970,
+            190
+          ],
+          "color": "blue",
+          "index": "02",
+          "title": {
+            "zh": "准备环境与首次连接",
+            "en": "Prepare the environment and connections"
+          },
+          "body": {
+            "zh": [
+              "本地环境与配置 · 连接 Chrome / Edge · 打开抖音",
+              "Agent Plan 页面就绪；用户登录、购买、填写 Key"
+            ],
+            "en": [
+              "Runtime and config · Chrome / Edge · Douyin",
+              "User signs in, buys Agent Plan, enters its key locally"
+            ]
+          }
+        },
+        {
+          "id": "request",
+          "box": [
+            70,
+            680,
+            970,
+            150
+          ],
+          "color": "yellow",
+          "index": "03",
+          "title": {
+            "zh": "提出任务，核对作品",
+            "en": "Find and verify the work"
+          },
+          "body": {
+            "zh": [
+              "浏览器检索或打开链接 · 核对作者、ID、文案、时长 / 图序"
+            ],
+            "en": [
+              "Search / link → author, ID, caption, duration / image order"
+            ]
+          }
+        },
+        {
+          "id": "acquire",
+          "box": [
+            70,
+            895,
+            970,
+            165
+          ],
+          "color": "blue",
+          "index": "04",
+          "title": {
+            "zh": "获取媒体，检查完整性",
+            "en": "Acquire media and check completeness"
+          },
+          "body": {
+            "zh": [
+              "直接下载优先；必要时尝试免费解析来源",
+              "核对身份、时长、全片解码、首尾或图文数量与顺序"
+            ],
+            "en": [
+              "Direct download first; free public parsers when needed",
+              "Identity · duration · decode · ends · image count / order"
+            ]
+          }
+        },
+        {
+          "id": "preview",
+          "box": [
+            70,
+            1125,
+            970,
+            150
+          ],
+          "color": "yellow",
+          "index": "05",
+          "title": {
+            "zh": "预览用量，确认授权",
+            "en": "Preview usage and confirm authorization"
+          },
+          "body": {
+            "zh": [
+              "图片、音频、模型、缓存与请求上限 · 已有有效授权可沿用"
+            ],
+            "en": [
+              "Images · audio · model · cache · limit · valid authorization"
+            ]
+          }
+        },
+        {
+          "id": "analyze",
+          "box": [
+            70,
+            1340,
+            970,
+            170
+          ],
+          "color": "coral",
+          "index": "06",
+          "title": {
+            "zh": "Agent Plan 分段理解",
+            "en": "Analyze segments with Agent Plan"
+          },
+          "body": {
+            "zh": [
+              "全音频转写 + 原生时间；自适应画面采样",
+              "先逐段形成证据 JSON，再汇总 Markdown"
+            ],
+            "en": [
+              "Full-audio ASR / native time · sampled visuals",
+              "Segment evidence JSON → Markdown report"
+            ]
+          }
+        },
+        {
+          "id": "review",
+          "box": [
+            70,
+            1575,
+            970,
+            150
+          ],
+          "color": "blue",
+          "index": "07",
+          "title": {
+            "zh": "复核关键证据",
+            "en": "Review key evidence"
+          },
+          "body": {
+            "zh": [
+              "review_ready 后，宿主看原帧、核对数字、代码、公式与图序"
+            ],
+            "en": [
+              "review_ready → frames, digits, code, formulas, order"
+            ]
+          }
+        },
+        {
+          "id": "finalize",
+          "box": [
+            70,
+            1790,
+            970,
+            150
+          ],
+          "color": "yellow",
+          "index": "08",
+          "title": {
+            "zh": "finalize：校验文字，再清理媒体",
+            "en": "Finalize: validate text, then remove media"
+          },
+          "body": {
+            "zh": [
+              "仅清理有取得记录与哈希的任务副本；成功才 completed"
+            ],
+            "en": [
+              "Only registered task copies; completed after success"
+            ]
+          }
+        },
+        {
+          "id": "result",
+          "box": [
+            70,
+            2005,
+            970,
+            180
+          ],
+          "color": "blue",
+          "index": "09",
+          "title": {
+            "zh": "留下 Markdown / JSON",
+            "en": "Keep Markdown / JSON"
+          },
+          "body": {
+            "zh": [
+              "报告、转写时序、证据、状态、请求与清理记录",
+              "用户原件、源码、环境与私密配置保留"
+            ],
+            "en": [
+              "Report · timing · evidence · request / cleanup records",
+              "Keep user originals, code, runtime and private config"
+            ]
+          }
+        },
+        {
+          "id": "restricted",
+          "box": [
+            1140,
+            850,
+            390,
+            235
+          ],
+          "color": "coral",
+          "branch": true,
+          "title": {
+            "zh": "受限作品",
+            "en": "Restricted work"
+          },
+          "body": {
+            "zh": [
+              "不完整 / 完整性未知",
+              "停止该项收费理解",
+              "其他独立作品继续"
+            ],
+            "en": [
+              "Incomplete or unknown",
+              "Stop paid analysis",
+              "Other items continue"
+            ]
+          }
+        },
+        {
+          "id": "recover",
+          "box": [
+            1140,
+            1195,
+            390,
+            370
+          ],
+          "color": "blue",
+          "branch": true,
+          "title": {
+            "zh": "暂停与恢复",
+            "en": "Pause and recover"
+          },
+          "body": {
+            "zh": [
+              "优先复用缓存",
+              "核对未决原请求",
+              "超时不自动重提",
+              "保留原预算占用",
+              "恢复后更新预览"
+            ],
+            "en": [
+              "Reuse cached results",
+              "Reconcile pending calls",
+              "No automatic retry",
+              "Keep reservations",
+              "Update preview"
+            ]
+          }
+        },
+        {
+          "id": "cleanup",
+          "box": [
+            1140,
+            1750,
+            390,
+            235
+          ],
+          "color": "yellow",
+          "branch": true,
+          "title": {
+            "zh": "清理待完成",
+            "en": "Cleanup pending"
+          },
+          "body": {
+            "zh": [
+              "记录删除失败原因",
+              "修复占用或所有权",
+              "幂等重试 finalize"
+            ],
+            "en": [
+              "Record failed deletion",
+              "Fix lock / ownership",
+              "Retry finalize safely"
+            ]
+          }
+        }
+      ],
+      "edges": [
+        {
+          "from": "install",
+          "to": "setup",
+          "points": [
+            [
+              555,
+              360
+            ],
+            [
+              555,
+              425
+            ]
+          ]
+        },
+        {
+          "from": "setup",
+          "to": "request",
+          "points": [
+            [
+              555,
+              615
+            ],
+            [
+              555,
+              680
+            ]
+          ]
+        },
+        {
+          "from": "request",
+          "to": "acquire",
+          "points": [
+            [
+              555,
+              830
+            ],
+            [
+              555,
+              895
+            ]
+          ]
+        },
+        {
+          "from": "acquire",
+          "to": "preview",
+          "points": [
+            [
+              555,
+              1060
+            ],
+            [
+              555,
+              1125
+            ]
+          ]
+        },
+        {
+          "from": "preview",
+          "to": "analyze",
+          "points": [
+            [
+              555,
+              1275
+            ],
+            [
+              555,
+              1340
+            ]
+          ]
+        },
+        {
+          "from": "analyze",
+          "to": "review",
+          "points": [
+            [
+              555,
+              1510
+            ],
+            [
+              555,
+              1575
+            ]
+          ]
+        },
+        {
+          "from": "review",
+          "to": "finalize",
+          "points": [
+            [
+              555,
+              1725
+            ],
+            [
+              555,
+              1790
+            ]
+          ]
+        },
+        {
+          "from": "finalize",
+          "to": "result",
+          "points": [
+            [
+              555,
+              1940
+            ],
+            [
+              555,
+              2005
+            ]
+          ]
+        },
+        {
+          "from": "acquire",
+          "to": "restricted",
+          "points": [
+            [
+              1040,
+              977
+            ],
+            [
+              1140,
+              977
+            ]
+          ],
+          "color": "coral"
+        },
+        {
+          "from": "analyze",
+          "to": "recover",
+          "points": [
+            [
+              1040,
+              1425
+            ],
+            [
+              1140,
+              1425
+            ]
+          ],
+          "color": "blue"
+        },
+        {
+          "from": "recover",
+          "to": "preview",
+          "points": [
+            [
+              1335,
+              1195
+            ],
+            [
+              1335,
+              1100
+            ],
+            [
+              555,
+              1100
+            ],
+            [
+              555,
+              1125
+            ]
+          ],
+          "color": "blue",
+          "dashed": true
+        },
+        {
+          "from": "finalize",
+          "to": "cleanup",
+          "points": [
+            [
+              1040,
+              1865
+            ],
+            [
+              1140,
+              1865
+            ]
+          ],
+          "color": "coral",
+          "both": true
+        }
+      ],
+      "note": {
+        "zh": "本地导入可跳过浏览器获取。新增画面问题需重新取得素材与预览。",
+        "en": "Local imports skip browser acquisition. New visual questions require reacquisition and a preview."
+      }
+    },
+    "system": {
+      "size": [
+        1800,
+        1750
+      ],
+      "title": {
+        "zh": "谁负责什么，内容流向哪里",
+        "en": "Responsibilities and data flow"
+      },
+      "subtitle": {
+        "zh": "浏览器负责获取；本地负责验证与留存；Agent Plan 负责理解",
+        "en": "Browser acquisition · local verification and retention · Agent Plan understanding"
+      },
+      "nodes": [
+        {
+          "id": "user",
+          "box": [
+            60,
+            220,
+            480,
+            210
+          ],
+          "color": "coral",
+          "title": {
+            "zh": "用户",
+            "en": "You"
+          },
+          "body": {
+            "zh": [
+              "提出目标",
+              "完成登录、购买与本地 Key 填写"
+            ],
+            "en": [
+              "Describe the goal",
+              "Sign in / buy a plan",
+              "Enter key locally"
+            ]
+          }
+        },
+        {
+          "id": "host",
+          "box": [
+            730,
+            220,
+            1010,
+            210
+          ],
+          "color": "blue",
+          "title": {
+            "zh": "Codex 宿主 + douyin-agent",
+            "en": "Codex host + douyin-agent"
+          },
+          "body": {
+            "zh": [
+              "读取技能 · 编排安装与任务 · 操作浏览器",
+              "展示用量预览 · 复核关键证据 · 交付报告"
+            ],
+            "en": [
+              "Read skill · orchestrate setup and tasks · operate browser",
+              "Preview usage · review key evidence · deliver reports"
+            ]
+          }
+        },
+        {
+          "id": "browser",
+          "box": [
+            60,
+            700,
+            480,
+            360
+          ],
+          "color": "yellow",
+          "title": {
+            "zh": "Chrome / Edge",
+            "en": "Chrome / Edge"
+          },
+          "body": {
+            "zh": [
+              "宿主官方浏览器连接",
+              "使用选定的用户配置",
+              "检索、核对、获取媒体",
+              "登录 / 验证由用户完成"
+            ],
+            "en": [
+              "Host browser connection",
+              "Selected browser profile",
+              "Find, verify, acquire media",
+              "User handles sign-in / CAPTCHA"
+            ]
+          }
+        },
+        {
+          "id": "cli",
+          "box": [
+            730,
+            700,
+            480,
+            360
+          ],
+          "color": "coral",
+          "title": {
+            "zh": "本地 CLI 与工作区",
+            "en": "Local CLI + workspace"
+          },
+          "body": {
+            "zh": [
+              "完整性检查 · 抽帧与音频分段",
+              "预览 · 缓存 · 请求账本",
+              "调用 Agent Plan",
+              "校验结果 · 清理任务副本"
+            ],
+            "en": [
+              "Integrity and sampling",
+              "Audio chunks · request ledger",
+              "Cache · model calls",
+              "Validate · clean owned media"
+            ]
+          }
+        },
+        {
+          "id": "cloud",
+          "box": [
+            1370,
+            700,
+            370,
+            360
+          ],
+          "color": "blue",
+          "title": {
+            "zh": "Agent Plan",
+            "en": "Agent Plan"
+          },
+          "body": {
+            "zh": [
+              "专属 Key 鉴权",
+              "接收音频与采样图像",
+              "原生时间转写",
+              "视觉理解与综合分析"
+            ],
+            "en": [
+              "Dedicated key",
+              "Audio + sampled images",
+              "Native-timed ASR",
+              "Vision + synthesis"
+            ]
+          }
+        },
+        {
+          "id": "sources",
+          "box": [
+            60,
+            1260,
+            480,
+            290
+          ],
+          "color": "yellow",
+          "title": {
+            "zh": "公开作品来源",
+            "en": "Public work sources"
+          },
+          "body": {
+            "zh": [
+              "抖音：作品、文案与身份",
+              "免费解析站：需要时尝试",
+              "解析站仅收到公开链接",
+              "不发送账号凭据或 Key"
+            ],
+            "en": [
+              "Douyin: work, caption, ID",
+              "Free parsers when needed",
+              "Only public URLs to parsers",
+              "No credentials to parsers"
+            ]
+          }
+        },
+        {
+          "id": "text",
+          "box": [
+            730,
+            1260,
+            480,
+            290
+          ],
+          "color": "blue",
+          "title": {
+            "zh": "长期文字结果",
+            "en": "Durable text results"
+          },
+          "body": {
+            "zh": [
+              "Markdown / JSON",
+              "报告 · 转写时序 · 证据哈希",
+              "状态 · 请求与清理记录",
+              "媒体清理后仍可读取"
+            ],
+            "en": [
+              "Markdown / JSON",
+              "Reports · timing · evidence",
+              "State · requests · cleanup",
+              "Readable without media"
+            ]
+          }
+        },
+        {
+          "id": "media",
+          "box": [
+            1370,
+            1260,
+            370,
+            290
+          ],
+          "color": "coral",
+          "title": {
+            "zh": "临时任务媒体",
+            "en": "Task media"
+          },
+          "body": {
+            "zh": [
+              "视频与音频",
+              "抽帧与原图",
+              "复核后逐项清理",
+              "仅限登记副本",
+              "保留用户原件"
+            ],
+            "en": [
+              "Video · audio · images",
+              "Remove registered copies",
+              "after evidence review",
+              "Keep user originals"
+            ]
+          }
+        }
+      ],
+      "edges": [
+        {
+          "from": "user",
+          "to": "host",
+          "points": [
+            [
+              540,
+              325
+            ],
+            [
+              730,
+              325
+            ]
+          ],
+          "both": true
+        },
+        {
+          "from": "host",
+          "to": "browser",
+          "points": [
+            [
+              1000,
+              430
+            ],
+            [
+              1000,
+              555
+            ],
+            [
+              300,
+              555
+            ],
+            [
+              300,
+              700
+            ]
+          ]
+        },
+        {
+          "from": "host",
+          "to": "cli",
+          "points": [
+            [
+              970,
+              555
+            ],
+            [
+              970,
+              700
+            ]
+          ],
+          "both": true
+        },
+        {
+          "from": "browser",
+          "to": "cli",
+          "points": [
+            [
+              540,
+              880
+            ],
+            [
+              730,
+              880
+            ]
+          ],
+          "label": {
+            "zh": "媒体",
+            "en": "Media"
+          },
+          "label_at": [
+            635,
+            830
+          ]
+        },
+        {
+          "from": "cli",
+          "to": "cloud",
+          "points": [
+            [
+              1210,
+              880
+            ],
+            [
+              1370,
+              880
+            ]
+          ],
+          "both": true,
+          "color": "blue",
+          "label": {
+            "zh": "模型调用",
+            "en": "Plan API"
+          },
+          "label_at": [
+            1290,
+            815
+          ]
+        },
+        {
+          "from": "browser",
+          "to": "sources",
+          "points": [
+            [
+              300,
+              1060
+            ],
+            [
+              300,
+              1260
+            ]
+          ],
+          "both": true
+        },
+        {
+          "from": "cli",
+          "to": "text",
+          "points": [
+            [
+              970,
+              1060
+            ],
+            [
+              970,
+              1260
+            ]
+          ]
+        },
+        {
+          "from": "cli",
+          "to": "media",
+          "points": [
+            [
+              1130,
+              1060
+            ],
+            [
+              1130,
+              1160
+            ],
+            [
+              1555,
+              1160
+            ],
+            [
+              1555,
+              1260
+            ]
+          ]
+        }
+      ],
+      "note": {
+        "zh": "云端理解使用已预览的素材范围。源码、环境、私密配置与用户原件保留。",
+        "en": "Cloud calls use the previewed scope. Preserve source, runtime, private config, and user originals."
+      }
+    }
+  }
+}

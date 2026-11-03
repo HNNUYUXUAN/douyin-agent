@@ -1,0 +1,111 @@
+{
+  "schema_version": 1,
+  "case": "note",
+  "source": {
+    "url": "https://www.douyin.com/note/7699716622642105615",
+    "id": "7699716622642105615",
+    "title": "C语言 数论与大数运算，一组笔记讲清楚",
+    "author": "C语言模型笔记📝",
+    "kind": "note"
+  },
+  "model": "doubao-seed-2.1-pro",
+  "actual_submissions": {
+    "requests": 3,
+    "images": 9,
+    "audio_seconds": 0
+  },
+  "billing_verified": false,
+  "status": "completed",
+  "media_retired": true,
+  "integrity": "passed",
+  "text_validation": {
+    "valid": true,
+    "errors": []
+  },
+  "review": {
+    "status": "sampled",
+    "completed_at": "2026-11-03T01:38:08.696470+00:00",
+    "report_sha256": "2300eb9ea6e37dbb098179ef7b0890ebec28a5fd1cc6d082dca1a524b4d2719f",
+    "order_verified": true,
+    "scope": {
+      "zh-CN": "9张图片顺序及跨页续接核对；4张关键代码/样例页按原分辨率抽查。未编译运行。",
+      "en": "Order and continuation checked across all nine images; four critical code/example pages reviewed at original resolution. No compilation or execution."
+    }
+  },
+  "evidence": [
+    {
+      "id": "f00001",
+      "image_index": 1,
+      "sha256": "af3faa4e36d0e879d7490575f99af6b0ea99005128ed563fadc4b055c2fad408",
+      "observation": {
+        "zh-CN": "原图是 l = -l，字母 l 被模型误读为数字1；相关错误批评已撤回。",
+        "en": "The original shows l = -l; the model confused letter l with digit 1. The resulting incorrect criticism was withdrawn."
+      }
+    },
+    {
+      "id": "f00005",
+      "image_index": 5,
+      "sha256": "d26f8e1f45b618b37112e7dfdc972d201d4d096ed3f35fb8f2503a86590d995c",
+      "observation": {
+        "zh-CN": "函数调用第三参数是 mod，没有模型额外添加的 &。",
+        "en": "The third call argument is mod, without the ampersand invented by the model."
+      }
+    },
+    {
+      "id": "f00006",
+      "image_index": 6,
+      "sha256": "153339d6d8fb4b6395aa24228ce10c9a2456e73815223f63a5a80ca7109522e7",
+      "observation": {
+        "zh-CN": "进制转换页可见基数范围及十六进制样例；只做静态观察。",
+        "en": "The base-conversion page shows its radix range and a hexadecimal example; this was static observation only."
+      }
+    },
+    {
+      "id": "f00009",
+      "image_index": 9,
+      "sha256": "8ab5dbab021179b23ae6a532fd782ee6e299ae0e758cbd1f5510c1d938cfff9b",
+      "observation": {
+        "zh-CN": "减法结尾页展示负号和零结果处理；没有运行该程序。",
+        "en": "The subtraction ending shows sign and zero-result handling; the program was not run."
+      }
+    }
+  ],
+  "publication": {
+    "zh-CN": "经宿主修订的公共摘要；不含原媒体、完整转写或完整代码。",
+    "en": "Public summary of the host-corrected result; no original media, full transcript or full code."
+  },
+  "image_count": 9,
+  "timing": "not_applicable_to_static_images",
+  "summary": {
+    "zh-CN": "笔记覆盖数论基础、模运算、进制转换和非负大整数加减；公共摘要展示原图复核如何纠正代码识别错误。",
+    "en": "The notes cover number theory basics, modular operations, base conversion and nonnegative large-integer arithmetic. This summary demonstrates how original-image review corrected code-reading errors."
+  },
+  "corrections": [
+    {
+      "zh-CN": "l=-1 修正为 l=-l，并撤回由误读产生的推断。",
+      "en": "Corrected l=-1 to l=-l and withdrew the inference caused by that misreading."
+    },
+    {
+      "zh-CN": "移除 mod 参数前虚构的 &。",
+      "en": "Removed the invented & before the mod argument."
+    },
+    {
+      "zh-CN": "静态图文没有语音时间轴，按图片序号定位；这不是ASR失败。",
+      "en": "Static images are located by image order, without a speech timeline; this is not an ASR failure."
+    }
+  ],
+  "limitations": {
+    "zh-CN": [
+      "本机实测，不代表异机或所有作品可用。",
+      "模型原始输出可能有错，公共摘要以宿主修订后的报告和复核记录为准。",
+      "实际提交量是本次记录，不是固定成本、速度或平台结算承诺。",
+      "媒体已清理；哈希用于来源追溯，不提供失效本地媒体链接。"
+    ],
+    "en": [
+      "Local evidence does not establish other-device or universal-work support.",
+      "Original model output may be wrong; this summary follows the host-corrected report and review.",
+      "Submitted quantities describe this run, not fixed cost, speed or settled billing.",
+      "Media were removed; hashes support traceability without broken local-media links."
+    ]
+  }
+}
