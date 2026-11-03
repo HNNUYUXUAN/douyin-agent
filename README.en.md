@@ -1,178 +1,238 @@
 English · [简体中文](README.md)
 
-![douyin-agent: turn Douyin content into evidence-backed notes](docs/assets/hero-en.png)
+![douyin-agent: Understand videos. Keep the knowledge.](docs/assets/hero-en.png)
 
 # douyin-agent
 
-**Turn Douyin videos and image posts into notes you can trace back to the evidence.**
+**Let Codex understand Douyin videos and image posts, and keep traceable knowledge.**
 
-Give Codex a topic, share text, or a work URL. It uses your connected browser to find and verify the work, acquires the media, and checks completeness. Volcengine Agent Plan transcribes the audio and analyzes the visuals. After review, the task retains Markdown / JSON and removes the media it downloaded.
+Provide a topic, work URL, share text, or local media. Codex verifies and acquires the work through connected Chrome / Edge. Local scripts check completeness, and Volcengine Agent Plan transcribes speech and analyzes visuals. After key-evidence review, retain Markdown / JSON and remove task-owned temporary media.
 
-[Get started](#get-started) · [See the workflow](#see-the-workflow) · [First-time setup](#first-time-setup) · [How it works](#how-it-works)
+Short videos, long videos, image posts, and batches share one workflow. Audio receives full coverage; visuals use adaptive sampling. Reports distinguish recognized speech, visual observations, and inference.
 
-## Get started
+## Install with one request
 
-Send this prompt and the repository URL to Codex:
+Send the repository URL and this prompt to Codex with local terminal, file, and browser capabilities:
 
 ```text
-Install douyin-agent from https://github.com/HNNUYUXUAN/douyin-agent.
-Read AGENTS.md and AGENT_INSTALL.md, check for an existing version,
-install with install.ps1, and guide me through first-time setup.
-Prefer D:\douyin-agent for the workspace; let me choose another location if D: is unavailable.
+Install https://github.com/HNNUYUXUAN/douyin-agent
+Read AGENTS.md and AGENT_INSTALL.md; inspect existing versions and local prerequisites.
+Reuse my PowerShell or Git Bash and existing Conda; prepare an isolated workspace.
 Help me connect Chrome or Edge, open Douyin, and configure Agent Plan.
-When sign-in, a purchase, or a key is needed, prepare the page or local file for me to complete.
+Open the required pages or local file when I need to sign in, purchase, or enter a key.
 ```
 
-You can also install from [GitCode](https://gitcode.com/yuxuan6426/douyin-agent). Use one source and version per installation. Agents start at the [installation entry](AGENT_INSTALL.md) and use the [operation index](docs/agent/index.json) to select the current step.
+[GitHub](https://github.com/HNNUYUXUAN/douyin-agent) · [GitCode mirror](https://gitcode.com/yuxuan6426/douyin-agent) · [Agent installation entry](AGENT_INSTALL.md)
 
-Then describe the task:
+## Prepare the environment
 
-```text
-Find a Douyin video explaining binary search.
-Verify completeness and show the usage preview before analyzing the explanation and code.
-Keep the report and evidence JSON, then remove the media downloaded for this task.
-```
+| Layer | Purpose and preparation |
+|---|---|
+| Windows terminal | Choose Windows PowerShell 5.1, PowerShell 7, or Git Bash. The host locates and checks the actual executable/version, reusing system or host-bundled tools. |
+| Conda | Discover existing Miniconda, Anaconda, or compatible Conda. Base Python 3.10+ launches the installer. Open the official installation guide if missing. |
+| Isolated runtime | Lockfiles create workspace Python 3.12. Call that interpreter directly afterward; `conda activate` is unnecessary. |
+| Media tools | FFmpeg / FFprobe on PATH handle probing, decoding, audio preparation, and frame extraction. |
+| Browser | Host-connected Chrome / Edge handles online search and acquisition. Open Douyin in the same profile and sign in as needed. Local imports go directly to media checks. |
+| Agent Plan | The user purchases an applicable plan and enters its dedicated key as `VOLC_AGENT_API_KEY` in workspace `.env`. Process environment variables take priority. |
 
-Online acquisition uses **Windows Codex with connected Chrome / Edge**. Local imports can skip browser acquisition. You need a dedicated Python 3.12 environment, FFmpeg / FFprobe, and a valid Agent Plan API key. Chrome has local test evidence; see [acceptance status](references/acceptance.md) for other browsers and devices.
+Codex opens the needed pages during onboarding: [browser connection](https://learn.chatgpt.com/docs/chrome-extension), [Douyin](https://www.douyin.com/), [Agent Plan purchase](https://www.volcengine.com/activity/agentplan), [console](https://ark.volcengine.com/region:cn-beijing/openManagement?LLM=%7B%7D&advancedActiveKey=agentPlan), and [configuration guide](https://docs.volcengine.com/docs/ark/agent-plan-personal-get-started?lang=zh). Official tool entries: [Miniconda](https://www.anaconda.com/docs/getting-started/miniconda/install), [PowerShell](https://learn.microsoft.com/powershell/scripting/install/installing-powershell-on-windows), [Git for Windows](https://gitforwindows.org/), and [FFmpeg](https://ffmpeg.org/download.html).
 
-## See the workflow
+Reuse existing configuration according to actual checks. Users complete sign-in, CAPTCHA, purchases, and local key entry. The skill is free and open source; Codex and cloud services have their own charges. Current plan benefits are defined by the provider.
 
-![Evidence walkthrough from real acceptance records: tasks, sources, usage, review, and cleanup](docs/assets/demo-en.gif)
+Choose the command for your terminal at the downloaded repository root:
 
-Seven screens present records from three real acceptance cases: task intent, source identity, usage preview, evidence review, and cleanup. This is an evidence walkthrough, not the Codex interface or a continuous screen recording. Waiting is omitted; playback duration is not task processing time. [Walkthrough source](docs/demo.html). After cloning, run `python -m http.server 8766 --bind 127.0.0.1` at the repository root and open `http://127.0.0.1:8766/docs/demo.html?lang=en` for interactive viewing.
-
-Reports organize the content into traceable sections: what was said, when it appeared, what the images show, and what remains uncertain. Transcripts preserve server-provided timing; visual observations reference image IDs for review.
-
-## Three tasks, from discovery to results
-
-![Three use cases: short-video insights, long-video sections, and ordered image-post analysis](docs/assets/scenes-en.png)
-
-### Short videos: capture the point and check the details
-
-```text
-Find a 1–3 minute educational video on Douyin.
-Analyze its main claims, supporting evidence, and on-screen text.
-Show the selected work and usage preview before starting analysis.
-```
-
-Deliverables focus on key claims, timestamps, important numbers, and the relationship between speech and visuals.
-
-![The short-video case's actual report](docs/assets/case-short-en.png)
-
-Tested work: 猫小申’s [《递归到底是什么？3分钟看懂递归》](https://www.douyin.com/video/7683763028419956019), approximately **2 minutes 54 seconds** long. This run analyzed **68 sampled frames**, transcribed all **174.375 audio seconds**, and recorded **15 requests**. Review of six key frames verified the order of five cars, the base case, and the return sequence. Missing ASR words remain marked as uncertain. The report completed, task media was removed, and validation passed after cleanup.
-
-[Read the short-video evidence summary](docs/cases/short.en.md) · [View the evidence JSON](docs/cases/short.json). The screenshot shows key evidence and review results from the actual report.
-
-### Long videos: follow the sections and connect the reasoning
-
-```text
-Find a 6–10 minute technical explanation on Douyin.
-Organize its reasoning by time segment, check code and formulas,
-and retain conclusions that need further confirmation.
-```
-
-Deliverables focus on full-audio transcription, segment-level understanding, key evidence, and an overview. Visual analysis uses adaptive samples distributed across the video.
-
-![The long-video case's segmented report](docs/assets/case-long-en.png)
-
-Tested work: 林粒粒呀’s [《8分钟搞懂“编程的鬼打墙”——递归》](https://www.douyin.com/video/7493866919565610291), approximately **8 minutes 26 seconds** long. This run found and acquired the work through the browser, produced a new full-audio transcript, and analyzed **102 sampled frames**. It recorded **22 requests**: 2 ASR, 17 visual analysis, 2 hierarchical summaries, and 1 report. Key evidence was reviewed; the job completed, its media was removed, and validation passed after cleanup.
-
-[Read the long-video evidence summary](docs/cases/long.en.md) · [View the evidence JSON](docs/cases/long.json). The screenshot shows the code-boundary and timing review: `n == 0` and `n <= 0` are kept distinct, as are native ASR timing and frame positions. The code shown in the video was not compiled or executed.
-
-### Image posts: preserve the sequence and read images with their caption
-
-```text
-Find a Douyin image post containing 5–10 images.
-Explain each image in its original order, then summarize it with the author's caption.
-Flag any text that is unclear or cannot be confirmed.
-```
-
-Deliverables focus on image count and order, individual observations, visible text, and how the caption relates to the images.
-
-![The image-post case's ordered observations](docs/assets/case-note-en.png)
-
-Tested work: C语言模型笔记📝’s [《C语言 数论与大数运算，一组笔记讲清楚》](https://www.douyin.com/note/7699716622642105615). A free-parser ZIP fallback provided **nine images** whose count and original order were verified. The run recorded **three requests** and **zero audio seconds**. Review of four key pages corrected a letter `l` misread as digit `1` and an invented `&`. The report completed, task images and registered download copies were removed, and validation passed after cleanup.
-
-[Read the image-post evidence summary](docs/cases/note.en.md) · [View the evidence JSON](docs/cases/note.json). The screenshot shows sequence checks and character corrections; no parser service is a fixed dependency.
-
-All three cases began with browser discovery of new works. Together they recorded **40 requests, 680.59178 audio seconds, and 179 images / frames**. All completed review, cleanup, and validation after cleanup. These figures describe this run’s submissions; platform settlement, other tasks’ usage, and processing time are recorded separately.
-
-## First-time setup
-
-Codex follows the [first-use guide](docs/agent/en/onboarding.md) to prepare the environment, open the relevant pages, and check status. You sign in, make any purchase, and enter the key locally. Existing configuration is reused. `onboard --check` is read-only; the host separately verifies and records browser connection, Douyin access, and a real model call.
-
-| Requirement | Codex prepares | You complete |
-|---|---|---|
-| Local workspace | A short path, existing Conda discovery, a dedicated environment, and a configuration file | Choose the location; follow official installation guidance if tools are missing |
-| Browser connection | Official extension setup guidance and a page-read check | Connect Chrome / Edge and grant website access |
-| Douyin | A work or search page in the same browser profile | Sign in if needed and complete any CAPTCHA |
-| Agent Plan | The purchase page, console, and local configuration file | Choose a plan and copy its dedicated API key into `.env` |
-| Initial validation | Local checks and a small-sample usage preview before testing the service | Approve this batch or a continuing usage allowance |
-
-[Browser connection guide](https://learn.chatgpt.com/docs/chrome-extension) · [Open Douyin](https://www.douyin.com/) · [Agent Plan purchase page](https://www.volcengine.com/activity/agentplan) · [Agent Plan console](https://ark.volcengine.com/region:cn-beijing/openManagement?LLM=%7B%7D&advancedActiveKey=agentPlan) · [Official setup guide](https://docs.volcengine.com/docs/ark/agent-plan-personal-get-started?lang=zh)
-
-Enter the **dedicated Agent Plan key** as `VOLC_AGENT_API_KEY` in the workspace `.env`; do not send it in chat. The skill is open source and free to use. Codex and cloud model services have their own charges; current plan pricing and benefits are shown on the purchase page.
-
-<details>
-<summary>Manual installation and environment rebuild</summary>
-
-From the downloaded repository root, use PowerShell 7:
+**PowerShell 5.1 / 7**
 
 ```powershell
 ./install.ps1 -Workspace 'D:\douyin-agent'
+# Optional: -SkillDir 'C:\Users\YOUR_USER\.codex\skills\douyin-agent'
+# Optional: -Conda 'C:\PATH_TO_CONDA\Scripts\conda.exe'
 ```
 
-The installer prepares a dedicated environment and installs the allowlisted skill files into the host discovery directory. It defaults to `$CODEX_HOME/skills/douyin-agent`, or the current user’s `.codex/skills/douyin-agent` when `CODEX_HOME` is unset. To choose a skill directory or an existing Conda executable:
+**Git Bash**
 
-```powershell
-./install.ps1 -Workspace 'D:\douyin-agent' `
-  -SkillDir 'C:\Users\YOUR_USER\.codex\skills\douyin-agent' `
-  -Conda 'C:\PATH_TO_CONDA\Scripts\conda.exe'
+```bash
+bash ./install.sh --workspace '/d/douyin-agent'
+# Optional: --skill-dir '/c/Users/YOUR_USER/.codex/skills/douyin-agent'
+# Optional: --conda '/c/PATH_TO_CONDA/Scripts/conda.exe'
 ```
 
-Replace the example paths with actual locations. Keep the workspace separate from the installed skill. Choose another short path if D: is unavailable, or omit `-Workspace` for interactive selection. Installation records the actual paths. Use the installation receipt and `agent-context.json` to locate Python, the skill, and the workspace; run `onboard --check`, then follow host-led onboarding. Refresh or restart the host if its UI requires it.
+Omitting the workspace prompts for a location: `D:\douyin-agent` when D: exists, otherwise a short path under the user directory. The skill directory defaults to `$CODEX_HOME/skills/douyin-agent`, or the current user's `.codex/skills/douyin-agent` when unset. Keep workspace and skill directories separate; quote paths containing spaces.
 
-Use `./setup.ps1 -Workspace 'D:\douyin-agent'` only to rebuild the environment for existing source. `setup.ps1` does not install the skill into the host discovery directory. Both entrypoints reuse existing Conda; FFmpeg / FFprobe must be on PATH. `doctor` and `onboard --check` do not make paid calls. See [install and upgrade](docs/agent/en/install.md).
+To prepare or rebuild only the environment, use `./setup.ps1 -Workspace 'D:\douyin-agent'` or `bash ./setup.sh --workspace '/d/douyin-agent'`. Both shells use one Python installation core. Conda selection order: explicit parameter → `CONDA_EXE` → PATH → common locations under the user directory and ProgramData.
 
-</details>
+## The complete workflow
 
-## How it works
+### 1. Installation and first-time setup
 
-![Understanding workflow: verify, acquire, check completeness, preview usage, analyze segments, review, and clean up](docs/assets/workflow-en.png)
+```mermaid
+flowchart TD
+  A["User provides repository and installation goal"] --> B["Codex reads Agent guides and checks existing installation"]
+  B --> C["Choose workspace and skill directory"]
+  C --> D["Check selected shell, Conda, and media tools"]
+  D --> E{"Prerequisites ready?"}
+  E -->|Missing| F["Open official guides; user installs required tools"]
+  F --> D
+  E -->|Ready| G["Install skill; prepare isolated Python 3.12 and local config"]
+  G --> H["Connect Chrome or Edge; open Douyin"]
+  H --> I["User grants access and signs in; host reads the page"]
+  I --> J{"Agent Plan configured?"}
+  J -->|No| K["Open purchase page, console, and local .env"]
+  K --> L["User purchases and enters dedicated key"]
+  L --> M["Read-only local checks; separate capability records"]
+  J -->|Yes| M
+  M --> N["Preview a small sample; verify within usage authorization"]
+  N --> O["Save private handoff context; reuse configuration"]
+```
 
-The host first tries usable direct acquisition routes. If it encounters a `blob` URL or an acquisition failure, it reuses a verified free parser or searches for alternatives, trying at most three sources per round. Paid analysis begins only after identity, duration or image count, decoding, and the applicable visual checks pass. Image posts can use a parser-provided ZIP fallback when necessary. The host checks the archive, image count and order, then registers file ownership under the acquisition guide. Parser availability is verified at use time; no specific service is a fixed dependency.
+Steps: read guides → choose directories → check shell and Conda → install runtime → connect browser and Douyin → configure Agent Plan → preview and verify. `doctor`, `status`, and `onboard --check` are read-only. Browser access, login state, and real service calls are verified separately.
 
-![System responsibilities: Codex orchestrates, the browser acquires, local scripts verify, Agent Plan analyzes, and MD/JSON persists](docs/assets/system-en.png)
+### 2. From task to delivery
 
-Codex interprets the request, operates the browser, and reviews evidence. Local scripts handle integrity checks, sampling, caching, the request ledger, and cleanup. Agent Plan receives audio and sampled images and returns transcription and analysis. The upload scope appears in the usage preview; added media or a larger scope produces an updated preview.
+```mermaid
+flowchart TD
+  A["Topic, URL, share text, local media, or batch"] --> B["Clean expired tasks; read live state"]
+  B --> C{"Reusable text evidence?"}
+  C -->|Yes, sufficient for this question| Z["Read report and evidence JSON"]
+  C -->|No, or new visuals needed| D["Find candidates and verify work identity"]
+  D --> E["Acquire media; register provenance and ownership"]
+  E --> F{"Completeness passed?"}
+  F -->|No| G["Record restriction; continue independent works"]
+  F -->|Yes| H["Deduplicate, segment, sample, and preview usage"]
+  H --> I["Check batch or continuing usage authorization"]
+  I --> J["Run ASR, vision, and hierarchical summaries sequentially"]
+  J --> K["Report reaches review_ready"]
+  K --> L["Host checks key original frames; corrects and records review"]
+  L --> M{"More visual evidence needed?"}
+  M -->|Yes| H
+  M -->|No| N["finalize: validate text and clean registered media"]
+  N --> O{"Validation and cleanup succeeded?"}
+  O -->|Yes| P["completed: deliver MD and JSON"]
+  O -->|No| Q["Preserve specific state; follow recovery guide"]
+```
 
-## Keep the understanding, remove the media
+Steps: verify → acquire and check completeness → preview → authorize → analyze → review → `finalize` → deliver. Additional media or expanded scope creates a new preview. Batches deduplicate by work ID or media hash; browser operations and cloud calls run sequentially by default.
 
-| Retained | Removed after review | Preserved |
-|---|---|---|
-| Markdown reports, segment analysis, native transcript timing, evidence IDs and hashes, request and cleanup records | Task-owned videos, audio, sampled frames, source images, and registered download copies | User-imported originals, runtime, source code, and private configuration |
+### 3. How media is acquired
 
-Completed results remain readable after media removal. New visual questions may require reacquisition. Failed deletion records the reason and leaves cleanup pending. Failed-task media expires 24 hours after the first failure and is handled at the next task entry; no background scheduler is installed.
+```mermaid
+flowchart TD
+  A{"Input source"} -->|User local media| B["Register imported originals; verify identity"]
+  A -->|Public Douyin work| C["Browser reads identity, duration, or image count"]
+  C --> D{"Directly downloadable media?"}
+  D -->|Yes| E["Host downloads media"]
+  D -->|Blob or failure| F["Reuse a locally verified free parser"]
+  F --> G{"Acquisition succeeded?"}
+  G -->|Unavailable or no record| H["Find alternatives; at most three sources per round"]
+  H --> I{"Acquisition succeeded?"}
+  I -->|Source failed; attempts remain| H
+  I -->|Limit reached or acquisition restricted| J["Record reason; await usable local media"]
+  I -->|Yes| K{"Acquired type"}
+  G -->|Yes| K
+  E -->|Download succeeded| K
+  E -->|Download failed| F
+  K -->|Video| L["Compare duration; inspect tracks, full decode, head and tail"]
+  K -->|Image files or ZIP| M["Check and unpack ZIP when used; identify actual image format"]
+  M --> N["Verify count, original order, and content coverage"]
+  B --> O["Apply video or image completeness checks"]
+  L --> P{"Completeness passed?"}
+  N --> P
+  O --> P
+  P -->|Yes| Q["adopt registers evidence; usage preview is allowed"]
+  Q --> R["Record parser success after verification"]
+  P -->|No or unknown| J
+```
 
-Visual analysis is sampled and cannot guarantee that every frame was read. Without reliable native timing, the result retains text and states that limitation. Deleted, private, paid, live, or persistently incomplete works are reported as restricted. Timed-out cloud requests are not resubmitted automatically; unresolved reservations and submission history survive media cleanup.
+The host operates direct downloads and parser services. Parsers receive only public work URLs. Verified sources are registered locally and revalidated on other hosts. Video duration tolerance is the larger of one second or two frame durations; absent reliable source duration means completeness is unknown. Image posts retain original order; a separate tool checks ZIPs before image import. Restricted works retain their reason while independent works continue. See [acquisition](docs/agent/en/acquisition.md).
 
-## Documentation and license
+### 4. System and cloud data flow
 
-Agent documentation is organized by task, with stable entrypoints for installation and use:
+```mermaid
+flowchart TD
+  U["User: goal, configuration, usage authorization"] --> H["Codex host: orchestration and evidence review"]
+  H --> B["Connected Chrome or Edge"]
+  B --> S["Douyin pages and public parser services"]
+  S --> F["Task media and acquisition receipt"]
+  H --> L["Local scripts: Conda-isolated Python 3.12"]
+  F --> L
+  L --> T["FFmpeg / FFprobe: integrity, audio chunks, adaptive frames"]
+  T --> P["Preview: coverage, model, cache, and new usage"]
+  P --> C["Cache and atomic JSON ledger: reserve before submission"]
+  C -->|No audio or static images| V
+  C --> A["Full audio chunks → Agent Plan ASR WebSocket"]
+  A --> N["Native timestamps and original-video offsets"]
+  N --> V["Actual sampled images → Agent Plan Responses vision"]
+  V --> G["Segment JSON → hierarchical summaries → Markdown report"]
+  G --> R["Host reviews original frames and saves text corrections"]
+  R --> X["finalize removes task media; MD / JSON remains"]
+  G --> C
+```
 
-| Entry | Purpose |
+Videos with audio receive full-audio transcription, followed by actual-image analysis and synthesis with the transcript. Videos without audio and static image posts skip ASR. Long-audio chunks preserve server-native timing plus global offsets. Visual evidence is organized into one-minute sections. Hierarchical summary requests enter the preview in advance; cloud requests have automatic retries disabled.
+
+| Interface or record | Responsibility |
 |---|---|
-| [AGENTS.md](AGENTS.md) | Repository rules and task routing |
-| [AGENT_INSTALL.md](AGENT_INSTALL.md) | Repository installation, upgrades, and initial connection |
-| [SKILL.md](SKILL.md) | Natural-language discovery and installed-skill execution rules |
-| [llms.txt](llms.txt) | A compact documentation map for agents |
-| [Operation index JSON](docs/agent/index.json) | Select a guide by language and task |
+| `wss://openspeech.bytedance.com/api/v3/plan/sauc/bigmodel_nostream` | Agent Plan single-stream ASR; resource ID `volc.seedasr.sauc.duration`. |
+| `https://ark.cn-beijing.volces.com/api/plan/v3/responses` | Visual understanding and synthesis; configurable model, default `doubao-seed-2.1-pro`. |
+| Cache and ledger | Reuse by media hash, model, processing configuration, and independent prompt/protocol versions. Submission amounts, returned usage, and platform settlement are recorded separately. |
+| Review record | Links time or image order, evidence IDs, hashes, textual observations, and current report hash. |
 
-- [First use](docs/agent/en/onboarding.md): browser, Agent Plan, local configuration, and separate readiness checks.
-- [Full workflow](docs/agent/en/workflow.md): commands, receipts, previews, and review.
-- [Search, acquisition, and completeness](docs/agent/en/acquisition.md): browser discovery, direct downloads, parser fallbacks, and image order.
-- [Recovery, cleanup, and migration](docs/agent/en/recovery.md): unresolved requests, caching, and lifecycle.
-- [Acceptance status](references/acceptance.md): local tests, same-machine relocation, and untested environments.
-- [MIT license](LICENSE) · [Third-party dependency licenses](THIRD_PARTY_NOTICES.md). The code license does not grant redistribution rights to third-party works.
+### 5. Lifecycle, cleanup, and recovery
 
-Windows Codex is the primary environment with current test evidence. A separate Conda environment rebuilt successfully under a path with spaces on the same machine. Installation, repeat installation, local-modification conflict detection, upgrade from v2, and rollback under file locking were tested. Other devices and hosts require their own validation. Report issues with reproduction steps and redacted logs. Do not submit keys, cookies, signed download URLs, or private media.
+```mermaid
+flowchart TD
+  A["Read live status, cache, and ledger"] --> B{"Unresolved paid request?"}
+  B -->|Yes| C["Keep reservation; stop resubmission; gather recovery evidence"]
+  B -->|No| D{"Usable cached results?"}
+  D -->|Yes| E["Reuse results or continue remaining steps"]
+  D -->|No| F["Execute within preview authorization"]
+  E -->|Remaining steps| F
+  E -->|Job already completed| R
+  F --> G{"Execution result"}
+  G -->|Authentication or quota error| H["Pause cloud calls; resolve configuration or quota"]
+  G -->|Unresolved timeout| C
+  G -->|Report generated| I["review_ready → original-frame review and corrections"]
+  I --> J["finalize first validates text-only results"]
+  J --> K["Clean individual files by ownership, absolute path, and hash"]
+  K --> L{"Cleanup succeeded?"}
+  L -->|Yes| M["completed: text remains readable"]
+  L -->|No| N["cleanup_pending: record reasons and retry idempotently"]
+  N --> J
+  H --> O["Failed media retained for 24 hours from first failure"]
+  C --> O
+  O --> P["Next task entry checks expiry and active processes"]
+  P -->|Expired and inactive| X["cleanup --expired removes owned media"]
+  X --> Y["Success: expired_media_cleaned; failure: cleanup_pending"]
+  Y -->|Retry after failure| P
+  M --> Q{"Follow-up question"}
+  Q -->|Existing evidence sufficient| R["Read MD / JSON directly"]
+  Q -->|New visuals needed| S["Reacquire and preview"]
+```
+
+Completed cache results can be delivered directly; partially completed jobs execute only remaining steps. Unresolved requests retain their reservations and currently require evidence gathering and maintainer assistance under [recovery](docs/agent/en/recovery.md); a new task must not bypass protection. Expired failed jobs become `expired_media_cleaned` after cleanup. Only reviewed, text-validated, successfully cleaned jobs become `completed`. `doctor/status` do not clean media; no background scheduler is installed.
+
+## Outputs and cleanup
+
+| Retained | Removed after review | Preserved for the user |
+|---|---|---|
+| `analysis.md`, segment understanding, native transcript-timing JSON, source/evidence index, request and cleanup records | Registered task-owned video, audio, sampled frames, original images, temporary ZIPs, and browser download copies | Imported originals, isolated environment, source, private configuration |
+
+Durable reports use source URLs, times, image order, hashes, and textual observations. Recognized speech, visual results, and inference are labeled separately. New visual questions after cleanup require acquisition again. Deleted, private, paid, live, or persistently incomplete works receive an explicit restriction report.
+
+## Real case summaries
+
+| Case | Verified result | Evidence |
+|---|---|---|
+| [2:54 recursion video](https://www.douyin.com/video/7683763028419956019) | 174.375 audio seconds, 68 frames, 15 requests; six key frames reviewed. | [Summary](docs/cases/short.en.md) · [JSON](docs/cases/short.json) |
+| [8:26 recursion video](https://www.douyin.com/video/7493866919565610291) | 506.21678 audio seconds, 102 frames, 22 requests; formulas, code boundaries, and timing reviewed. | [Summary](docs/cases/long.en.md) · [JSON](docs/cases/long.json) |
+| [Nine C-language note pages](https://www.douyin.com/note/7699716622642105615) | ZIP fallback, three requests; original order checked and key character recognition corrected. | [Summary](docs/cases/note.en.md) · [JSON](docs/cases/note.json) |
+
+All three completed review, media cleanup, and validation after cleanup. These are v2.1 live records; submissions and platform settlement are separate. See [acceptance](references/acceptance.md) for current terminal and installation verification.
+
+## Agent documentation and license
+
+[AGENTS.md](AGENTS.md) routes repository tasks; [AGENT_INSTALL.md](AGENT_INSTALL.md) covers installation; [SKILL.md](SKILL.md) routes installed-skill requests. [llms.txt](llms.txt) and the [bilingual index](docs/agent/index.json) provide intent-based navigation.
+
+Guides: [install/upgrade](docs/agent/en/install.md) · [onboarding](docs/agent/en/onboarding.md) · [acquisition](docs/agent/en/acquisition.md) · [understanding/delivery](docs/agent/en/workflow.md) · [recovery/cleanup](docs/agent/en/recovery.md) · [maintenance](docs/agent/en/maintenance.md).
+
+Windows Codex is the current validation environment. Chrome has real acquisition and understanding evidence; Edge, other hosts, and other devices require their own records. Original code is [MIT licensed](LICENSE); see [dependency notices](THIRD_PARTY_NOTICES.md). Code licensing does not grant redistribution rights to third-party works.

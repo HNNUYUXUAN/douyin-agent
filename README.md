@@ -1,175 +1,238 @@
 [English](README.en.md) · 简体中文
 
-![douyin-agent：从抖音内容到可追溯的文字理解](docs/assets/hero-zh.png)
+![douyin-agent：看懂视频，留下知识](docs/assets/hero-zh.png)
 
 # douyin-agent
 
-**把抖音视频与图文，变成带证据的笔记。**
+**让 Codex 理解抖音视频与图文，留下可追溯的知识。**
 
-给 Codex 一个主题、一段分享文案或一个作品链接。它会通过连接的浏览器查找和核对作品，取得媒体并检查完整性，再用火山 Agent Plan 转写、理解画面、整理分段报告。复核完成后，保留 Markdown / JSON，清理任务下载的媒体。
+提供一个主题、作品链接、分享文案或本地素材，Codex 通过连接的 Chrome / Edge 核对与获取作品，本地脚本检查完整性，火山 Agent Plan 完成语音转写和画面理解。关键证据复核后，保存 Markdown / JSON，清理任务拥有的临时媒体。
 
-[开始使用](#开始使用) · [看看实际过程](#看看实际过程) · [首次配置](#首次配置) · [工作原理](#工作原理)
+支持短视频、长视频、图文和批量任务。音频完整覆盖，画面按内容自适应采样；报告分别标记语音识别、视觉观察与推断。
 
-## 开始使用
+## 用一句话安装
 
-把下面这段话连同本仓库链接发给 Codex：
-
-```text
-帮我安装 douyin-agent：https://github.com/HNNUYUXUAN/douyin-agent
-请先阅读 AGENTS.md 和 AGENT_INSTALL.md，检查已有版本，
-使用 install.ps1 安装，并带我完成首次配置。
-工作区优先放在 D:\douyin-agent；没有 D 盘时让我选择其他位置。
-引导我连接 Chrome 或 Edge、打开抖音，以及配置 Agent Plan。
-需要登录、购买或填写 Key 时，把对应页面或本地文件准备好，由我完成。
-```
-
-也可从 [GitCode](https://gitcode.com/yuxuan6426/douyin-agent) 安装；一次安装使用同一来源和版本。Agent 从 [安装入口](AGENT_INSTALL.md) 开始，按 [操作索引](docs/agent/index.json) 选择当前步骤。
-
-安装后直接说：
+将仓库链接和下面这段话发给具备本地终端、文件及浏览器能力的 Codex：
 
 ```text
-帮我在抖音找一条讲二分查找的视频。
-核对完整性后，先展示用量预览，再分析讲解步骤和关键代码。
-完成后只留总结和证据 JSON，清理任务下载的媒体。
+帮我安装 https://github.com/HNNUYUXUAN/douyin-agent
+先阅读 AGENTS.md 和 AGENT_INSTALL.md，检查已有版本和本机依赖。
+复用我正在使用的 PowerShell 或 Git Bash，以及已有 Conda；准备独立工作区。
+带我连接 Chrome 或 Edge、打开抖音，完成 Agent Plan 配置。
+需要登录、购买或填写 Key 时，打开相应页面或本地文件，由我完成。
 ```
 
-在线获取使用 **Windows Codex + 已连接的 Chrome / Edge**；本地导入可跳过浏览器获取。需要独立 Python 3.12 环境、FFmpeg / FFprobe 和有效的 Agent Plan 专属 Key。Chrome 已有本机实测；其他浏览器与设备的验证范围见[验收记录](references/acceptance.md)。
+[GitHub](https://github.com/HNNUYUXUAN/douyin-agent) · [GitCode 镜像](https://gitcode.com/yuxuan6426/douyin-agent) · [Agent 安装入口](AGENT_INSTALL.md)
 
-## 看看实际过程
+## 环境准备
 
-![真实验收记录回放：任务、作品、用量、证据复核与媒体清理](docs/assets/demo.gif)
+| 层次 | 用途与准备方式 |
+|---|---|
+| Windows 终端 | Windows PowerShell 5.1、PowerShell 7 或 Git Bash，任选其一；宿主先检查实际可执行文件和版本，复用系统或宿主随附工具。 |
+| Conda | 发现已有 Miniconda、Anaconda 或兼容 Conda；基础 Python 需 3.10+，用于启动安装器。缺失时打开官方安装指南。 |
+| 独立运行环境 | 使用锁文件在工作区创建 Python 3.12 环境；后续直接调用该解释器，无需 `conda activate`。 |
+| 媒体工具 | FFmpeg / FFprobe 可从 PATH 调用，负责探测、解码、音频处理与抽帧。 |
+| 浏览器 | 在线检索和取得使用宿主连接的 Chrome / Edge；在同一浏览器打开抖音，用户按需登录。本地导入可直接进入素材核对。 |
+| Agent Plan | 用户购买可用套餐，将专属 Key 填入工作区 `.env` 的 `VOLC_AGENT_API_KEY`；进程环境变量优先。 |
 
-七屏展示依据三项真实验收记录编排，覆盖自然语言任务、作品身份、用量预览、报告复核与清理结果。它是验收证据回放；等待已省略，不是 Codex 产品界面或连续录屏，播放时长不代表任务处理耗时。[回放页面源码](docs/demo.html)。克隆后在仓库根运行 `python -m http.server 8766 --bind 127.0.0.1`，再访问 `http://127.0.0.1:8766/docs/demo.html` 可交互查看。
+首次向导由 Codex 打开所需入口：[浏览器连接](https://learn.chatgpt.com/docs/chrome-extension)、[抖音](https://www.douyin.com/)、[Agent Plan 购买页](https://www.volcengine.com/activity/agentplan)、[控制台](https://ark.volcengine.com/region:cn-beijing/openManagement?LLM=%7B%7D&advancedActiveKey=agentPlan)、[配置说明](https://docs.volcengine.com/docs/ark/agent-plan-personal-get-started?lang=zh)。缺少工具时使用 [Miniconda](https://www.anaconda.com/docs/getting-started/miniconda/install)、[PowerShell](https://learn.microsoft.com/powershell/scripting/install/installing-powershell-on-windows)、[Git for Windows](https://gitforwindows.org/)、[FFmpeg](https://ffmpeg.org/download.html) 官方入口。
 
-报告把内容分成可追溯的段落：哪里说了什么、对应哪个时间点、哪些是画面观察、哪些仍需确认。转写使用服务返回的原生时间；视觉观察关联图片编号，方便复核。
+已有配置按检查结果复用。用户自行完成登录、验证码、购买和本地 Key 输入。技能开源免费；Codex 与云服务按各自规则收费，套餐权益以官方页面为准。
 
-## 三种任务，从检索到结果
+从下载的仓库根目录选择对应命令：
 
-![三种使用场景：短视频抓重点、长视频拆章节、图文保留顺序](docs/assets/scenes-zh.png)
-
-### 短视频：抓住重点，也核对细节
-
-```text
-在抖音找一条 1–3 分钟的科普短视频，分析核心观点、论据和画面文字。
-先给我作品清单与调用量预览，再开始理解。
-```
-
-交付关注：核心观点、时间点、关键数字、语音与画面的对应关系。
-
-![短视频案例的实际报告](docs/assets/case-short-zh.png)
-
-实测作品：猫小申的 [《递归到底是什么？3分钟看懂递归》](https://www.douyin.com/video/7683763028419956019)，实际时长约 **2分54秒**。本轮分析 **68 帧**并转写完整的 **174.375 秒**音频，共 **15 次请求**。复核 6 张关键原帧，确认五辆车的顺序、终止条件和逐层返回；语音识别缺字保留为不确定项。报告完成，任务媒体已清理，清理后校验通过。
-
-[阅读短视频证据摘要](docs/cases/short.zh.md) · [查看证据 JSON](docs/cases/short.json)。截图展示真实报告的关键证据与复核结果。
-
-### 长视频：拆成段落，再串起完整思路
-
-```text
-在抖音找一条 6–10 分钟的技术讲解视频。
-按时间段整理思路，核对代码、公式和易混淆的结论，保留不确定项。
-```
-
-交付关注：全音频转写、分段理解、关键内容证据和总览；画面采用覆盖全片的自适应采样。
-
-![长视频案例的分段报告](docs/assets/case-long-zh.png)
-
-实测作品：林粒粒呀的 [《8分钟搞懂“编程的鬼打墙”——递归》](https://www.douyin.com/video/7493866919565610291)，实际时长约 **8分26秒**。本轮从浏览器检索并取得作品，完成全新音频转写和 **102 帧**采样理解；共 **22 次请求**（2 次 ASR、17 次视觉理解、2 次分层汇总、1 次报告）。关键证据已复核，任务完成并清理媒体，清理后校验通过。
-
-[阅读长视频证据摘要](docs/cases/long.zh.md) · [查看证据 JSON](docs/cases/long.json)。截图展示代码边界与时序复核：保留 `n == 0` 和 `n <= 0` 的区别，分别记录原生 ASR 时间与画面时间。本次没有编译运行视频中的代码。
-
-### 图文：保留图片顺序，读懂文案与画面
-
-```text
-在抖音找一篇包含 5–10 张图片的图文作品。
-按原顺序说明每张图的信息，再结合作者文案汇总，标明看不清或无法确认的文字。
-```
-
-交付关注：图片数量与原顺序、逐图观察、画面文字、作者文案及其与图片的关系。
-
-![图文案例的逐图观察报告](docs/assets/case-note-zh.png)
-
-实测作品：C语言模型笔记📝的 [《C语言 数论与大数运算，一组笔记讲清楚》](https://www.douyin.com/note/7699716622642105615)。通过免费解析服务的 ZIP 后备路线取得 **9 张图片**，核对数量与原顺序；共 **3 次请求**、**0 秒音频**。抽查 4 张关键页，纠正把字母 `l` 读成数字 `1`、以及额外读出 `&` 的错误。报告完成，任务图片与登记下载副本已清理，清理后校验通过。
-
-[阅读图文证据摘要](docs/cases/note.zh.md) · [查看证据 JSON](docs/cases/note.json)。截图展示顺序检查和字符纠错，解析站不是固定依赖。
-
-三项均从浏览器检索新作品开始，累计提交 **40 次请求、680.59178 秒音频、179 张图片 / 帧**，均已完成复核、清理与清理后校验。这些数字记录本轮提交量；平台结算、其他任务的用量和耗时分别记录。
-
-## 首次配置
-
-Codex 按 [首次使用指南](docs/agent/zh-CN/onboarding.md) 准备环境、打开入口并检查状态；你完成账号登录、购买和本地填写 Key。已配置的项目直接复用。`onboard --check` 是只读检查；浏览器连接、抖音访问和真实模型调用由宿主分别核验并记录。
-
-| 准备项 | Codex 帮你做 | 你需要完成 |
-|---|---|---|
-| 本地工作区 | 选择短路径，发现现有 Conda，准备独立环境与配置文件 | 确认工作区；缺少工具时按官方指引安装 |
-| 浏览器连接 | 引导进入官方浏览器扩展设置，并检查页面读取 | 连接 Chrome / Edge，完成网站授权 |
-| 抖音 | 在同一浏览器配置中打开作品或搜索页 | 按需登录，完成验证码 |
-| Agent Plan | 打开购买页、控制台和本地配置文件 | 自行选购套餐，复制专属 Key 到 `.env` |
-| 首次验证 | 检查本地环境，展示小样本用量后验证服务 | 确认本次或持续用量范围 |
-
-[浏览器连接说明](https://learn.chatgpt.com/docs/chrome-extension) · [打开抖音](https://www.douyin.com/) · [Agent Plan 购买页](https://www.volcengine.com/activity/agentplan) · [Agent Plan 控制台](https://ark.volcengine.com/region:cn-beijing/openManagement?LLM=%7B%7D&advancedActiveKey=agentPlan) · [官方配置说明](https://docs.volcengine.com/docs/ark/agent-plan-personal-get-started?lang=zh)
-
-Key 填在工作区 `.env` 的 `VOLC_AGENT_API_KEY`，不要发到聊天。必须使用 **Agent Plan 专属 Key**。技能开源免费，Codex 与云端模型服务按各自规则收费；套餐价格和权益以购买页面为准。
-
-<details>
-<summary>手动安装与环境重建</summary>
-
-在下载的仓库根目录中使用 PowerShell 7：
+**PowerShell 5.1 / 7**
 
 ```powershell
 ./install.ps1 -Workspace 'D:\douyin-agent'
+# 可选：-SkillDir 'C:\Users\YOUR_USER\.codex\skills\douyin-agent'
+# 可选：-Conda 'C:\PATH_TO_CONDA\Scripts\conda.exe'
 ```
 
-安装器准备独立环境，并将发布清单中的技能文件安装到宿主发现目录。默认使用 `$CODEX_HOME/skills/douyin-agent`；未设置 `CODEX_HOME` 时使用当前用户的 `.codex/skills/douyin-agent`。需要指定安装位置或已有 Conda 时：
+**Git Bash**
 
-```powershell
-./install.ps1 -Workspace 'D:\douyin-agent' `
-  -SkillDir 'C:\Users\YOUR_USER\.codex\skills\douyin-agent' `
-  -Conda 'C:\PATH_TO_CONDA\Scripts\conda.exe'
+```bash
+bash ./install.sh --workspace '/d/douyin-agent'
+# 可选：--skill-dir '/c/Users/YOUR_USER/.codex/skills/douyin-agent'
+# 可选：--conda '/c/PATH_TO_CONDA/Scripts/conda.exe'
 ```
 
-将示例路径替换为实际路径。工作区与技能目录分开；没有 D 盘时改用其他短路径，也可省略 `-Workspace` 交互选择。安装结果记录实际路径；后续从安装回执和 `agent-context.json` 定位 Python、技能与工作区，执行 `onboard --check`，再由宿主完成首次引导。宿主需要刷新或重启时按实际提示操作。
+省略工作区参数会交互选择：有 D 盘时建议 `D:\douyin-agent`，否则建议用户目录下的短路径。安装目录默认取 `$CODEX_HOME/skills/douyin-agent`，未设置时取当前用户 `.codex/skills/douyin-agent`。工作区和技能目录分开；含空格路径需加引号。
 
-已有源码仅需重建环境时使用 `./setup.ps1 -Workspace 'D:\douyin-agent'`；`setup.ps1` 不负责安装到宿主技能目录。两个入口均复用已有 Conda；FFmpeg / FFprobe 需在 PATH。`doctor` 和 `onboard --check` 不发起收费请求。详见[安装与升级](docs/agent/zh-CN/install.md)。
+仅准备或重建环境时使用 `./setup.ps1 -Workspace 'D:\douyin-agent'` 或 `bash ./setup.sh --workspace '/d/douyin-agent'`。两个终端入口共用 Python 安装核心。Conda 选择顺序为显式参数 → `CONDA_EXE` → PATH → 用户目录和 ProgramData 下的常见安装位置。
 
-</details>
+## 完整工作链路
 
-## 工作原理
+### 1. 安装与首次配置
 
-![理解流程：核对、获取、完整性检查、用量预览、分段理解、复核与清理](docs/assets/workflow-zh.png)
+```mermaid
+flowchart TD
+  A["用户提供仓库链接和安装目标"] --> B["Codex 读取 Agent 指南并检查已有安装"]
+  B --> C["选择工作区与技能目录"]
+  C --> D["检查所选终端、Conda 和媒体工具"]
+  D --> E{"依赖就绪？"}
+  E -->|缺失| F["打开官方安装入口，用户完成安装"]
+  F --> D
+  E -->|就绪| G["安装技能，准备独立 Python 3.12 和本地配置"]
+  G --> H["连接 Chrome 或 Edge，打开抖音"]
+  H --> I["用户按需授权与登录，宿主实际读取页面"]
+  I --> J{"Agent Plan 已配置？"}
+  J -->|未配置| K["打开购买页、控制台和本地 .env"]
+  K --> L["用户购买并填写专属 Key"]
+  L --> M["只读检查环境，分别记录能力状态"]
+  J -->|已配置| M
+  M --> N["预览小样本，在用量授权内验证服务"]
+  N --> O["保存私有交接记录，后续复用配置"]
+```
 
-先尝试可用的直接获取路线；遇到 `blob` 或获取失败，由宿主复用已验证的免费解析来源，必要时重新检索，每轮最多尝试三个来源。只有作品身份、时长或图文数量、解码及首尾等检查通过，才进入收费理解。图文可在必要时使用解析服务提供的 ZIP 后备路线；宿主按取得指南检查压缩包、图片数量与顺序，再登记文件所有权。具体解析站按当时可用性验证，不作为固定依赖。
+步骤：读指南 → 选目录 → 检查终端和 Conda → 安装环境 → 连接浏览器与抖音 → 配置 Agent Plan → 预览并验证。`doctor`、`status`、`onboard --check` 只读；浏览器访问、登录状态和真实调用分别核验。
 
-![系统关系：Codex 编排，浏览器获取，本地验证，Agent Plan 理解，MD/JSON 长期留存](docs/assets/system-zh.png)
+### 2. 从任务到交付
 
-Codex 负责意图理解、浏览器操作和证据复核；本地脚本负责媒体检查、抽帧、缓存、请求账本和清理；Agent Plan 接收音频与采样画面，返回转写及分析。上传范围先进入用量预览，新增素材或扩大范围会更新预览。
+```mermaid
+flowchart TD
+  A["主题、链接、分享文案、本地媒体或批次"] --> B["清理到期任务，读取现有状态"]
+  B --> C{"已有可复用文字结果？"}
+  C -->|是，问题由现有证据覆盖| Z["读取报告与证据 JSON"]
+  C -->|否或需要新画面| D["检索候选，核对作品身份"]
+  D --> E["取得媒体，登记来源与所有权"]
+  E --> F{"完整性通过？"}
+  F -->|否| G["登记受限，继续其他独立作品"]
+  F -->|是| H["去重、分段、抽帧，生成用量预览"]
+  H --> I["核对本次或持续用量授权"]
+  I --> J["顺序执行 ASR、视觉理解与分层汇总"]
+  J --> K["报告进入 review_ready"]
+  K --> L["宿主查看关键原帧，修订并记录复核"]
+  L --> M{"需要补充画面？"}
+  M -->|是| H
+  M -->|否| N["finalize：验证文字并清理登记媒体"]
+  N --> O{"验证与清理均成功？"}
+  O -->|是| P["completed：交付 MD 和 JSON"]
+  O -->|否| Q["保留具体状态，按恢复指南处理"]
+```
 
-## 留下理解，清理媒体
+步骤：核对作品 → 取得与完整性检查 → 预览 → 授权 → 理解 → 复核 → `finalize` → 交付。新增素材和扩大调用范围会形成新预览；批次按作品 ID 或媒体哈希去重，浏览器操作与云请求默认顺序执行。
 
-| 长期保留 | 复核后清理 | 始终保护 |
-|---|---|---|
-| Markdown 报告、分段理解、转写原生时间、证据编号与哈希、请求和清理记录 | 任务拥有的视频、音频、抽帧、原图及已登记下载副本 | 用户导入原件、运行环境、源码与私密配置 |
+### 3. 媒体如何取得
 
-已完成结果可在媒体删除后继续读取；新的画面问题可能需要重新获取。清理失败会记录原因并保持待清理状态；失败任务的媒体按首次失败起 24 小时到期，下次任务入口处理，没有后台定时任务。
+```mermaid
+flowchart TD
+  A{"输入来源"} -->|用户本地素材| B["登记导入原件，核对作品信息"]
+  A -->|公开抖音作品| C["浏览器读取身份、时长或图片数量"]
+  C --> D{"有可直接下载的媒体？"}
+  D -->|是| E["宿主下载媒体"]
+  D -->|blob 或失败| F["复用本机已验证的免费解析来源"]
+  F --> G{"本次取得成功？"}
+  G -->|失效或无记录| H["检索其他免费来源，每轮累计最多三个"]
+  H --> I{"取得成功？"}
+  I -->|来源失败，尚有尝试次数| H
+  I -->|次数用尽或获取受限| J["登记原因，等待可用本地素材"]
+  I -->|是| K{"取得类型"}
+  G -->|是| K
+  E -->|下载成功| K
+  E -->|下载失败| F
+  K -->|视频| L["核对源时长、音视频轨、全片解码和首尾"]
+  K -->|图文单图或 ZIP| M["按需检查与解包 ZIP，识别实际图片格式"]
+  M --> N["逐张核对数量、原顺序与内容覆盖"]
+  B --> O["按视频或图文执行相同完整性检查"]
+  L --> P{"完整性通过？"}
+  N --> P
+  O --> P
+  P -->|是| Q["adopt 登记证据，可进入用量预览"]
+  Q --> R["解析路线通过核验后更新成功登记"]
+  P -->|否或未知| J
+```
 
-视觉理解采用采样，不能保证读到每一帧；缺少可靠时序时保留文本并说明限制。删除、私密、付费、直播和始终无法完整取得的作品会明确报告受限。云请求超时不自动重发，未决占用和历史提交在媒体清理后仍保留。
+直接获取和解析服务均由宿主操作。解析站只接收公开作品链接；成功来源登记在本机，其他主机重新验证。视频时长容差取一秒与两个视频帧时长中的较大值，缺少可靠源时长标记完整性未知。图文按原顺序登记；ZIP 由独立解包工具检查后再导入图片。取得受阻的作品保留原因，其他独立作品继续。详见[取得指南](docs/agent/zh-CN/acquisition.md)。
 
-## 文档与许可
+### 4. 系统组成与云端数据流
 
-Agent 文档按任务分流，安装与运行都能从稳定入口继续：
+```mermaid
+flowchart TD
+  U["用户：目标、配置与用量授权"] --> H["Codex 宿主：编排与关键证据复核"]
+  H --> B["连接的 Chrome 或 Edge"]
+  B --> S["抖音页面与公开解析服务"]
+  S --> F["任务媒体与取得回执"]
+  H --> L["本地脚本：Conda 独立 Python 3.12"]
+  F --> L
+  L --> T["FFmpeg / FFprobe：完整性、音频分段、自适应抽帧"]
+  T --> P["预览：覆盖范围、模型、缓存与新增用量"]
+  P --> C["缓存与原子 JSON 账本：提交前预留"]
+  C -->|无音轨或静态图文| V
+  C --> A["完整音频分段 → Agent Plan ASR WebSocket"]
+  A --> N["原生时间戳与原视频起点偏移"]
+  N --> V["实际采样图片 → Agent Plan Responses 视觉理解"]
+  V --> G["逐段理解 JSON → 分层汇总 → Markdown 报告"]
+  G --> R["宿主复核原帧，保存文字证据与修订"]
+  R --> X["finalize 清理任务媒体，保留 MD / JSON"]
+  G --> C
+```
 
-| 入口 | 用途 |
+有音轨的视频先覆盖整段音频，再分析实际采样画面并综合转写；无音轨视频和静态图文跳过 ASR。长音频分段保留服务器原生时间与全局偏移，画面按一分钟证据段组织。分段汇总所需请求提前进入预览，云请求关闭自动重试。
+
+| 接口或记录 | 职责 |
 |---|---|
-| [AGENTS.md](AGENTS.md) | 读取仓库的规则与任务路由 |
-| [AGENT_INSTALL.md](AGENT_INSTALL.md) | 从仓库安装、升级与首次接入 |
-| [SKILL.md](SKILL.md) | 已安装技能的自然语言触发与执行规则 |
-| [llms.txt](llms.txt) | Agent 可快速读取的文档地图 |
-| [操作索引 JSON](docs/agent/index.json) | 按语言与任务选择操作指南 |
+| `wss://openspeech.bytedance.com/api/v3/plan/sauc/bigmodel_nostream` | Agent Plan ASR 单流接口，资源 ID `volc.seedasr.sauc.duration`。 |
+| `https://ark.cn-beijing.volces.com/api/plan/v3/responses` | 视觉理解与综合分析；默认 `doubao-seed-2.1-pro`，可配置。 |
+| 缓存与账本 | 按媒体哈希、模型、处理配置及独立提示词/协议版本复用；提交量、返回用量、平台结算分别记录。 |
+| 复核记录 | 关联时间或图片序号、证据编号、哈希、文字观察及当前报告哈希。 |
 
-- [首次使用](docs/agent/zh-CN/onboarding.md)：浏览器、Agent Plan、本地配置与分别验证。
-- [完整执行流程](docs/agent/zh-CN/workflow.md)：命令、回执、预览和复核。
-- [检索、取得与完整性](docs/agent/zh-CN/acquisition.md)：浏览器检索、直接下载、解析后备与图文顺序。
-- [恢复、清理与迁移](docs/agent/zh-CN/recovery.md)：未决请求、缓存和生命周期。
-- [验收范围](references/acceptance.md)：本机实测、同机重定位与未验证环境。
-- [MIT 许可](LICENSE) · [第三方依赖许可](THIRD_PARTY_NOTICES.md)。代码许可不授予第三方作品的转载权。
+### 5. 生命周期、清理与恢复
 
-Windows Codex 是当前已验证的主要环境。同机独立 Conda 环境在含空格路径重建通过；安装、重复安装、用户修改冲突检测、旧 v2 升级和文件占用时回滚已实测。异机与其他宿主仍需各自验证。欢迎带上复现步骤与脱敏日志反馈问题；请勿提交 Key、Cookie、签名下载地址或私人媒体。
+```mermaid
+flowchart TD
+  A["读取实时 status、缓存和账本"] --> B{"存在未决收费请求？"}
+  B -->|是| C["保留预算占用，停止该任务重提，取证恢复"]
+  B -->|否| D{"结果缓存可用？"}
+  D -->|是| E["复用已完成结果或继续剩余步骤"]
+  D -->|否| F["预览授权范围内执行"]
+  E -->|尚有剩余步骤| F
+  E -->|任务已完成| R
+  F --> G{"执行结果"}
+  G -->|认证或额度错误| H["暂停云调用，处理配置或额度"]
+  G -->|超时未决| C
+  G -->|报告已生成| I["review_ready → 原帧复核与修订"]
+  I --> J["finalize 先验证纯文字结果"]
+  J --> K["按所有权、绝对路径和哈希逐文件清理"]
+  K --> L{"清理成功？"}
+  L -->|是| M["completed：文字结果继续可读"]
+  L -->|否| N["cleanup_pending：记录原因，幂等重试"]
+  N --> J
+  H --> O["失败媒体自首次失败暂留24小时"]
+  C --> O
+  O --> P["下次任务入口检查到期与活跃进程"]
+  P -->|到期且无活跃任务| X["cleanup --expired 按所有权清理"]
+  X --> Y["成功为 expired_media_cleaned，失败为 cleanup_pending"]
+  Y -->|失败后重试| P
+  M --> Q{"后续问题"}
+  Q -->|现有证据足够| R["直接读取 MD / JSON"]
+  Q -->|需要新画面| S["重新取得素材并预览"]
+```
+
+已完成缓存直接交付；部分完成的任务只执行剩余步骤。未决请求始终保留原占用，当前需要按[恢复指南](docs/agent/zh-CN/recovery.md)取证并由维护者处理，不能用新任务绕过。过期失败任务清理后记录 `expired_media_cleaned`，只有经过报告复核、文字验证与成功清理的任务才能标记 `completed`。`doctor/status` 不触发清理，后台不安装定时任务。
+
+## 输出与清理规则
+
+| 长期保留 | 复核后清理 | 用户保留 |
+|---|---|---|
+| `analysis.md`、分段理解、转写原生时序 JSON、来源与证据索引、请求和清理记录 | 登记为任务所有的视频、音频、抽帧、原图、临时 ZIP 及浏览器下载副本 | 导入原件、独立环境、源码、私密配置 |
+
+长期报告引用作品链接、时间、图片序号、哈希与文字观察。语音识别、视觉结果和推断分别说明。新的画面问题在清理后需要重新取得素材。删除、私密、付费、直播或始终无法完整获取的作品，会报告实际限制。
+
+## 真实案例摘要
+
+| 案例 | 已验证结果 | 证据 |
+|---|---|---|
+| [2分54秒递归短视频](https://www.douyin.com/video/7683763028419956019) | 174.375秒音频、68帧、15请求；抽查6张关键原帧。 | [摘要](docs/cases/short.zh.md) · [JSON](docs/cases/short.json) |
+| [8分26秒递归长视频](https://www.douyin.com/video/7493866919565610291) | 506.21678秒音频、102帧、22请求；复核公式、代码边界与时间引用。 | [摘要](docs/cases/long.zh.md) · [JSON](docs/cases/long.json) |
+| [9张 C 语言笔记](https://www.douyin.com/note/7699716622642105615) | ZIP 后备取得，3请求；核对原顺序并纠正关键字符识别。 | [摘要](docs/cases/note.zh.md) · [JSON](docs/cases/note.json) |
+
+三项均完成复核、媒体清理和清理后验证。这些记录来自 v2.1 实测，提交量与平台结算分别记录；当前版本终端与安装验证见[验收范围](references/acceptance.md)。
+
+## Agent 文档与许可
+
+[AGENTS.md](AGENTS.md) 提供仓库路由；[AGENT_INSTALL.md](AGENT_INSTALL.md) 负责安装；[SKILL.md](SKILL.md) 负责已安装技能的触发；[llms.txt](llms.txt) 和[双语索引](docs/agent/index.json) 提供按意图检索的入口。
+
+操作指南：[安装升级](docs/agent/zh-CN/install.md) · [首次配置](docs/agent/zh-CN/onboarding.md) · [检索取得](docs/agent/zh-CN/acquisition.md) · [理解交付](docs/agent/zh-CN/workflow.md) · [恢复清理](docs/agent/zh-CN/recovery.md) · [开发维护](docs/agent/zh-CN/maintenance.md)。
+
+Windows Codex 是当前验证环境；Chrome 有真实获取与理解证据，Edge、其他宿主和异机按各自实测记录。原始代码采用 [MIT](LICENSE)，依赖见[第三方说明](THIRD_PARTY_NOTICES.md)；代码许可不授予第三方作品转载权。

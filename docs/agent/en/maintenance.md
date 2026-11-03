@@ -28,6 +28,8 @@ The source repository is [GitHub](https://github.com/HNNUYUXUAN/douyin-agent), w
 
 Upgrades still compare receipt hashes and preserve rollback code, user `.env` and workspace state. Media cleanup cannot be rolled back. Release notes and [acceptance evidence](../../../references/acceptance.md) must agree about validated and untested capabilities.
 
+For installer changes, also run `scripts/test_installer.py` and exercise install, repeat install, setup, and read-only entrypoints through Windows PowerShell 5.1, PowerShell 7, and Git Bash. README diagram sources are native Mermaid blocks; check rendering on both platforms and keep complete text steps.
+
 ## Expected outputs and success evidence
 
 Documentation, commands, index, delivery manifest and implementation agree, with separate test/presentation records. Publication requires actual commit/push and remote checks; local files alone are insufficient.

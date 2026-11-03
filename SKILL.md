@@ -2,7 +2,7 @@
 name: douyin-agent
 description: 使用火山 Agent Plan 自适应理解抖音视频、长视频、图文、分享文案和本地媒体；完整性检查、分段证据、MD/JSON交付并清理临时媒体。Use for Douyin video/image understanding with verified acquisition, adaptive segments and text-only retention.
 ---
-# douyin-agent v2.1.0
+# douyin-agent v2.2.0
 
 按用户语言从 [Agent 操作索引](docs/agent/index.json) 选择当前任务；常用入口为 [中文任务流程](docs/agent/zh-CN/workflow.md) / [English workflow](docs/agent/en/workflow.md)。从仓库安装先读 [AGENT_INSTALL.md](AGENT_INSTALL.md)，首次使用或配置失效读 [中文首次引导](docs/agent/zh-CN/onboarding.md) / [English onboarding](docs/agent/en/onboarding.md)。
 

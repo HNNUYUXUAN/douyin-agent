@@ -16,11 +16,19 @@ English: Give this repository link to a Codex desktop host with local file, term
 
 1. Read `AGENTS.md` and the installation guide in the user's language. Resolve the repository root from actual downloaded files; never reuse an author's machine paths. Inspect the existing installation before replacing it.
 2. Use the official repository linked below. Choose a writable short workspace, suggesting `D:\douyin-agent` only when D: exists. Choose the host's actual skill directory separately from the workspace. Reuse an existing supported Conda installation; missing dependencies follow the guide.
-3. From the repository root use the public installer, replacing both example paths with the detected choices. Optionally pass `-Conda CONDA_EXE` to select an existing installation:
+3. Detect the selected PowerShell 5.1/7 or Git Bash executable/version, reusing available system or host-bundled tools. From the repository root use the public installer, replacing both example paths with the detected choices. Optionally pass `-Conda CONDA_EXE` to select an existing installation:
 
 ```powershell
 ./install.ps1 -Workspace 'D:\douyin-agent' -SkillDir 'C:\Users\YOUR_USER\.codex\skills\douyin-agent'
 ```
+
+Git Bash equivalent / Git Bash 等价入口：
+
+```bash
+bash ./install.sh --workspace '/d/douyin-agent' --skill-dir '/c/Users/YOUR_USER/.codex/skills/douyin-agent'
+```
+
+Use `--conda CONDA_EXE` to select Conda in Git Bash. Both shells call the shared Python installer using Conda base Python 3.10+ and prepare an isolated Python 3.12 runtime. Resolve relative paths from the user's current shell directory. / 两种终端共用安装核心，复用 Conda；相对路径以当前终端目录为准。
 
 4. Read the installer result and use its actual Python/skill paths. Run `onboard --check` through `scripts/da.py`. Follow [中文首次使用](docs/agent/zh-CN/onboarding.md) / [English onboarding](docs/agent/en/onboarding.md) for the host checks and pages to open. Local checks never imply that browser access, a subscription or cloud calls have succeeded.
 5. User completes browser permissions, login, purchases and local Key entry. Record observed non-sensitive readiness using `onboard --record FILE`; show only what remains unresolved. Run a real sample only after its usage preview is covered by user authorization.

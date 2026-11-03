@@ -5,7 +5,7 @@ from datetime import datetime, timezone, timedelta
 import legacy as core
 from legacy import read, write, sha, digest, now, config, within, source, probe, response, recognize
 
-VERSION='2.1.0'
+VERSION='2.2.0'
 MEDIA={'.mp4','.mov','.mkv','.webm','.mp3','.wav','.pcm','.aac','.jpg','.jpeg','.png','.webp','.bmp'}
 
 def process_token(pid):

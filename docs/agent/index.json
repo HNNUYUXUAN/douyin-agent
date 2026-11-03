@@ -19,6 +19,26 @@
       "paths": {
         "zh-CN": "zh-CN/install.md",
         "en": "en/install.md"
+      },
+      "keywords": {
+        "zh-CN": [
+          "安装",
+          "升级",
+          "回滚",
+          "终端",
+          "PowerShell",
+          "Git Bash",
+          "Conda"
+        ],
+        "en": [
+          "install",
+          "upgrade",
+          "rollback",
+          "terminal",
+          "PowerShell",
+          "Git Bash",
+          "Conda"
+        ]
       }
     },
     {
@@ -150,5 +170,18 @@
         "Preserve user-imported archives; register only proven task-owned copies"
       ]
     }
+  ],
+  "installation_entrypoints": {
+    "powershell": "../../install.ps1",
+    "git_bash": "../../install.sh"
+  },
+  "environment_entrypoints": {
+    "powershell": "../../setup.ps1",
+    "git_bash": "../../setup.sh"
+  },
+  "terminal_support": [
+    "Windows PowerShell 5.1",
+    "PowerShell 7",
+    "Windows Git Bash"
   ]
 }

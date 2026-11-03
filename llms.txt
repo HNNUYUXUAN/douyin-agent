@@ -5,7 +5,7 @@
 ## Start here
 
 - [Agent instructions](AGENTS.md): repository rules and routing.
-- [Install with an agent](AGENT_INSTALL.md): bilingual installation entry.
+- [Install with an agent](AGENT_INSTALL.md): bilingual installation entry; Windows PowerShell 5.1/7 and Git Bash share a Conda-backed installer.
 - [Installed skill](SKILL.md): runtime routing and mandatory boundaries.
 - [Machine-readable guide index](docs/agent/index.json): Chinese/English operation map.
 - [Chinese README](README.md): product overview.

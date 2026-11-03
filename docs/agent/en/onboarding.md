@@ -16,6 +16,8 @@ Actual Python/skill/workspace paths, the selected browser and observations to re
 
 ## Procedure
 
+Before installation, check the shell, Conda base interpreter, workspace Python 3.12, and FFmpeg separately. A working shell does not establish runtime readiness. See [installation](install.md).
+
 Bring connection, login, subscription and local Key entry into one guided session, then reuse valid configuration. The host checks capabilities and opens pages; an installer cannot prove browser connectivity. Skip steps already supported by valid evidence.
 
 ### Check before guiding

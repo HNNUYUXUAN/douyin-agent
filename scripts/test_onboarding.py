@@ -29,7 +29,7 @@ class OnboardingTests(unittest.TestCase):
         (self.w/'evidence.md').write_text('Host observed public page')
         r=self.record(); self.assertEqual(r.returncode,0,r.stdout)
         result=json.loads(r.stdout); self.assertTrue(result['record_written']); self.assertFalse(result['browser_verified_by_this_check'])
-        context=json.loads((self.w/'agent-context.json').read_text()); self.assertEqual(context['skill_version'],'2.1.0')
+        context=json.loads((self.w/'agent-context.json').read_text()); self.assertEqual(context['skill_version'],json.loads((self.script.parent.parent/'delivery.json').read_text(encoding='utf-8'))['version'])
         self.assertTrue(Path(context['documentation_index']).is_file())
     def test_unsafe_receipts_never_persist(self):
         for evidence in ['../outside.md','https://example.com/?token=secret','https://user:pass@example.com/','data:image/png;base64,xyz','private.txt']:
