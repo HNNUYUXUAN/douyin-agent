@@ -63,6 +63,8 @@ bash ./install.sh --workspace '/d/douyin-agent'
 
 ## 完整工作链路
 
+以下图源可直接维护。当前客户端若未显示 Mermaid，可阅读每图下方的文字步骤，或查看 [GitCode 页面](https://gitcode.com/yuxuan6426/douyin-agent/blob/main/README.md)。
+
 ### 1. 安装与首次配置
 
 ```mermaid

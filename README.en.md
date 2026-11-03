@@ -63,6 +63,8 @@ To prepare or rebuild only the environment, use `./setup.ps1 -Workspace 'D:\douy
 
 ## The complete workflow
 
+The diagrams are maintained directly in Markdown. If your client does not display Mermaid, use the text steps below each diagram or the [GitCode page](https://gitcode.com/yuxuan6426/douyin-agent/blob/main/README.en.md).
+
 ### 1. Installation and first-time setup
 
 ```mermaid
