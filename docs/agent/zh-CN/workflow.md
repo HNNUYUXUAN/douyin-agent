@@ -20,6 +20,8 @@
 
 以下命令统一使用 `PYTHON SKILL/scripts/da.py --workspace WORKSPACE COMMAND`。`JOB` 是实际返回的任务目录，`PLAN` 与 `ID` 来自当前预览；不要复制旧任务的值。
 
+`ID` 是当前预览 JSON 的 `id` 字段；`PLAN` 是本次自动保存的计划文件绝对路径 `WORKSPACE/out/plans/ID.json`（将 WORKSPACE 和 ID 替换为实际值）。预览打印 JSON，不单独返回路径；先确认该文件存在，再把它传给 `--plan`。
+
 1. 开始任务运行 `cleanup --expired`。查看 `status`；已有相同作品 ID/媒体哈希任务优先复用。完成的文字结果直接读取，新增画面问题重新获取。
 2. 浏览器打开目标作品，核对 ID、作者、标题、完整文案、源时长或图文数量与顺序。获取遵循 [取得协议](../../../references/browser.md)：直接下载优先；blob/失败时复用已成功的免费解析来源，每轮最多三个不同来源。只提交公开链接，不交账号凭据。
 3. 下载后检查真实首尾画面。视频回执使用 `source_id`、`identity_verified`、`page_duration`、`head_tail_verified`、`method`、`host`；图文记录 `expected_images` 与 `order_verified`。仅新下载副本可列入 `owned_downloads`，每项有绝对 `path`、`sha256` 和 `created_by_task:true`。本地用户原件不登记为可删除副本。逐张图片下载受阻时，按 [ZIP 批量取得](acquisition.md#图文逐张下载受阻zip-批量获取) 使用 `unpack_images.py --archive ABS --workspace ABS --output NEW_ABS_DIR --expected-images N`，输出目录必须是工作区内不存在的 ASCII 子目录；宿主逐张核对原页后才确认顺序。ZIP 不传给 adopt；把有所有权证据的临时 ZIP 和解包图片列入回执 `owned_artifacts`，字段为绝对 `path`、`sha256`、`created_by_task:true`。命令及完整回执示例见该取得指南。
