@@ -24,14 +24,14 @@ Windows is the primary environment. Use the host's actual connected Chrome/Edge.
 
 ```mermaid
 flowchart TD
-A[Repository URL] --> B[Agent guides and existing install]
-B --> C[Git Bash then PS7 then PS5.1]
-C --> D[Conda Python 3.12 and FFmpeg]
-D --> E[Choose workspace and host skill directory]
-E --> F[Install and verify actual skill discovery]
-F --> G[Connect browser and open platform]
-G --> H[User login and local Agent Plan Key]
-H --> I[Read-only checks then concrete authorized sample]
+A["Repository URL"] --> B["Agent guides and existing install"]
+B --> C["Git Bash then PS7 then PS5.1"]
+C --> D["Conda Python 3.12 and FFmpeg"]
+D --> E["Choose workspace and host skill directory"]
+E --> F["Install and verify actual skill discovery"]
+F --> G["Connect browser and open platform"]
+G --> H["User login and local Agent Plan Key"]
+H --> I["Read-only checks then concrete authorized sample"]
 ```
 
 Read guides, prepare dependencies and verify browser/service separately. The user handles login, purchase and local Key entry.
@@ -40,16 +40,16 @@ Read guides, prepare dependencies and verify browser/service separately. The use
 
 ```mermaid
 flowchart TD
-A[Topic or URL or local media] --> B[Resolve identity and read live state]
-B --> C{Explicit browse session?}
-C -->|Yes| D[User chooses platform mode and finite limits]
-C -->|Direct analysis| E[Acquire media and verify completeness]
-D --> F[Muted sequential normal-speed playback]
-F --> G[Record observations and selected works]
+A["Topic or URL or local media"] --> B["Resolve identity and read live state"]
+B --> C{"Explicit browse session?"}
+C -->|Yes| D["User chooses platform mode and finite limits"]
+C -->|Direct analysis| E["Acquire media and verify completeness"]
+D --> F["Muted sequential normal-speed playback"]
+F --> G["Record observations and selected works"]
 G --> E
-E --> H[Concrete preview under applicable authorization]
-H --> I[Analyze then actual evidence review]
-I --> J[Finalize and deliver text results]
+E --> H["Concrete preview under applicable authorization"]
+H --> I["Analyze then actual evidence review"]
+I --> J["Finalize and deliver text results"]
 ```
 
 Browse-only, selective and all-item analysis are explicit choices with no default spending mode.
@@ -58,15 +58,15 @@ Browse-only, selective and all-item analysis are explicit choices with no defaul
 
 ```mermaid
 flowchart TD
-A[Verified free parser first] --> B{Actual file landed?}
-B -->|No| C[Existing search skills then host search]
-C --> D[Configured Yuanbao then Bocha]
-D --> E[At most three parser sources per round]
-E --> F[Available host downloader]
-F --> G[User import or deferred item]
-B -->|Yes| H[Verify identity duration tracks full decode head-tail]
+A["Verified free parser first"] --> B{"Actual file landed?"}
+B -->|No| C["Existing search skills then host search"]
+C --> D["Configured Yuanbao then Bocha"]
+D --> E["At most three parser sources per round"]
+E --> F["Available host downloader"]
+F --> G["User import or deferred item"]
+B -->|Yes| H["Verify identity duration tracks full decode head-tail"]
 G -->|Imported| H
-H --> I[Images: original count and order; safe ZIP unpack if needed]
+H --> I["Images: original count and order; safe ZIP unpack if needed"]
 ```
 
 Parser success messages are not landed files. Count every attempt, defer blocked works and continue independent items.
@@ -75,17 +75,17 @@ Parser success messages are not landed files. Count every attempt, defer blocked
 
 ```mermaid
 flowchart TD
-A[User] --> B[Host agent and connected browser]
-B --> C[Local scripts and FFmpeg]
-C --> D[Complete audio chunks]
-C --> E[Adaptive sampled frames or ordered images]
-D --> F[Agent Plan ASR WebSocket]
-E --> G[Agent Plan Responses vision]
-F --> H[Native timestamps and observations]
+A["User"] --> B["Host agent and connected browser"]
+B --> C["Local scripts and FFmpeg"]
+C --> D["Complete audio chunks"]
+C --> E["Adaptive sampled frames or ordered images"]
+D --> F["Agent Plan ASR WebSocket"]
+E --> G["Agent Plan Responses vision"]
+F --> H["Native timestamps and observations"]
 G --> H
-H --> I[Layered report and host review]
-C --> J[Hash cache and request ledger]
-B --> K[DOM first; budgeted screenshot vision when needed]
+H --> I["Layered report and host review"]
+C --> J["Hash cache and request ledger"]
+B --> K["DOM first; budgeted screenshot vision when needed"]
 ```
 
 Audio is fully covered; video vision is sampled. Version ASR, vision and summarization separately and retain native timing and uncertainty.
@@ -94,17 +94,17 @@ Audio is fully covered; video vision is sampled. Version ASR, vision and summari
 
 ```mermaid
 flowchart TD
-A[Read live state cache and ledger] --> B{Unresolved request?}
-B -->|Yes| C[Retain reservation and reconcile]
-B -->|No| D[Reuse completed cache or continue remaining work]
-D --> E[review_ready]
-E --> F[Review original evidence and finalize]
-F --> G{Text valid and cleanup successful?}
-G -->|Yes| H[completed: text remains readable]
-G -->|No| I[cleanup_pending and precise retry]
+A["Read live state cache and ledger"] --> B{"Unresolved request?"}
+B -->|Yes| C["Retain reservation and reconcile"]
+B -->|No| D["Reuse completed cache or continue remaining work"]
+D --> E["review_ready"]
+E --> F["Review original evidence and finalize"]
+F --> G{"Text valid and cleanup successful?"}
+G -->|Yes| H["completed: text remains readable"]
+G -->|No| I["cleanup_pending and precise retry"]
 I --> F
-A --> J[Entry checks expired failed media after 24h]
-J --> K[Clean only owned inactive task files]
+A --> J["Entry checks expired failed media after 24h"]
+J --> K["Clean only owned inactive task files"]
 ```
 
 No automatic paid resubmission. Viewing failed work does not renew its media expiry. No resident scheduler; doctor/status are read-only.

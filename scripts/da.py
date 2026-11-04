@@ -6,7 +6,7 @@ import legacy as core
 from media_tools import configure as configure_media
 from legacy import read, write, sha, digest, now, config, within, source, probe, response, recognize
 
-VERSION='2.4.0'
+VERSION='2.4.1'
 MEDIA={'.mp4','.mov','.mkv','.webm','.mp3','.wav','.pcm','.aac','.jpg','.jpeg','.png','.webp','.bmp'}
 
 def process_token(pid):

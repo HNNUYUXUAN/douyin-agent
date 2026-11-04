@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "name": "douyin-agent",
-  "version": "2.4.0",
+  "version": "2.4.1",
   "files": [
     ".gitattributes",
     ".gitignore",
@@ -158,6 +158,9 @@
     ],
     "2.3.0": [
       "27c0f6ddf02ead9dcee8dc8d374ea20948d7d50ec5c0142f62d26f287797fd90"
+    ],
+    "2.4.0": [
+      "ad5c210ee221dcbe927e44a215178363cb5892474da5ca7241ff0fb4ac5971bb"
     ]
   }
 }

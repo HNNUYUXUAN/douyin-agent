@@ -1,4 +1,4 @@
-param([Parameter(Mandatory=$true)][string]$Destination,[string]$Ref='v2.4.0')
+param([Parameter(Mandatory=$true)][string]$Destination,[string]$Ref='v2.4.1')
 $ErrorActionPreference='Stop'
 # Bootstrap needs Windows PowerShell only; it does not need Git, Python or Conda.
 if($Ref -notmatch '^[A-Za-z0-9._-]+$'){throw 'Use a release tag or commit id.'}
