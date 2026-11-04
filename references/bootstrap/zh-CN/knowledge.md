@@ -14,3 +14,5 @@ PYTHON SKILL/scripts/knowledge.py --workspace WORKSPACE validate
 先检索公开概念和本地案例，再读实时 status、相关指南与实际错误。结果带 public/private 和文档路径；案例中的历史结果不证明当前环境可用。修复后复验，将现象、采取的动作、实际结果、验证证据、关键词写成 JSON；格式见 [脱敏示例](../../../docs/agent/examples/case.json)。sources 仅用干净公开 HTTPS URL 或已存在的工作区相对 MD/JSON 证据。不要把 Key、Cookie、签名地址、机器绝对路径、私人转写、账号资料或原媒体填入案例。脚本拒绝常见凭据/路径模式，提交前仍由宿主检查脱敏。
 
 record 要求新 ASCII id，已有案例不可覆盖；修订用新 id 并在动作中提及旧案例。保存状态始终 draft，不自动宣称已由人复核。中断后用 reindex 重建索引与日志；原问题事实和未决账本仍以工作区证据为准。私有案例不会自动上传或进入分发；需要公开的经验须单独脱敏审阅。
+
+本地 sources 中的 `workspace:qa/evidence.json` 是本项目约定：相对于当前工作区读取该 MD/JSON，允许移动整个工作区后继续定位；它不是公开 URL。通用消费者不认识该 URI 时应保留文本，按实际工作区重新解析，不能据此请求远端。
