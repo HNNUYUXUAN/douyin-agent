@@ -9,3 +9,6 @@ __pycache__/
 .local/
 agent-context.json
 onboarding.json
+
+knowledge-private/
+tools/

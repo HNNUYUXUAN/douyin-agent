@@ -3,9 +3,10 @@ import argparse, asyncio, json, math, os, re, shutil, subprocess, sys, uuid
 from pathlib import Path
 from datetime import datetime, timezone, timedelta
 import legacy as core
+from media_tools import configure as configure_media
 from legacy import read, write, sha, digest, now, config, within, source, probe, response, recognize
 
-VERSION='2.2.0'
+VERSION='2.3.0'
 MEDIA={'.mp4','.mov','.mkv','.webm','.mp3','.wav','.pcm','.aac','.jpg','.jpeg','.png','.webp','.bmp'}
 
 def process_token(pid):
@@ -409,7 +410,7 @@ def main():
     for name in ('finalize','validate','integrity'):
         q=sub.add_parser(name); q.add_argument('--job',required=True)
     q=sub.add_parser('migrate'); q.add_argument('--apply',action='store_true'); q.add_argument('--dry-run',action='store_true')
-    a=p.parse_args(); w=Path(a.workspace).resolve()
+    a=p.parse_args(); w=Path(a.workspace).resolve(); configure_media(w)
     if not w.is_dir(): raise ValueError('Initialize workspace first')
     if a.cmd in ('adopt','preview','run','resume'): cleanup(w)
     if a.cmd=='doctor': result={'python':sys.version.split()[0],'ffmpeg':shutil.which('ffmpeg'),'ffprobe':shutil.which('ffprobe'),'config_present':(w/'.env').exists(),'key_present':bool(config(w).get('VOLC_AGENT_API_KEY')),'cloud_verified':False}

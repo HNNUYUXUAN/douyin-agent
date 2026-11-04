@@ -1,0 +1,56 @@
+{
+  "schema_version": 1,
+  "skill_version": "2.3.0",
+  "host": "WorkBuddy",
+  "host_version": "record_actual_version",
+  "os_architecture": "record_actual_value",
+  "browser": "record_actual_browser",
+  "checks": {
+    "source_fetch": {
+      "status": "unverified",
+      "observed_at": null,
+      "evidence": null
+    },
+    "dependencies": {
+      "status": "unverified",
+      "observed_at": null,
+      "evidence": null
+    },
+    "skill_discovery": {
+      "status": "unverified",
+      "observed_at": null,
+      "evidence": null
+    },
+    "browser_bridge": {
+      "status": "unverified",
+      "observed_at": null,
+      "evidence": null
+    },
+    "douyin_access": {
+      "status": "unverified",
+      "observed_at": null,
+      "evidence": null
+    },
+    "agent_plan_call": {
+      "status": "unverified",
+      "observed_at": null,
+      "evidence": null
+    },
+    "finalize": {
+      "status": "unverified",
+      "observed_at": null,
+      "evidence": null
+    },
+    "text_after_restart": {
+      "status": "unverified",
+      "observed_at": null,
+      "evidence": null
+    },
+    "wiki_record_retrieval": {
+      "status": "unverified",
+      "observed_at": null,
+      "evidence": null
+    }
+  },
+  "note": "Template only. Do not submit as an onboarding --record receipt."
+}

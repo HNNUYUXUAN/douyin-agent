@@ -1,4 +1,4 @@
-param([ValidateSet('install','setup')][string]$Mode,[string]$Workspace,[string]$SkillDir,[string]$Conda)
+param([ValidateSet('install','setup')][string]$Mode,[string]$Workspace,[string]$SkillDir,[string]$Conda,[ValidateSet("codex","workbuddy")][string]$TargetHost="codex")
 $ErrorActionPreference='Stop'
 if($PSVersionTable.PSVersion.Major -lt 5){throw 'Windows PowerShell 5.1 or PowerShell 7 is required.'}
 $candidates=@()
@@ -26,7 +26,7 @@ $base=& $found info --base
 if($LASTEXITCODE -ne 0){throw 'Conda discovery failed; inspect the selected Conda installation.'}
 $py=Join-Path ((@($base)[-1]).Trim()) 'python.exe'
 if(-not(Test-Path -LiteralPath $py -PathType Leaf)){throw 'Conda base Python is missing.'}
-$arguments=@('-B',(Join-Path $PSScriptRoot 'installer.py'),$Mode,'--conda',$found)
+$arguments=@('-B',(Join-Path $PSScriptRoot 'installer.py'),$Mode,'--conda',$found,'--host',$TargetHost)
 if($Workspace){$arguments+=@('--workspace',$ExecutionContext.SessionState.Path.GetUnresolvedProviderPathFromPSPath($Workspace))}
 if($SkillDir){$arguments+=@('--skill-dir',$ExecutionContext.SessionState.Path.GetUnresolvedProviderPathFromPSPath($SkillDir))}
 $prior=$env:PYTHONUTF8

@@ -11,6 +11,10 @@
 - [Chinese README](README.md): product overview.
 - [English README](README.en.md): product overview.
 
+- [Zero-start WorkBuddy (中文)](references/bootstrap/zh-CN/first-run.md) / [English](references/bootstrap/en/first-run.md): source, dependencies, host and clean-device acceptance.
+- [OKF knowledge bundle](wiki/index.md): portable operational knowledge.
+- [Local knowledge operations (中文)](references/bootstrap/zh-CN/knowledge.md) / [English](references/bootstrap/en/knowledge.md): search and sanitized private case storage.
+
 ## Operations
 
 - [Install (中文)](docs/agent/zh-CN/install.md) / [Install (English)](docs/agent/en/install.md)

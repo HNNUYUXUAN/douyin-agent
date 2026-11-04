@@ -237,6 +237,7 @@ def main():
     parser.add_argument('mode', choices=['install', 'setup'])
     parser.add_argument('--workspace')
     parser.add_argument('--skill-dir')
+    parser.add_argument('--host', choices=['codex', 'workbuddy'], default='codex')
     parser.add_argument('--conda', required=True, help='Conda executable discovered by the shell launcher')
     args = parser.parse_args()
     if os.name != 'nt':
@@ -248,7 +249,8 @@ def main():
         parser.error('Conda executable missing; see ' + CONDA_GUIDE)
     w = workspace_path(args.workspace)
     if args.mode == 'install':
-        skill = plain(args.skill_dir or str(Path(os.environ.get('CODEX_HOME', str(Path.home() / '.codex'))) / 'skills/douyin-agent'))
+        default_skill = w / '.codebuddy/skills/douyin-agent' if args.host == 'workbuddy' else Path(os.environ.get('CODEX_HOME', str(Path.home() / '.codex'))) / 'skills/douyin-agent'
+        skill = plain(args.skill_dir or str(default_skill))
         result = install(w, skill, conda)
     else:
         if args.skill_dir:

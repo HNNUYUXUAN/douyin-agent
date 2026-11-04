@@ -1,21 +1,22 @@
 #!/usr/bin/env bash
 set -euo pipefail
 mode=$1; shift
-workspace=''; skill_dir=''; conda_arg=''
+workspace=''; skill_dir=''; conda_arg=''; target_host='codex'
 while (($#)); do
   case "$1" in
-    --workspace|--skill-dir|--conda)
+    --workspace|--skill-dir|--conda|--host)
       (($# >= 2)) || { printf 'Missing value for %s\n' "$1" >&2; exit 2; }
       case "$1" in
         --workspace) workspace=$2;;
         --skill-dir) skill_dir=$2;;
         --conda) conda_arg=$2;;
+        --host) target_host=$2;;
       esac
       shift 2;;
     -h|--help)
       printf 'Usage: bash %s.sh [--workspace PATH] [--conda CONDA_EXE]' "$mode"
       [[ $mode != install ]] || printf ' [--skill-dir PATH]'
-      printf '\nWindows Git Bash; Conda creates a dedicated Python 3.12 environment.\n'; exit 0;;
+      printf '\n--host codex|workbuddy\nWindows Git Bash; Conda creates a dedicated Python 3.12 environment.\n'; exit 0;;
     *) printf 'Unknown argument: %s\n' "$1" >&2; exit 2;;
   esac
 done
@@ -45,7 +46,7 @@ base=${base//$'\r'/}; base=$(cygpath -au "$base")
 py="$base/python.exe"
 [[ -f $py ]] || { printf 'Conda base Python is missing.\n' >&2; exit 1; }
 script_dir=$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)
-args=( -B "$(cygpath -aw "$script_dir/installer.py")" "$mode" --conda "$(cygpath -aw "$found")" )
+args=( -B "$(cygpath -aw "$script_dir/installer.py")" "$mode" --host "$target_host" --conda "$(cygpath -aw "$found")" )
 [[ -z $workspace ]] || args+=( --workspace "$(cygpath -aw "$workspace")" )
 [[ -z $skill_dir ]] || args+=( --skill-dir "$(cygpath -aw "$skill_dir")" )
 # All path arguments are already native Windows paths; prevent MSYS from rewriting them again.

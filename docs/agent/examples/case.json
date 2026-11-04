@@ -1,0 +1,17 @@
+{
+  "id": "browser-bridge-check",
+  "title": "Browser bridge requires verification",
+  "symptom": "Extension exists but the target tab is unreadable",
+  "action": "Inspect bridge status and share a test tab using current host tools",
+  "result": "Illustrative record only; replace with actual observed result",
+  "verification": "Illustrative; not a passed clean-device test",
+  "keywords": [
+    "WorkBuddy",
+    "browser",
+    "连接",
+    "bridge"
+  ],
+  "sources": [
+    "https://www.codebuddy.cn/docs/workbuddy/From-Beginner-to-Expert-Guide/Function-Description/Right-Sidebar"
+  ]
+}

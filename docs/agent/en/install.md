@@ -2,6 +2,8 @@
 
 [中文](../zh-CN/install.md) · [Index](../index.json)
 
+For a new WorkBuddy device read [zero-start](../../../references/bootstrap/en/first-run.md). Explicitly use `-TargetHost workbuddy` / `--host workbuddy` rather than the Codex default directory.
+
 ## Applicable intent
 
 Install from a repository for the first time, or upgrade an existing installation and rebuild its isolated runtime.

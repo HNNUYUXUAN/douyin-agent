@@ -28,6 +28,9 @@
 
 ### 浏览器
 
+WorkBuddy 使用自己的 [宿主连接指南](../../../references/bootstrap/zh-CN/workbuddy.md)，浏览器连接按其设置与工具核验；下述 Codex UI 说明仅适用于 Codex。
+
+
 本机优先已连接 Chrome；用户选择 Edge 时使用该浏览器自己的配置和权限。根据 [官方连接说明](https://learn.chatgpt.com/docs/chrome-extension)，引导用户在桌面宿主 Settings → Computer Use 安装/管理对应扩展，并在聊天选择 `@Chrome` 或 `@Edge`。入口随宿主版本变化时以实际 UI 为准。
 
 连接成功后，在同一浏览器配置中打开 [抖音](https://www.douyin.com/)。用户按需登录、处理验证码和权限提示。宿主实际读到页面标题或目标作品后才记录访问通过。不能要求用户导出 Cookie。浏览器未连接时先提供官方说明链接，让用户完成连接，再自动打开余下页面；不要声称已打开无法访问的标签页。

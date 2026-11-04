@@ -183,5 +183,33 @@
     "Windows PowerShell 5.1",
     "PowerShell 7",
     "Windows Git Bash"
-  ]
+  ],
+  "zero_start": {
+    "zh-CN": "../../references/bootstrap/zh-CN/first-run.md",
+    "en": "../../references/bootstrap/en/first-run.md"
+  },
+  "knowledge": {
+    "bundle": "../../wiki/index.md",
+    "script": "../../scripts/knowledge.py",
+    "guide": {
+      "zh-CN": "../../references/bootstrap/zh-CN/knowledge.md",
+      "en": "../../references/bootstrap/en/knowledge.md"
+    },
+    "format": "OKF 0.2",
+    "private_directory": "WORKSPACE/knowledge-private",
+    "read_only": [
+      "search",
+      "validate"
+    ],
+    "writes": [
+      "init",
+      "record",
+      "reindex"
+    ]
+  },
+  "workbuddy": {
+    "install_flag": "-TargetHost workbuddy / --host workbuddy",
+    "default_skill_dir": "WORKSPACE/.codebuddy/skills/douyin-agent",
+    "runtime_status": "other_device_unverified"
+  }
 }

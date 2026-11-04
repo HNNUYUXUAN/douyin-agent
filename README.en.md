@@ -24,6 +24,8 @@ Open the required pages or local file when I need to sign in, purchase, or enter
 
 [GitHub](https://github.com/HNNUYUXUAN/douyin-agent) · [GitCode mirror](https://gitcode.com/yuxuan6426/douyin-agent) · [Agent installation entry](AGENT_INSTALL.md)
 
+For a new device with only WorkBuddy and its Chrome/Edge connector, start with the [modular zero-start guide](references/bootstrap/en/first-run.md). It covers source, Conda/FFmpeg, WorkBuddy discovery and the first task. Use the [Google OKF Wiki](wiki/index.md) for operational knowledge; other-device success requires actual acceptance evidence.
+
 ## Prepare the environment
 
 | Layer | Purpose and preparation |

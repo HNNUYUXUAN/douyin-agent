@@ -7,6 +7,8 @@ This repository contains `douyin-agent`, a Windows-first skill orchestrated by t
 | Intent / 意图 | Read first / 首读 |
 |---|---|
 | Install from this repository / 从仓库安装 | [AGENT_INSTALL.md](AGENT_INSTALL.md) |
+| New WorkBuddy device / 全新设备 | [中文](references/bootstrap/zh-CN/first-run.md) / [English](references/bootstrap/en/first-run.md) |
+| Search/store operational knowledge / 检索与记录问题 | [OKF Wiki](wiki/index.md) |
 | Run an installed skill / 使用已安装技能 | [SKILL.md](SKILL.md) |
 | Find a specific operation / 查找操作 | [Machine index / 机器索引](docs/agent/index.json) |
 | Understand the public project / 了解项目 | [中文 README](README.md) · [English README](README.en.md) |
@@ -16,7 +18,7 @@ This repository contains `douyin-agent`, a Windows-first skill orchestrated by t
 - Read the existing script and the corresponding guide before editing. Keep Chinese and English operation guides equivalent; update command examples only when the implementation supports them.
 - Only publish reviewed, task-authorized assets. Private configuration, local installation receipts, environments, job media, user paths, raw service responses and task ledgers are not public examples. Public diagrams explain the system; illustrations must not impersonate screenshots or measured results.
 - Use the delivery allowlist for installation/export. Preserve unknown user files and changed installed files; compare release hashes before replacement. Backups belong outside skill discovery. Never package an author's runtime or credentials.
-- Run the existing offline suite for runtime changes: `PYTHON scripts/test_da.py`, `PYTHON scripts/test_onboarding.py`, `PYTHON scripts/test_unpack_images.py`, and `PYTHON scripts/test_installer.py`. Installation changes also require actual PowerShell 5.1, PowerShell 7 and Windows Git Bash checks. Offline success does not prove browser, cloud, clean-device or fresh-chat support. Link documented evidence and label untested capabilities.
+- Run the existing offline suite for runtime changes: `PYTHON scripts/test_da.py`, `PYTHON scripts/test_onboarding.py`, `PYTHON scripts/test_unpack_images.py`, and `PYTHON scripts/test_installer.py`, and `PYTHON scripts/test_knowledge.py`. Source-fetch changes also require `scripts/test_fetch.ps1` through PowerShell 5.1/7. Installation changes also require actual PowerShell 5.1, PowerShell 7 and Windows Git Bash checks. Offline success does not prove browser, cloud, clean-device or fresh-chat support. Link documented evidence and label untested capabilities.
 - Paid calls require a concrete preview and applicable user authorization. No automatic retries; retain original request reservations during recovery. Do not call the production pipeline merely to test configuration.
 - Temporary media cleanup applies to verified task-owned files. Never delete a user-import original, a whole Downloads directory, browser caches or unrelated project media. Preserve native timing, text evidence, reports and billing history.
 - New names use short ASCII; full task paths must fit within 160 characters. Default delivery is an ordinary directory, without an archive.

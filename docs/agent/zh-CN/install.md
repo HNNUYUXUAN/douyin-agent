@@ -2,6 +2,8 @@
 
 [English](../en/install.md) · [索引](../index.json)
 
+新 WorkBuddy 设备先读 [从零引导](../../../references/bootstrap/zh-CN/first-run.md)，使用明确的 `-TargetHost workbuddy` / `--host workbuddy`，勿沿用 Codex 默认技能目录。
+
 ## 适用意图
 
 从仓库首次安装技能，或升级已有安装并重建独立环境。

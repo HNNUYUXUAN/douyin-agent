@@ -28,6 +28,9 @@ The host separately verifies browser connection, selected profile, Douyin access
 
 ### Browser
 
+For WorkBuddy use its [host connection guide](../../../references/bootstrap/en/workbuddy.md) and actual tools/settings; the Codex UI below applies to Codex only.
+
+
 Prefer a connected Chrome on the tested device. If the user selects Edge, verify that browser's own profile and permissions. Follow the [official connection guide](https://learn.chatgpt.com/docs/chrome-extension): desktop Settings → Computer Use installs/manages the corresponding extension, and `@Chrome` or `@Edge` selects it in chat. Follow the actual host UI if labels change.
 
 Once connected, open [Douyin](https://www.douyin.com/) in that same profile. The user handles login, CAPTCHA and permission prompts where required. Record access as passed only after the host reads the actual page title or target work. Never request exported cookies. Without a connection, provide the official guide first, let the user connect, then open the remaining pages; do not claim inaccessible tabs were opened.

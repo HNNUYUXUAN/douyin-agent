@@ -24,6 +24,8 @@
 
 [GitHub](https://github.com/HNNUYUXUAN/douyin-agent) · [GitCode 镜像](https://gitcode.com/yuxuan6426/douyin-agent) · [Agent 安装入口](AGENT_INSTALL.md)
 
+新设备仅安装 WorkBuddy 与 Chrome/Edge 连接器时，从 [分块指引](references/bootstrap/zh-CN/first-run.md) 开始。覆盖源码获取、Conda/FFmpeg、WorkBuddy 技能发现及首条任务；问题经验可按 [Google OKF Wiki](wiki/index.md) 检索与存储。异机实测由新设备验收记录确认。
+
 ## 环境准备
 
 | 层次 | 用途与准备方式 |

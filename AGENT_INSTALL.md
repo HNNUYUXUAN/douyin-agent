@@ -1,16 +1,22 @@
 # Install with an agent / 通过 Agent 安装
 
-中文：将仓库链接交给具备本地文件、终端及浏览器连接能力的 Codex 桌面宿主，并说：
+中文：将仓库链接交给具备本地文件、终端及浏览器连接能力的 Codex 或 WorkBuddy 桌面宿主，并说：
 
 > 请从这个仓库安装 douyin-agent，选择合适的工作区，检查依赖，并带我完成浏览器与 Agent Plan 的首次配置。
 
-English: Give this repository link to a Codex desktop host with local file, terminal and connected-browser capabilities:
+English: Give this repository link to a Codex or WorkBuddy desktop host with local file, terminal and connected-browser capabilities:
 
 > Install douyin-agent from this repository, choose a workspace, check dependencies, and guide me through browser and Agent Plan setup.
 
 - [中文安装指南](docs/agent/zh-CN/install.md)
 - [English installation guide](docs/agent/en/install.md)
 - [操作索引 / Operation index](docs/agent/index.json)
+
+## New device / 全新设备
+
+Only WorkBuddy and its browser connector installed? Start with [中文从零引导](references/bootstrap/zh-CN/first-run.md) / [English zero-start guide](references/bootstrap/en/first-run.md). The guides cover source acquisition without Git/Python, Conda and FFmpeg preparation, explicit WorkBuddy installation target, browser checks, local Key entry, first task and clean-device acceptance.
+
+WorkBuddy must use `-TargetHost workbuddy` / `--host workbuddy`, or an explicitly verified skill directory. The default remains Codex for compatibility. The project-local WorkBuddy location is `WORKSPACE/.codebuddy/skills/douyin-agent`; verify actual client discovery.
 
 ## Agent procedure / Agent 执行顺序
 

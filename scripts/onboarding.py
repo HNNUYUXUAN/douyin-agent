@@ -7,6 +7,7 @@ CHECKS={'browser_connection','douyin_access','agent_plan_call'}
 STATUSES={'passed','blocked','unverified','not_applicable'}
 LINKS={
  'browser':'https://learn.chatgpt.com/docs/chrome-extension',
+ 'workbuddy_browser':'https://www.codebuddy.cn/docs/workbuddy/From-Beginner-to-Expert-Guide/Function-Description/Right-Sidebar',
  'douyin':'https://www.douyin.com/',
  'agent_plan':'https://www.volcengine.com/activity/agentplan',
  'console':'https://ark.volcengine.com/region:cn-beijing/openManagement?LLM=%7B%7D&advancedActiveKey=agentPlan',
