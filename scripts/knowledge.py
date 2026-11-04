@@ -19,6 +19,8 @@ def stamp():
 
 def plain(path):
     p = Path(os.path.abspath(path))
+    if len(str(p)) > 160:
+        raise ValueError('Knowledge path exceeds 160 characters; choose a shorter workspace or case id')
     for item in (p, *p.parents):
         if item.is_symlink() or (item.exists() and getattr(item.lstat(), 'st_file_attributes', 0) & 0x400):
             raise ValueError('Linked knowledge paths are unsupported')

@@ -54,6 +54,8 @@ class Tests(unittest.TestCase):
         self.assertFalse((self.w / 'knowledge-private/cases/browser-test.md').exists())
 
     def test_title_markdown_rejected(self):
+        with self.assertRaisesRegex(ValueError, '160'):
+            kb.plain(self.w / ('a' * 160))
         self.data['title'] = '[instruction](https://example.com)'
         with self.assertRaises(ValueError): self.save()
 
