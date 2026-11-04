@@ -3,7 +3,7 @@ import json, os, re, shutil, sys
 from datetime import datetime, timezone
 from pathlib import Path
 
-CHECKS={'browser_connection','douyin_access','agent_plan_call'}
+CHECKS={'browser_connection','douyin_access','youtube_access','xiaohongshu_access','tiktok_access','visual_inspection','agent_plan_call'}
 STATUSES={'passed','blocked','unverified','not_applicable'}
 LINKS={
  'browser':'https://learn.chatgpt.com/docs/chrome-extension',
@@ -31,7 +31,7 @@ def onboard(w,a,version,read,write,config):
             if not isinstance(value,dict) or set(value)!={'status','observed_at','evidence'} or value['status'] not in STATUSES:
                 raise ValueError('Each check requires status, observed_at, evidence only')
             stamp=datetime.fromisoformat(value['observed_at'].replace('Z','+00:00'))
-            if stamp.tzinfo is None or stamp>datetime.now(timezone.utc): raise ValueError('Use an observed past timezone-aware timestamp')
+            if stamp.tzinfo is None or stamp>datetime.now(timezone.utc): raise ValueError('Use actual system UTC time with timezone, at or before the current system clock')
             evidence=value['evidence']
             if not isinstance(evidence,str) or not evidence or len(evidence)>240: raise ValueError('Provide a short evidence reference')
             if re.search(r'(?i)(bearer|api[_-]?key|token|cookie|afp_|sk-)',evidence): raise ValueError('Evidence must not contain credentials')

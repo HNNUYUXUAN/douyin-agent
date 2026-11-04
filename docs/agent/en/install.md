@@ -63,3 +63,8 @@ Stop overwriting on user-edit conflicts, unknown existing directories, missing e
 ## Next links
 
 Continue with [onboarding](onboarding.md), then [acquisition](acquisition.md) and the [workflow](workflow.md).
+
+
+v2.4: prefer installed Git Bash, then PowerShell 7, then Windows PowerShell 5.1; record actual executable/version. New WorkBuddy installs use user-level `.workbuddy/skills/douyin-agent`; existing receipt paths remain. Separate session folder from runtime workspace. Use system UTC observations. Load [browsing](browse.md) for platform/vision routes. Prefer free parsers for acquisition; discover sources through existing search skills, host search, then configured Yuanbao/Bocha. Guide local Key setup only when search capability is missing. `parsed_download_failed` means parsing succeeded but no file landed. Every attempt counts toward the three-source round limit. User-assisted imports preserve originals and require identity, head/tail, duration or image-order checks. Avoid reading unknown clipboard contents for download links.
+
+Use built-in Windows PowerShell to run read-only `scripts/terminal.ps1`; it returns the preferred executable and version. Execute installation through that returned shell.

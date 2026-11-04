@@ -5,13 +5,20 @@ New-Item -ItemType Directory -Path $testRoot | Out-Null
 $target=Join-Path $testRoot 'repo'
 $global:FetchFixtureRoot=$SourceRoot
 $global:FetchFixtureBad=$false
+$global:FetchFixtureArchive=$false
 function FileDigest([string]$Path){
  $digest=[Security.Cryptography.SHA256]::Create()
  try{return [BitConverter]::ToString($digest.ComputeHash([IO.File]::ReadAllBytes($Path)))}finally{$digest.Dispose()}
 }
 function global:Invoke-WebRequest {
  param([switch]$UseBasicParsing,[string]$Uri,[string]$OutFile)
- $prefix='https://raw.githubusercontent.com/HNNUYUXUAN/douyin-agent/v2.3.0/'
+ if($global:FetchFixtureArchive){
+  if($Uri.StartsWith('https://raw.githubusercontent.com/')){throw 'simulated raw unavailable'}
+  if($Uri.StartsWith('https://api.github.com/')){return @{Content='{"sha":"1111111111111111111111111111111111111111"}'}}
+  if($Uri.StartsWith('https://codeload.github.com/')){Copy-Item -LiteralPath $global:FetchArchivePath -Destination $OutFile;return}
+  throw 'Unexpected archive origin'
+ }
+ $prefix='https://raw.githubusercontent.com/HNNUYUXUAN/douyin-agent/v2.4.0/'
  if(-not $Uri.StartsWith($prefix)){throw 'Unexpected origin'}
  $rel=$Uri.Substring($prefix.Length)
  if($global:FetchFixtureBad){return @{Content='{"schema_version":1,"name":"douyin-agent","files":["../escape.md"]}'}}
@@ -19,7 +26,7 @@ function global:Invoke-WebRequest {
  else{return @{Content=[IO.File]::ReadAllText((Join-Path $global:FetchFixtureRoot $rel))}}
 }
 try {
- & (Join-Path $SourceRoot 'fetch.ps1') -Destination $target -Ref v2.3.0 | Out-Null
+ & (Join-Path $SourceRoot 'fetch.ps1') -Destination $target -Ref v2.4.0 | Out-Null
  $manifest=Get-Content -Raw -LiteralPath (Join-Path $SourceRoot 'delivery.json') | ConvertFrom-Json
  foreach($rel in (@($manifest.files)+@('delivery.json'))){
   if((FileDigest (Join-Path $target $rel)) -ne (FileDigest (Join-Path $SourceRoot $rel))){throw 'Fixture download mismatch'}
@@ -29,6 +36,18 @@ try {
  $global:FetchFixtureBad=$true
  $failed=$false;try {& (Join-Path $SourceRoot 'fetch.ps1') -Destination (Join-Path $testRoot 'bad') | Out-Null}catch{$failed=$true}
  if(-not $failed -or (Test-Path -LiteralPath (Join-Path $testRoot 'escape.md'))){throw 'Manifest traversal protection failed'}
+ $global:FetchFixtureBad=$false
+ Add-Type -AssemblyName System.IO.Compression.FileSystem
+ Add-Type -AssemblyName System.IO.Compression
+ $global:FetchArchivePath=Join-Path $testRoot 'fixture.zip'
+ $zip=[IO.Compression.ZipFile]::Open($global:FetchArchivePath,[IO.Compression.ZipArchiveMode]::Create)
+ try{foreach($rel in (@($manifest.files)+@('delivery.json'))){
+  [IO.Compression.ZipFileExtensions]::CreateEntryFromFile($zip,(Join-Path $SourceRoot $rel),('release/'+$rel)) | Out-Null
+ }}finally{$zip.Dispose()}
+ $global:FetchFixtureArchive=$true
+ $fallback=Join-Path $testRoot 'fallback'
+ & (Join-Path $SourceRoot 'fetch.ps1') -Destination $fallback -Ref v2.4.0 | Out-Null
+ foreach($rel in (@($manifest.files)+@('delivery.json'))){if((FileDigest (Join-Path $fallback $rel)) -ne (FileDigest (Join-Path $SourceRoot $rel))){throw 'Archive fallback mismatch'}}
  Write-Output 'PASS: simulated no-Git source fetch, hashes, existing-directory and traversal protection'
 } finally {
  Remove-Item Function:\Invoke-WebRequest -ErrorAction SilentlyContinue

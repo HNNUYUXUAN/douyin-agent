@@ -6,7 +6,7 @@ import legacy as core
 from media_tools import configure as configure_media
 from legacy import read, write, sha, digest, now, config, within, source, probe, response, recognize
 
-VERSION='2.3.0'
+VERSION='2.4.0'
 MEDIA={'.mp4','.mov','.mkv','.webm','.mp3','.wav','.pcm','.aac','.jpg','.jpeg','.png','.webp','.bmp'}
 
 def process_token(pid):
@@ -63,9 +63,13 @@ def paid(w,job,ident,charge,call,limit):
     if cache.exists(): return read(cache)
     if pending.exists(): raise ValueError('Unresolved paid request; explicit reconciliation required')
     records=ledger(w)
+    if limit.get('session_id'):
+        from browsing import check
+        check(w,limit['session_id'],charge,records,ident.get('stage'))
     used={k:sum(r['charge'].get(k,0) for r in records if r.get('plan')==limit['id']) for k in charge}
     if any(used[k]+charge[k]>limit['new_usage'][k]+1e-6 for k in charge): raise ValueError('Approved plan budget exceeded')
     reservation={'at':now(),'cache_id':key,'identity':ident,'job':job.name,'plan':limit['id'],'charge':charge,'status':'submitted'}
+    if limit.get('session_id'): reservation['session_id']=limit['session_id']
     pending.parent.mkdir(parents=True,exist_ok=True)
     with open(pending,'x',encoding='utf-8') as f: json.dump(reservation,f)
     records.append(reservation); write(w/'requests.json',records)
@@ -87,12 +91,12 @@ def public_url(url):
 
 def provider(w,a):
     p=w/'providers.json'; rows=read(p) if p.exists() else []
-    if not a.receipt: return {'providers':sorted(rows,key=lambda r:r.get('last_success',''),reverse=True),'max_sources_per_round':3,'host_action':'reuse verified provider; on failure discover free public providers'}
+    if not a.receipt: return {'providers':sorted(rows,key=lambda r:r.get('last_success',''),reverse=True),'max_sources_per_round':3,'host_action':'free verified parser first; existing search skills, host search, then configured Yuanbao/Bocha; all attempts count'}
     r=read(a.receipt)
     allowed={'url','host','search_source','instructions','types','outcome','job','round_id'}
     if set(r)-allowed: raise ValueError('Unexpected provider receipt fields')
     public_url(r['url']); public_url(r['search_source'])
-    if r['outcome'] not in ('success','failed','quota_exhausted','unavailable','login_required','captcha_required'): raise ValueError('Unknown provider outcome')
+    if r['outcome'] not in ('success','failed','quota_exhausted','unavailable','login_required','captcha_required','parsed_download_failed'): raise ValueError('Unknown provider outcome')
     history_path=w/'provider-history.json'; history=read(history_path) if history_path.exists() else []
     if r.get('round_id'):
         attempted={x['url'] for x in history if x.get('round_id')==r['round_id'] and x['host']==r['host']}
@@ -196,7 +200,7 @@ def preview(w,a):
     jobs=[]; seen_ids=set(); seen_hashes=set(); duplicates=[]
     for p in a.jobs:
         job=within(w,p); m=read(job/'metadata.json')
-        sid=m.get('source',{}).get('id'); identity=m.get('media_identity')
+        sid=(m.get('source',{}).get('platform','douyin'),m.get('source',{}).get('id')); identity=m.get('media_identity')
         if (sid and sid in seen_ids) or (identity and identity in seen_hashes): duplicates.append(str(job)); continue
         if sid: seen_ids.add(sid)
         if identity: seen_hashes.add(identity)
@@ -224,6 +228,14 @@ def preview(w,a):
     effort=config(w).get('VOLC_AGENT_REASONING','low'); options={'max_output_tokens':16384}
     if effort!='default': options['reasoning']={'effort':effort}
     plan={'version':VERSION,'model':config(w).get('VOLC_AGENT_MODEL') or core.MODEL,'response_options':options,'question':a.question,'jobs':jobs,'duplicates_skipped':duplicates,'usage_basis':'upper_bound_before_downstream_cache_hits','new_usage':{'audio_seconds':sum(j['audio_seconds'] for j in jobs),'images':sum(j['images'] for j in jobs),'requests':sum(j['requests'] for j in jobs)},'created_at':now()}
+    if getattr(a,'session',None):
+        from browsing import check,scope_job,load
+        for j in jobs: scope_job(w,a.session,read(w/j['job']/'metadata.json'),ledger(w))
+        check(w,a.session,plan['new_usage'],ledger(w),'report')
+        plan['session_id']=a.session
+        session_root,session=load(w,a.session)
+        session['jobs']=sorted(set(session.get('jobs',[])) | {j['job'] for j in jobs})
+        write(session_root/'session.json',session)
     plan['id']=digest(plan)[:24]; write(w/'out/plans'/f"{plan['id']}.json",plan); return plan
 
 def run(w,a):
@@ -238,6 +250,9 @@ def run(w,a):
             if not key: raise ValueError('Missing Agent Plan key')
             if sha(job/'metadata.json')!=j['metadata_hash']: raise ValueError('Metadata changed')
             if any(read(f).get('job') in (job.name,j['job']) for f in (w/'cache').glob('*.pending.json')): raise ValueError('Unresolved request blocks job')
+            if p.get('session_id'):
+                from browsing import scope_job
+                scope_job(w,p['session_id'],m,ledger(w))
             state(job,'processing')
             try:
                 segments=[]
@@ -401,19 +416,38 @@ def main():
     for name in ('doctor','status'): sub.add_parser(name)
     q=sub.add_parser('onboard'); g=q.add_mutually_exclusive_group(required=True); g.add_argument('--check',action='store_true'); g.add_argument('--record')
     q=sub.add_parser('cleanup'); q.add_argument('--expired',action='store_true')
-    q=sub.add_parser('search'); q.add_argument('--job',required=True); q.add_argument('--query',required=True)
+    q=sub.add_parser('search'); q.add_argument('--job'); q.add_argument('--session'); q.add_argument('--query',required=True)
     q=sub.add_parser('providers'); q.add_argument('--receipt')
     q=sub.add_parser('adopt'); q.add_argument('source'); q.add_argument('--media',nargs='+',required=True); q.add_argument('--receipt'); q.add_argument('--title',default=''); q.add_argument('--author',default=''); q.add_argument('--caption',default='')
-    q=sub.add_parser('preview'); q.add_argument('--jobs',nargs='+'); q.add_argument('--manifest'); q.add_argument('--question',default='完整理解并保留证据和限制')
+    q=sub.add_parser('preview'); q.add_argument('--jobs',nargs='+'); q.add_argument('--manifest'); q.add_argument('--session'); q.add_argument('--question',default='完整理解并保留证据和限制')
     for name in ('run','resume'):
         q=sub.add_parser(name); q.add_argument('--plan',required=True); q.add_argument('--approve',required=True)
     for name in ('finalize','validate','integrity'):
         q=sub.add_parser(name); q.add_argument('--job',required=True)
     q=sub.add_parser('migrate'); q.add_argument('--apply',action='store_true'); q.add_argument('--dry-run',action='store_true')
+    q=sub.add_parser('browse'); bs=q.add_subparsers(dest='action',required=True)
+    z=bs.add_parser('create'); z.add_argument('--config',required=True)
+    for act in ('approve','resume','pause','status','record'):
+        z=bs.add_parser(act); z.add_argument('--session',required=True)
+        if act in ('approve','resume'): z.add_argument('--approve',required=True)
+        if act=='record': z.add_argument('--file',required=True)
+    q=sub.add_parser('inspect'); q.add_argument('--session',required=True); q.add_argument('--image',required=True); q.add_argument('--snapshot',required=True); q.add_argument('--goal',required=True)
     a=p.parse_args(); w=Path(a.workspace).resolve(); configure_media(w)
     if not w.is_dir(): raise ValueError('Initialize workspace first')
     if a.cmd in ('adopt','preview','run','resume'): cleanup(w)
-    if a.cmd=='doctor': result={'python':sys.version.split()[0],'ffmpeg':shutil.which('ffmpeg'),'ffprobe':shutil.which('ffprobe'),'config_present':(w/'.env').exists(),'key_present':bool(config(w).get('VOLC_AGENT_API_KEY')),'cloud_verified':False}
+    if a.cmd=='browse':
+        import browsing
+        if a.action=='create': result=browsing.create(w,read(a.config))
+        elif a.action=='status':
+            result=browsing.load(w,a.session)[1]; result['usage']=browsing.usage(ledger(w),a.session)
+        else:
+            with locked(w):
+                result=browsing.record(w,a.session,read(a.file)) if a.action=='record' else browsing.change(w,a.session,a.action,getattr(a,'approve',None))
+    elif a.cmd=='inspect':
+        import browsing
+        if not config(w).get('VOLC_AGENT_API_KEY'): raise ValueError('Missing Agent Plan key')
+        with locked(w): result=browsing.inspect(w,a,paid,ledger,config,response)
+    elif a.cmd=='doctor': result={'python':sys.version.split()[0],'ffmpeg':shutil.which('ffmpeg'),'ffprobe':shutil.which('ffprobe'),'config_present':(w/'.env').exists(),'key_present':bool(config(w).get('VOLC_AGENT_API_KEY')),'cloud_verified':False}
     elif a.cmd=='onboard':
         from onboarding import onboard
         result=onboard(w,a,VERSION,read,write,config)
@@ -426,7 +460,17 @@ def main():
         result=preview(w,a)
     elif a.cmd in ('run','resume'): result=run(w,a)
     elif a.cmd=='cleanup': result=cleanup(w)
-    elif a.cmd=='search': result=core.search(w,within(w,a.job),a.query)
+    elif a.cmd=='search':
+        if a.session:
+            import browsing
+            target,session=browsing.load(w,a.session,True)
+            limit={'id':'search-'+session['approval_id'],'session_id':a.session,'new_usage':session['config']['limits']}
+            def submit(provider,body,call):
+                return paid(w,target,{'stage':'search','provider':provider,'query':digest(body)},{'search_requests':1,'requests':0,'images':0,'audio_seconds':0},call,limit)
+            with locked(w): result=core.search(w,target,a.query,submit)
+        else:
+            if not a.job: raise ValueError('Provide --session or --job')
+            result=core.search(w,within(w,a.job),a.query)
     elif a.cmd=='migrate': result=migrate(w,a.apply)
     elif a.cmd=='finalize': result=finalize(w,a)
     elif a.cmd=='integrity': result=integrity(within(w,a.job))

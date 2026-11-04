@@ -3,7 +3,7 @@
 适用：Windows x64 新设备仅安装 WorkBuddy 与 Chrome/Edge 连接器。标准技能入口文件名是 `SKILL.md`（大写单数），旁边的 scripts 和 references 随安装保留。
 
 1. [获取源码和依赖](dependencies.md)：无需预先安装 Git、Python 或 Conda；宿主先检查实际终端，使用 Windows 自带 PowerShell 下载源码。
-2. [WorkBuddy 宿主配置](workbuddy.md)：选择工作文件夹，把技能安装到其 `.codebuddy/skills/douyin-agent`；验证客户端发现和实际浏览器连接。
+2. [WorkBuddy 宿主配置](workbuddy.md)：核对当前用户目录，把技能安装到其 `.codebuddy/skills/douyin-agent`；验证客户端发现和实际浏览器连接。
 3. [首次配置](../../../docs/agent/zh-CN/onboarding.md)：宿主打开抖音、Agent Plan 购买页、控制台及本地 .env，用户完成登录/购买/Key 输入。
 4. [首条任务](../../../docs/agent/zh-CN/workflow.md)：给实际作品链接，核对与取得媒体，完整性通过后展示预览；在有效授权内执行，复核并 finalize。
 5. [排错与知识积累](knowledge.md)：先检索文档和私有案例，按证据处理，保存脱敏问题记录。

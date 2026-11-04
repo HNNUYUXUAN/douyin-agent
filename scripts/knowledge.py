@@ -105,10 +105,11 @@ def record(workspace, source):
     sources = []
     for item in data['sources']:
         safe_text(item)
+        if item.startswith('workspace:'): item=item[len('workspace:'):]
         u = urlsplit(item)
         if u.scheme:
             if u.scheme != 'https' or not u.hostname or u.username or u.password or u.query or u.fragment:
-                raise ValueError('Use clean public HTTPS URLs')
+                raise ValueError('Use clean public HTTPS URL or existing workspace-relative MD/JSON evidence')
         else:
             evidence = plain(workspace / item)
             evidence.relative_to(workspace)

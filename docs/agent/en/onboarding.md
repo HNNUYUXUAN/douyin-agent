@@ -93,3 +93,9 @@ Pause only actions depending on incomplete connection, login, verification or Ke
 ## Next links
 
 Once configured, read [acquisition](acquisition.md); with media already acquired, proceed to the [workflow](workflow.md).
+
+
+v2.4: prefer installed Git Bash, then PowerShell 7, then Windows PowerShell 5.1; record actual executable/version. New WorkBuddy installs use user-level `.workbuddy/skills/douyin-agent`; existing receipt paths remain. Separate session folder from runtime workspace. Use system UTC observations. Load [browsing](browse.md) for platform/vision routes. Prefer free parsers for acquisition; discover sources through existing search skills, host search, then configured Yuanbao/Bocha. Guide local Key setup only when search capability is missing. `parsed_download_failed` means parsing succeeded but no file landed. Every attempt counts toward the three-source round limit. User-assisted imports preserve originals and require identity, head/tail, duration or image-order checks. Avoid reading unknown clipboard contents for download links.
+
+
+To convert a full acceptance record into host observations, map browser_bridge to browser_connection; retain observed douyin_access/youtube_access/xiaohongshu_access/tiktok_access/agent_plan_call under their names. Keep install/cleanup checks in the full acceptance artifact. Preserve each actual observed_at, and reference that existing acceptance JSON through a workspace-relative evidence path. Do not import null timestamps until observed. The host-record envelope contains only schema_version:1 and checks; do not pass the whole clean-device template.

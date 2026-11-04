@@ -93,3 +93,9 @@ Key 存在后先做本地检查。真实服务测试使用一个具体、已取�
 ## 下一步链接
 
 配置就绪后读 [取得作品](acquisition.md)；已有素材则进入 [任务流程](workflow.md)。
+
+
+v2.4：终端按已有 Git Bash → PowerShell 7 → Windows PowerShell 5.1 选择，记录实际路径/版本。WorkBuddy 新安装使用用户级 `.workbuddy/skills/douyin-agent`，已有安装沿用回执；会话目录和运行工作区分开。时间戳以系统 UTC 为准。新增平台/视觉/浏览流程从 [会话指南](browse.md) 按需加载。下载和检索为两层：免费解析站优先；寻找来源用已有检索技能 → 宿主搜索 → 已配置元宝/博查。缺少检索能力时打开服务官方入口，让用户本地配置 Key。`parsed_download_failed` 表示解析成功但文件未落地，所有来源尝试均计入每轮三源上限。用户协助提供本地文件后保留原件，重新核对身份、首尾、时长或图片顺序。不要读取未知剪贴板来寻找下载地址。
+
+
+验收模板转换为 host record 时只提取实际观测项：browser_bridge → browser_connection；douyin_access、youtube_access、xiaohongshu_access、tiktok_access、agent_plan_call 同名保留；其他安装/清理项目留在完整验收表中。每个提取项保留原 observed_at，evidence 改为本地完整验收 JSON 的工作区相对路径；null 时间项不导入，等待真正观察后记录。外层仅保留 schema_version:1 与 checks，不直接传整个 clean-device 模板。

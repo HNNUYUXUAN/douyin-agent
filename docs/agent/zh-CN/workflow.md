@@ -23,7 +23,7 @@
 `ID` 是当前预览 JSON 的 `id` 字段；`PLAN` 是本次自动保存的计划文件绝对路径 `WORKSPACE/out/plans/ID.json`（将 WORKSPACE 和 ID 替换为实际值）。预览打印 JSON，不单独返回路径；先确认该文件存在，再把它传给 `--plan`。
 
 1. 开始任务运行 `cleanup --expired`。查看 `status`；已有相同作品 ID/媒体哈希任务优先复用。完成的文字结果直接读取，新增画面问题重新获取。
-2. 浏览器打开目标作品，核对 ID、作者、标题、完整文案、源时长或图文数量与顺序。获取遵循 [取得协议](../../../references/browser.md)：直接下载优先；blob/失败时复用已成功的免费解析来源，每轮最多三个不同来源。只提交公开链接，不交账号凭据。
+2. 浏览器打开目标作品，核对 ID、作者、标题、完整文案、源时长或图文数量与顺序。获取遵循 [取得协议](../../../references/browser.md)：先复用已成功的免费解析来源，再尝试实际可用的宿主下载能力，每轮最多三个不同来源。只提交公开链接，不交账号凭据。
 3. 下载后检查真实首尾画面。视频回执使用 `source_id`、`identity_verified`、`page_duration`、`head_tail_verified`、`method`、`host`；图文记录 `expected_images` 与 `order_verified`。仅新下载副本可列入 `owned_downloads`，每项有绝对 `path`、`sha256` 和 `created_by_task:true`。本地用户原件不登记为可删除副本。逐张图片下载受阻时，按 [ZIP 批量取得](acquisition.md#图文逐张下载受阻zip-批量获取) 使用 `unpack_images.py --archive ABS --workspace ABS --output NEW_ABS_DIR --expected-images N`，输出目录必须是工作区内不存在的 ASCII 子目录；宿主逐张核对原页后才确认顺序。ZIP 不传给 adopt；把有所有权证据的临时 ZIP 和解包图片列入回执 `owned_artifacts`，字段为绝对 `path`、`sha256`、`created_by_task:true`。命令及完整回执示例见该取得指南。
 4. `adopt "SOURCE" --media "FILE1" "FILE2" --receipt "RECEIPT.json" --title "TITLE" --author "AUTHOR" --caption "CAPTION"` 返回 JOB 和完整性结果。单个视频每项一个文件；图文按原顺序提供多个文件。本地视频也需首尾复核；本地图文也需数量和顺序回执。源时长未知、身份不符、截断或解码失败时停止该项云调用。`integrity --job JOB` 可重查。
 5. `preview --jobs JOB1 JOB2 --question "QUESTION"` 生成用量预览；或 `--manifest FILE` 读取含 `jobs` 数组的批次 JSON。展示时长、图片数、分段覆盖、模型、缓存和新增调用上限。默认随时长自适应采样；音频完整覆盖，视觉不是逐帧观看。重要片段可写 JOB 下 `extra-frames.json` 时间秒数数组再预览。
@@ -46,3 +46,6 @@
 ## 下一步链接
 
 继续读取完成报告；新画面问题回到 [取得作品](acquisition.md)，异常进入 [恢复指南](recovery.md)。
+
+
+v2.4：终端按已有 Git Bash → PowerShell 7 → Windows PowerShell 5.1 选择，记录实际路径/版本。WorkBuddy 新安装使用用户级 `.workbuddy/skills/douyin-agent`，已有安装沿用回执；会话目录和运行工作区分开。时间戳以系统 UTC 为准。新增平台/视觉/浏览流程从 [会话指南](browse.md) 按需加载。下载和检索为两层：免费解析站优先；寻找来源用已有检索技能 → 宿主搜索 → 已配置元宝/博查。缺少检索能力时打开服务官方入口，让用户本地配置 Key。`parsed_download_failed` 表示解析成功但文件未落地，所有来源尝试均计入每轮三源上限。用户协助提供本地文件后保留原件，重新核对身份、首尾、时长或图片顺序。不要读取未知剪贴板来寻找下载地址。

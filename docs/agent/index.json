@@ -119,6 +119,69 @@
         "zh-CN": "zh-CN/maintenance.md",
         "en": "en/maintenance.md"
       }
+    },
+    {
+      "id": "browse",
+      "paths": {
+        "zh-CN": "zh-CN/browse.md",
+        "en": "en/browse.md"
+      },
+      "keywords": {
+        "zh-CN": [
+          "browse",
+          "浏览",
+          "视觉",
+          "多平台"
+        ],
+        "en": [
+          "browse",
+          "session",
+          "controls",
+          "platform"
+        ]
+      }
+    },
+    {
+      "id": "vision",
+      "paths": {
+        "zh-CN": "zh-CN/vision.md",
+        "en": "en/vision.md"
+      },
+      "keywords": {
+        "zh-CN": [
+          "vision",
+          "浏览",
+          "视觉",
+          "多平台"
+        ],
+        "en": [
+          "vision",
+          "session",
+          "controls",
+          "platform"
+        ]
+      }
+    },
+    {
+      "id": "platforms",
+      "paths": {
+        "zh-CN": "zh-CN/platforms.md",
+        "en": "en/platforms.md"
+      },
+      "keywords": {
+        "zh-CN": [
+          "platforms",
+          "浏览",
+          "视觉",
+          "多平台"
+        ],
+        "en": [
+          "platforms",
+          "session",
+          "controls",
+          "platform"
+        ]
+      }
     }
   ],
   "command_entry": "PYTHON SKILL/scripts/da.py --workspace WORKSPACE COMMAND",
@@ -180,9 +243,9 @@
     "git_bash": "../../setup.sh"
   },
   "terminal_support": [
-    "Windows PowerShell 5.1",
+    "Windows Git Bash",
     "PowerShell 7",
-    "Windows Git Bash"
+    "Windows PowerShell 5.1"
   ],
   "zero_start": {
     "zh-CN": "../../references/bootstrap/zh-CN/first-run.md",
@@ -209,7 +272,18 @@
   },
   "workbuddy": {
     "install_flag": "-TargetHost workbuddy / --host workbuddy",
-    "default_skill_dir": "WORKSPACE/.codebuddy/skills/douyin-agent",
-    "runtime_status": "other_device_unverified"
-  }
+    "default_skill_dir": "USER_HOME/.workbuddy/skills/douyin-agent",
+    "runtime_status": "5.9.3 field discovery passed; media acquisition blocked"
+  },
+  "session_commands": [
+    "browse create",
+    "browse approve",
+    "browse record",
+    "browse status",
+    "browse pause",
+    "browse resume",
+    "inspect",
+    "preview --session",
+    "search --session"
+  ]
 }

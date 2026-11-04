@@ -26,7 +26,7 @@ if [[ -n $conda_arg ]]; then candidates+=("$conda_arg"); else
   [[ -z ${CONDA_EXE:-} ]] || candidates+=("$CONDA_EXE")
   path_conda=$(type -P conda 2>/dev/null || type -P conda.exe 2>/dev/null || type -P conda.bat 2>/dev/null || true)
   [[ -z $path_conda ]] || candidates+=("$path_conda")
-  for root in "${USERPROFILE:-}" "${PROGRAMDATA:-${ProgramData:-C:\ProgramData}}"; do
+  for root in "${USERPROFILE:-}" "${PROGRAMDATA:-${ProgramData:-C:\ProgramData}}" /d /c; do
     [[ -n $root ]] || continue
     for name in miniconda3 anaconda3 miniforge3; do candidates+=("$root/$name/Scripts/conda.exe"); done
   done

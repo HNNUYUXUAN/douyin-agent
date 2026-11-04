@@ -82,16 +82,8 @@ def within(w,p):
 
 def source(s):
     if '://' not in s and len(s)<260 and Path(s).is_file(): return {'kind':'local','id':sha(s)[:16]}
-    m=re.search(r'https?://[^\s<>]+',s)
-    if not m: raise ValueError('Expected local media or Douyin URL/share text')
-    from urllib.parse import urlsplit,parse_qs
-    u=urlsplit(m[0].rstrip('。，,.!'))
-    if u.hostname not in ('www.douyin.com','douyin.com','v.douyin.com','m.douyin.com','www.iesdouyin.com','iesdouyin.com'): raise ValueError('Unsupported source domain')
-    ident=re.search(r'/(video|note)/(\d{15,22})',u.path)
-    if ident: return {'kind':ident[1],'id':ident[2],'source_url':f'https://www.douyin.com/{ident[1]}/{ident[2]}'}
-    q=parse_qs(u.query); mid=(q.get('modal_id') or q.get('aweme_id') or [None])[0]
-    if mid and re.fullmatch(r'\d{15,22}',mid): return {'kind':'video','id':mid,'source_url':f'https://www.douyin.com/video/{mid}'}
-    return {'kind':'unresolved','id':digest(s)[:16],'status':'needs_browser_resolution'}
+    from sources import online
+    return online(s,digest)
 
 
 def probe(p):
@@ -162,14 +154,17 @@ def response(key,model,content,options=None):
     return {'id':d.get('id'),'model':d.get('model'),'text':text,'usage':d.get('usage')}
 
 
-def search(w,job,query):
+def search(w,job,query,submit=None):
     c=config(w); rows=[]; failures=[]
     for provider,var,url,body in [('yuanbao','TENCENTCLOUD_WSA_APIKEY','https://api.wsa.cloud.tencent.com/SearchPro',{'Query':query,'Cnt':10}),('bocha','BOCHA_API_KEY','https://api.bocha.cn/v1/web-search',{'query':query,'count':10,'summary':True,'freshness':'noLimit'})]:
         if not c.get(var): continue
         try:
-            r=requests.post(url,headers={'Authorization':'Bearer '+c[var]},json=body,timeout=40,allow_redirects=False)
-            if r.status_code!=200: failures.append({'provider':provider,'http':r.status_code}); continue
-            d=r.json()
+            def request():
+                r=requests.post(url,headers={'Authorization':'Bearer '+c[var]},json=body,timeout=40,allow_redirects=False)
+                return {'http':r.status_code,'data':r.json() if r.status_code==200 else {}}
+            result=submit(provider,body,request) if submit else request()
+            if result['http']!=200: failures.append({'provider':provider,'http':result['http']}); continue
+            d=result['data']
             if provider=='yuanbao':
                 for page in d.get('Response',{}).get('Pages',[]):
                     x=json.loads(page); rows.append({'title':x.get('title'),'url':x.get('url'),'summary':x.get('passage'),'site':x.get('site')})

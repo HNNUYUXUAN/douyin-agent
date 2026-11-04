@@ -8,9 +8,9 @@
 
 ```powershell
 # 在实际选定目录执行；ROOT 由宿主替换为短路径
-Invoke-WebRequest -UseBasicParsing 'https://raw.githubusercontent.com/HNNUYUXUAN/douyin-agent/v2.3.0/fetch.ps1' -OutFile './fetch.ps1'
+Invoke-WebRequest -UseBasicParsing 'https://raw.githubusercontent.com/HNNUYUXUAN/douyin-agent/v2.4.0/fetch.ps1' -OutFile './fetch.ps1'
 # 先读取并核对脚本，再执行
-./fetch.ps1 -Destination 'D:\da\repo' -Ref 'v2.3.0'
+./fetch.ps1 -Destination 'D:\da\repo' -Ref 'v2.4.0'
 ```
 
 没有 D 盘时使用用户目录下可写短路径；不得照抄作者路径。下载受阻时，宿主从 GitCode 同版本逐文件取得 delivery.json 与白名单文件，或复用已有 Git 克隆；记录实际来源与版本，不混用镜像文件。脚本失败可能留下不完整新目录，保留并检查，重试使用另一新目录。下载完成不等于来源验证；对照公开标签、检查脚本后安装。
@@ -30,3 +30,6 @@ Invoke-WebRequest -UseBasicParsing 'https://raw.githubusercontent.com/HNNUYUXUAN
 按 [WorkBuddy 指南](workbuddy.md) 安装后运行 doctor 和 onboard --check，分别核对 Python 3.12、FFmpeg、FFprobe、Key 状态；不调用收费服务。下载或系统策略受阻时记录准确错误，按 [知识入口](knowledge.md) 保存阻塞，不降级冒充验证通过。
 
 安装参数依据：[Conda 官方 Windows 安装](https://docs.conda.io/projects/conda/en/stable/user-guide/install/windows.html) 和 [Constructor 参数](https://conda.github.io/constructor/cli-options/)。
+
+
+raw 不可达时，先从 `https://api.github.com/repos/HNNUYUXUAN/douyin-agent/contents/fetch.ps1?ref=v2.4.0` 取得脚本，解码 JSON 的 Base64 content，审阅后执行。脚本将标签解析为固定提交，回退 codeload 的官方 ZIP，仅解包白名单并清理临时归档。重试选择新目录，保留失败现场。pip 日志直接转发；可显式使用 PIP_INDEX_URL 指定可信包源，并在本地脱敏记录来源，避免输出含凭据的配置值。

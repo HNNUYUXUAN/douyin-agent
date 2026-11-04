@@ -64,6 +64,9 @@ def run(argv):
     env = dict(os.environ, PYTHONUTF8='1', PYTHONDONTWRITEBYTECODE='1')
     subprocess.run([str(x) for x in argv], env=env, check=True)
 
+def progress(stage, **fields):
+    print(json.dumps({'event':'progress','stage':stage,**fields}),flush=True)
+
 
 def default_workspace():
     return Path('D:/douyin-agent') if Path('D:/').is_dir() else Path.home() / 'douyin-agent'
@@ -88,10 +91,12 @@ def prepare(w, conda, source=SOURCE, record=True):
     for name in ('out', 'cache', 'envs', 'qa'):
         plain(w / name).mkdir(parents=True, exist_ok=True)
     py = plain(w / 'envs/runtime/python.exe')
+    progress('environment', reused=py.exists())
     if not py.exists():
         run([conda, 'create', '-y', '--override-channels', '-c', 'conda-forge', '--prefix', py.parent,
              '--file', source / 'conda-win-64.lock'])
     run([py, '-B', '-c', "import sys; assert sys.version_info[:2]==(3,12), 'Expected Python 3.12'"])
+    progress('dependencies', index_configured=bool(os.environ.get('PIP_INDEX_URL')), guidance='pip output is forwarded; network speed varies; explicit package source stays in process configuration')
     run([py, '-B', '-m', 'pip', 'install', '-r', source / 'requirements.lock'])
     env = plain(w / '.env')
     if not env.exists():
@@ -178,6 +183,7 @@ def install(w, skill, conda, source=SOURCE, prepare_fn=prepare):
             snapshots[p] = None
     touched = []
     try:
+        progress('copy_files')
         for rel in hashes:
             target = plain(skill / rel)
             target.parent.mkdir(parents=True, exist_ok=True)
@@ -197,6 +203,7 @@ def install(w, skill, conda, source=SOURCE, prepare_fn=prepare):
                 raise ValueError('Retired file changed: ' + rel)
             target.unlink()
             touched.append(target)
+        progress('write_receipt')
         receipt = skill / 'installed.json'
         touched.append(receipt)
         atomic(receipt, {'schema_version': 1, 'version': manifest['version'], 'hashes': hashes,
@@ -249,13 +256,19 @@ def main():
         parser.error('Conda executable missing; see ' + CONDA_GUIDE)
     w = workspace_path(args.workspace)
     if args.mode == 'install':
-        default_skill = w / '.codebuddy/skills/douyin-agent' if args.host == 'workbuddy' else Path(os.environ.get('CODEX_HOME', str(Path.home() / '.codex'))) / 'skills/douyin-agent'
+        saved_context=read(w/'agent-context.json') if (w/'agent-context.json').exists() else {}
+        prior_skill=Path(saved_context['skill_root']) if saved_context.get('skill_root') else None
+        parts=set(prior_skill.parts) if prior_skill else set()
+        incompatible=('.codex' in parts) if args.host=='workbuddy' else bool({'.workbuddy','.codebuddy'} & parts)
+        reusable=prior_skill is not None and not incompatible and (prior_skill/'installed.json').is_file()
+        default_skill = prior_skill if reusable else Path.home() / '.workbuddy/skills/douyin-agent' if args.host == 'workbuddy' else Path(os.environ.get('CODEX_HOME', str(Path.home() / '.codex'))) / 'skills/douyin-agent'
         skill = plain(args.skill_dir or str(default_skill))
         result = install(w, skill, conda)
     else:
         if args.skill_dir:
             parser.error('--skill-dir applies only to install')
         result = {'status': 'prepared', 'workspace': str(w), 'python': str(prepare(w, conda))}
+    progress('complete')
     print(json.dumps(result, ensure_ascii=False, indent=2))
 
 
@@ -263,5 +276,5 @@ if __name__ == '__main__':
     try:
         main()
     except (ValueError, RuntimeError, OSError, subprocess.CalledProcessError) as error:
-        print(str(error), file=sys.stderr)
+        print('Installation stopped: '+str(error)+'; preserved environment can be reused. Inspect the last progress stage and rerun the same command after resolving the cause.', file=sys.stderr)
         sys.exit(1)

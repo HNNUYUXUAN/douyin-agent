@@ -1,6 +1,6 @@
 ---
 name: douyin-agent
-description: 使用火山 Agent Plan 理解抖音视频、图文、分享链接与本地媒体，生成可追溯的文字报告并清理任务媒体。Use for evidence-based Douyin video and image-post understanding with text-only retention.
+description: 使用火山 Agent Plan 理解多平台视频、图文、分享链接与本地媒体，生成可追溯的文字报告并清理任务媒体。Use for bounded multi-platform browsing and evidence-based video/image-post understanding with text-only retention.
 ---
 # douyin-agent
 
@@ -15,3 +15,5 @@ description: 使用火山 Agent Plan 理解抖音视频、图文、分享链接�
 遵循取得与完整性检查 → 预览及授权 → 执行 → `review_ready` 原帧复核 → `finalize` → `completed`。新增素材或扩大范围重新预览；已有持续授权在范围内有效。收费请求不自动重试，未决请求保留预算并停止该任务重提。仅清理经所有权、路径和哈希核对的任务媒体，保留用户原件。详见 [取得协议](references/browser.md) 和 [恢复协议](references/recovery.md)。
 
 命令入口：`PYTHON SKILL/scripts/da.py --workspace WORKSPACE COMMAND`；替换为实际绝对路径，含空格加引号。`doctor`、`status`、`onboard --check` 只读。分发使用 `delivery.json`，排除凭据、环境、缓存及私人媒体；验证范围见 [验收记录](references/acceptance.md)。
+
+用户明确开工后，先按语言读取 [受控浏览](docs/agent/zh-CN/browse.md) / [finite browsing](docs/agent/en/browse.md)。平台、模式和额度由用户选择，无默认消费模式。需要看图时加载视觉指南并使用已配置 Agent Plan；按会话预算持续执行，失败项留待处理，其他独立作品继续。

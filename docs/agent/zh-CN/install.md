@@ -63,3 +63,8 @@ Conda 顺序为显式 `-Conda` / `--conda` → `CONDA_EXE` → PATH → 用户�
 ## 下一步链接
 
 继续 [首次使用](onboarding.md)，就绪后进入 [取得作品](acquisition.md) 与 [任务流程](workflow.md)。
+
+
+v2.4：终端按已有 Git Bash → PowerShell 7 → Windows PowerShell 5.1 选择，记录实际路径/版本。WorkBuddy 新安装使用用户级 `.workbuddy/skills/douyin-agent`，已有安装沿用回执；会话目录和运行工作区分开。时间戳以系统 UTC 为准。新增平台/视觉/浏览流程从 [会话指南](browse.md) 按需加载。下载和检索为两层：免费解析站优先；寻找来源用已有检索技能 → 宿主搜索 → 已配置元宝/博查。缺少检索能力时打开服务官方入口，让用户本地配置 Key。`parsed_download_failed` 表示解析成功但文件未落地，所有来源尝试均计入每轮三源上限。用户协助提供本地文件后保留原件，重新核对身份、首尾、时长或图片顺序。不要读取未知剪贴板来寻找下载地址。
+
+可先用 Windows 自带 PowerShell 执行 `scripts/terminal.ps1`，它只读返回首选终端的路径和版本；然后用返回的终端执行安装。

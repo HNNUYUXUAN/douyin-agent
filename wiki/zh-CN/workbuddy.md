@@ -10,7 +10,7 @@
     "bridge",
     "连接",
     "技能发现",
-    ".codebuddy"
+    ".workbuddy"
   ],
   "status": "draft",
   "generated": {

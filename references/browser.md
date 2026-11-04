@@ -3,7 +3,7 @@
 The implementation is capability based: browser, search, local files and media tools. 本机优先宿主连接 Chrome，其他宿主使用对应能力，不要求固定插件或解析网站。
 
 1. Resolve share text/short links in the browser to the canonical video/note URL. Record ID, author, title, caption and reliable source duration or image count/order. 核对作品而非推荐卡片。
-2. Read `providers` for this host's verified sources. Try direct host media download when usable; a blob URL is not a downloadable file. On failure reuse a verified free parser; if unavailable use host search to find public free candidates. 每轮最多三个不同来源。
+2. Read `providers` and prefer verified free parsers for acquisition. Discover candidates using existing search plugins/skills, then host search, then configured Yuanbao/Bocha. Use an available host downloader as the next acquisition route; finally offer user-assisted local import or defer the work. A blob URL is not a downloadable file. 每轮最多三个不同来源，所有尝试计入上限，不自动另开新轮。
 3. Submit only a public work URL. No passwords, cookies, keys, paid upgrades or plugin installs. Stop at login/CAPTCHA and record the distinct reason; do not automatically complete a CAPTCHA. 额度耗尽、失效、登录要求、验证码分别登记。
 4. Download through supported host capabilities. Record exact paths, SHA256 and whether newly created by this task. For image posts select content images, not recommendation thumbnails; preserve original order and caption. No persistent signed media URLs, page scripts or download tokens.
 5. Adopt with acquisition receipt, then check integrity: source identity; duration tolerance max(1 second, 2 video frames); video/audio track presence; full decode; host head/tail inspection. Missing reliable duration means unknown, not complete. Image count/order must match. Whole-file SHA equality can reuse previous head/tail review, explicitly record this basis.
@@ -13,7 +13,7 @@ Provider receipt example / 解析来源回执：
 ```json
 {"url":"https://example.org/parse","search_source":"https://example.org","host":"Windows Codex Chrome","instructions":"Paste public URL, inspect identity, download and verify","types":["video"],"outcome":"success","round_id":"host-round-1","job":"ABSOLUTE_JOB_PATH"}
 ```
-Outcome values used by the host: success, failed, quota_exhausted, unavailable, login_required, captcha_required. Source attempts remain in providers history; never treat a successful webpage response as a successful download. Unknown ownership means retain external files, report the gap, and do not sweep Downloads or browser cache.
+Outcome values used by the host: success, failed, quota_exhausted, unavailable, login_required, captcha_required, parsed_download_failed. The last value means parsing succeeded but the file did not land. Source attempts remain in providers history; never treat a successful webpage response as a successful download. Unknown ownership means retain external files, report the gap, and do not sweep Downloads or browser cache. User-assisted imports preserve the original file. Avoid unknown clipboard reads; use explicit download receipts.
 
 
 ## Bulk image ZIP / 图文 ZIP 批量取得

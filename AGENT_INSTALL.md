@@ -16,7 +16,7 @@ English: Give this repository link to a Codex or WorkBuddy desktop host with loc
 
 Only WorkBuddy and its browser connector installed? Start with [中文从零引导](references/bootstrap/zh-CN/first-run.md) / [English zero-start guide](references/bootstrap/en/first-run.md). The guides cover source acquisition without Git/Python, Conda and FFmpeg preparation, explicit WorkBuddy installation target, browser checks, local Key entry, first task and clean-device acceptance.
 
-WorkBuddy must use `-TargetHost workbuddy` / `--host workbuddy`, or an explicitly verified skill directory. The default remains Codex for compatibility. The project-local WorkBuddy location is `WORKSPACE/.codebuddy/skills/douyin-agent`; verify actual client discovery.
+WorkBuddy must use `-TargetHost workbuddy` / `--host workbuddy`, or an explicitly verified skill directory. The default remains Codex for compatibility. The new-install user-level WorkBuddy location is `USER_HOME/.workbuddy/skills/douyin-agent`; verify actual client discovery.
 
 ## Agent procedure / Agent 执行顺序
 
