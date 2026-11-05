@@ -1,17 +1,15 @@
 ---
 {
   "type": "Runbook",
-  "title": "browse",
-  "description": "browse — douyin-agent operational knowledge",
+  "title": "Operation entry",
+  "description": "Operation entry",
   "tags": [
-    "douyin-agent",
-    "en",
-    "browse"
+    "routing"
   ],
-  "status": "active",
+  "status": "stable",
   "generated": {
-    "by": "douyin-agent/2.5.0",
-    "at": "2026-11-05T02:27:48.555869+00:00"
+    "by": "douyin-agent/2.5.1",
+    "at": "2026-11-05T09:57:06.630627+00:00"
   },
   "sources": [
     {
@@ -19,13 +17,13 @@
     }
   ],
   "applicability": {
-    "skill": "2.5.x",
-    "host": "capability-detected; see body for measured versions"
+    "skill": "2.5.1 candidate",
+    "host": "Windows x64; recheck current host capabilities"
   },
-  "verification_scope": "Documentation reviewed; runtime acceptance is recorded separately."
+  "verification_scope": "Candidate implementation; fixture, local and recipient results are recorded separately."
 }
 ---
 
-# browse
+# Operation entry
 
-[Read this operation / 读取操作正文](operations/browse.md)
+Read the complete rules in [guide](operations/browse.md).

@@ -6,7 +6,7 @@ import legacy as core
 from media_tools import configure as configure_media
 from legacy import read, write, sha, digest, now, config, within, source, probe, response, recognize
 
-VERSION='2.5.0'
+VERSION='2.5.1'
 MEDIA={'.mp4','.mov','.mkv','.webm','.mp3','.wav','.pcm','.aac','.jpg','.jpeg','.png','.webp','.bmp'}
 
 def process_token(pid):
@@ -117,7 +117,7 @@ def provider(w,a):
     parser_url(r['url']); public_url(r['search_source'])
     if r.get('route','parser')!='parser': raise ValueError('Providers describe parser routes only')
     r['route']='parser'
-    if r['outcome'] not in ('attempting','success','failed','quota_exhausted','unavailable','login_required','captcha_required','parsed_download_failed'): raise ValueError('Unknown provider outcome')
+    if r['outcome'] not in ('attempting','success','failed','quota_exhausted','unavailable','login_required','captcha_required','parsed_download_failed','no_result'): raise ValueError('Unknown provider outcome')
     history_path=w/'provider-history.json'; history=read(history_path) if history_path.exists() else []
     if r.get('round_id'):
         attempted={provider_site(x['url']) for x in history if x.get('round_id')==r['round_id']}
@@ -498,6 +498,8 @@ def main():
     p=argparse.ArgumentParser(); p.add_argument('--workspace',required=True); sub=p.add_subparsers(dest='cmd',required=True)
     for name in ('doctor','status'): sub.add_parser(name)
     q=sub.add_parser('onboard'); g=q.add_mutually_exclusive_group(required=True); g.add_argument('--check',action='store_true'); g.add_argument('--record')
+    q.add_argument('--flow',choices=['setup','use','acceptance'],default='setup'); q.add_argument('--language',choices=['zh-CN','en'],default='zh-CN')
+    q.add_argument('--host',choices=['codex','workbuddy']); q.add_argument('--browser-id'); q.add_argument('--observed',help='Current host observation receipt, read without persistence')
     q=sub.add_parser('cleanup'); q.add_argument('--expired',action='store_true')
     q=sub.add_parser('search'); q.add_argument('--job'); q.add_argument('--session'); q.add_argument('--query',required=True)
     q=sub.add_parser('providers'); q.add_argument('--receipt')

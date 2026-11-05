@@ -19,8 +19,8 @@
   ],
   "status": "active",
   "generated": {
-    "by": "douyin-agent/2.5.0",
-    "at": "2026-11-05T02:27:48.555869+00:00"
+    "by": "douyin-agent/2.5.1",
+    "at": "2026-11-05T09:57:06.630627+00:00"
   },
   "sources": [
     {
@@ -77,4 +77,8 @@ Refresh live DOM, click play and wait roughly 3–10 seconds with few progress c
 Preserve diagnostics for signature, hash, compatibility or path failures. Inspect existing receipts before rerunning. A failed repair with recorded changes supports `Rollback` using the same receipt; later user edits block automatic restoration. Private backups remain in `.workbuddy/bridge-backups/` and are excluded from delivery. Inspect the original process before manually resolving an interrupted lock. After two evidence-based repairs fail, hand off consolidated diagnostics and continue independent tasks through healthy browsers.
 
 
-Error routing: `provider invocation timed out` with working DOM enters screenshot diagnostics; `Current display surface not available for capture` enters visible-surface checks; extension “WorkBuddy is not running” enters connection/native-messaging checks. Check without an observed extension ID reports null matching. Plan/Repair requires explicitly selected browsers.
+Error routing uses the actual failed interface: capture timeouts enter screenshot diagnostics; scrolling/input/transient DOM faults follow [page controls](../faults/page-controls.md). `Current display surface not available for capture` enters visible-surface checks; extension “WorkBuddy is not running” enters connection/native-messaging checks. Check without an observed extension ID reports null matching. Plan/Repair requires explicitly selected browsers.
+
+## Classify first, verify and stop
+
+Record the actual failing interface: provider invocation timed out is not always a screenshot failure. Scrolling, typing and transient empty DOM follow [page controls](../faults/page-controls.md). Verify connection, DOM and capture separately; healthy static Check does not trigger Repair. After documented repair bounds, follow [bounded unknown diagnosis](../faults/unknown.md), then preserve state and hand off. Never resubmit paid requests or terminate user browsers.

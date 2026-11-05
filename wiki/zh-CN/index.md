@@ -4,9 +4,10 @@ Read only the required concept / 按任务读取概念正文。
 
 ## Start / 首次接入
 
-- [全新设备测试清单](bootstrap/clean-test.md)
+- [Setup / 首次配置](bootstrap/first-run.md) — ordinary setup, no regression matrix.
+- [Fault index / 故障索引](faults/index.md) — exact routes, bounded recovery.
+
 - [源码与依赖](bootstrap/dependencies.md)
-- [首次接入与恢复](bootstrap/first-run.md)
 - [知识检索与记录](bootstrap/knowledge.md)
 - [WorkBuddy 宿主接入](bootstrap/workbuddy.md)
 - [中文执行参考](start.md)
@@ -35,3 +36,7 @@ Read only the required concept / 按任务读取概念正文。
 - [图文逐张下载受阻：ZIP 批量获取](operations/zip-images.md)
 
 - [Parser routes / 解析站回执](operations/parser-sites.md)
+
+## Maintenance / 明确要求后验收
+
+- [Acceptance matrix / 维护测试](bootstrap/clean-test.md)

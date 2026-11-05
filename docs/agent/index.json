@@ -216,7 +216,9 @@
   "read_only_commands": [
     "doctor",
     "status",
-    "onboard --check"
+    "onboard --check",
+    "preflight.ps1",
+    "onboard --check --flow setup --observed CURRENT_JSON"
   ],
   "local_record_command": "onboard --record FILE",
   "task_flow": [
@@ -276,15 +278,15 @@
     "Windows PowerShell 5.1"
   ],
   "zero_start": {
-    "zh-CN": "../../references/bootstrap/zh-CN/first-run.md",
-    "en": "../../references/bootstrap/en/first-run.md"
+    "zh-CN": "../../wiki/zh-CN/bootstrap/first-run.md",
+    "en": "../../wiki/en/bootstrap/first-run.md"
   },
   "knowledge": {
     "bundle": "../../wiki/index.md",
     "script": "../../scripts/knowledge.py",
     "guide": {
-      "zh-CN": "../../references/bootstrap/zh-CN/knowledge.md",
-      "en": "../../references/bootstrap/en/knowledge.md"
+      "zh-CN": "../../wiki/zh-CN/bootstrap/knowledge.md",
+      "en": "../../wiki/en/bootstrap/knowledge.md"
     },
     "format": "OKF 0.2",
     "private_directory": "WORKSPACE/knowledge-private",
@@ -301,7 +303,7 @@
   "workbuddy": {
     "install_flag": "-TargetHost workbuddy / --host workbuddy",
     "default_skill_dir": "USER_HOME/.workbuddy/skills/douyin-agent",
-    "runtime_status": "5.9.3 field discovery passed; media acquisition blocked"
+    "runtime_status": "v2.5.1 candidate; field v2.5.0 installation passed with workflow deviations; new flow recipient verification pending"
   },
   "session_commands": [
     "browse create",
@@ -313,5 +315,473 @@
     "inspect",
     "preview --session",
     "search --session"
-  ]
+  ],
+  "setup_flow": {
+    "default": "setup",
+    "flows": [
+      "setup",
+      "use",
+      "acceptance"
+    ],
+    "required_docs": {
+      "zh-CN": [
+        "wiki/zh-CN/bootstrap/first-run.md",
+        "wiki/zh-CN/bootstrap/dependencies.md",
+        "wiki/zh-CN/bootstrap/{host}.md",
+        "wiki/zh-CN/operations/browser-selection.md",
+        "wiki/zh-CN/bootstrap/key.md",
+        "wiki/zh-CN/faults/index.md"
+      ],
+      "en": [
+        "wiki/en/bootstrap/first-run.md",
+        "wiki/en/bootstrap/dependencies.md",
+        "wiki/en/bootstrap/{host}.md",
+        "wiki/en/operations/browser-selection.md",
+        "wiki/en/bootstrap/key.md",
+        "wiki/en/faults/index.md"
+      ]
+    },
+    "fault_routes": [
+      {
+        "code": "F24-1",
+        "title": "PS5 stderr interruption",
+        "paths": {
+          "zh-CN": "wiki/zh-CN/faults/install.md",
+          "en": "wiki/en/faults/install.md"
+        }
+      },
+      {
+        "code": "F24-2",
+        "title": "raw unreachable",
+        "paths": {
+          "zh-CN": "wiki/zh-CN/faults/install.md",
+          "en": "wiki/en/faults/install.md"
+        }
+      },
+      {
+        "code": "F24-3",
+        "title": "knowledge source prefix",
+        "paths": {
+          "zh-CN": "wiki/zh-CN/faults/records.md",
+          "en": "wiki/en/faults/records.md"
+        }
+      },
+      {
+        "code": "F24-4",
+        "title": "missing save primitive",
+        "paths": {
+          "zh-CN": "wiki/zh-CN/faults/acquisition.md",
+          "en": "wiki/en/faults/acquisition.md"
+        }
+      },
+      {
+        "code": "F24-5",
+        "title": "install recovery diagnostics",
+        "paths": {
+          "zh-CN": "wiki/zh-CN/faults/install.md",
+          "en": "wiki/en/faults/install.md"
+        }
+      },
+      {
+        "code": "F24-6",
+        "title": "slow pip/index",
+        "paths": {
+          "zh-CN": "wiki/zh-CN/faults/install.md",
+          "en": "wiki/en/faults/install.md"
+        }
+      },
+      {
+        "code": "F24-7",
+        "title": "actual timestamps",
+        "paths": {
+          "zh-CN": "wiki/zh-CN/faults/records.md",
+          "en": "wiki/en/faults/records.md"
+        }
+      },
+      {
+        "code": "F24-8",
+        "title": "WorkBuddy skill location",
+        "paths": {
+          "zh-CN": "wiki/zh-CN/faults/install.md",
+          "en": "wiki/en/faults/install.md"
+        }
+      },
+      {
+        "code": "F24-9",
+        "title": "three-source accounting",
+        "paths": {
+          "zh-CN": "wiki/zh-CN/faults/acquisition.md",
+          "en": "wiki/en/faults/acquisition.md"
+        }
+      },
+      {
+        "code": "F24-10",
+        "title": "accurate validation messages",
+        "paths": {
+          "zh-CN": "wiki/zh-CN/faults/records.md",
+          "en": "wiki/en/faults/records.md"
+        }
+      },
+      {
+        "code": "F24-11",
+        "title": "clipboard exposure",
+        "paths": {
+          "zh-CN": "wiki/zh-CN/faults/records.md",
+          "en": "wiki/en/faults/records.md"
+        }
+      },
+      {
+        "code": "F24-12",
+        "title": "acceptance-to-observation conversion",
+        "paths": {
+          "zh-CN": "wiki/zh-CN/faults/records.md",
+          "en": "wiki/en/faults/records.md"
+        }
+      },
+      {
+        "code": "F241-1",
+        "title": "tail sampling overrun",
+        "paths": {
+          "zh-CN": "wiki/zh-CN/faults/media.md",
+          "en": "wiki/en/faults/media.md"
+        }
+      },
+      {
+        "code": "F241-2",
+        "title": "cleanup path representation",
+        "paths": {
+          "zh-CN": "wiki/zh-CN/faults/media.md",
+          "en": "wiki/en/faults/media.md"
+        }
+      },
+      {
+        "code": "F241-3",
+        "title": "Bilibili identity support",
+        "paths": {
+          "zh-CN": "wiki/zh-CN/faults/media.md",
+          "en": "wiki/en/faults/media.md"
+        }
+      },
+      {
+        "code": "F241-4",
+        "title": "IAB account mismatch",
+        "paths": {
+          "zh-CN": "wiki/zh-CN/operations/browser-selection.md",
+          "en": "wiki/en/operations/browser-selection.md"
+        }
+      },
+      {
+        "code": "F241-5",
+        "title": "Douyin shipin unresolved",
+        "paths": {
+          "zh-CN": "wiki/zh-CN/faults/records.md",
+          "en": "wiki/en/faults/records.md"
+        }
+      },
+      {
+        "code": "F241-6",
+        "title": "Miniconda digest unavailable",
+        "paths": {
+          "zh-CN": "wiki/zh-CN/faults/conda.md",
+          "en": "wiki/en/faults/conda.md"
+        }
+      },
+      {
+        "code": "F241-7",
+        "title": "FFmpeg supplier fallback",
+        "paths": {
+          "zh-CN": "wiki/zh-CN/faults/install.md",
+          "en": "wiki/en/faults/install.md"
+        }
+      },
+      {
+        "code": "F241-8",
+        "title": "saving probe before sources",
+        "paths": {
+          "zh-CN": "wiki/zh-CN/faults/acquisition.md",
+          "en": "wiki/en/faults/acquisition.md"
+        }
+      },
+      {
+        "code": "F241-9",
+        "title": "WorkBuddy location mismatch",
+        "paths": {
+          "zh-CN": "wiki/zh-CN/faults/install.md",
+          "en": "wiki/en/faults/install.md"
+        }
+      },
+      {
+        "code": "F241-10",
+        "title": "extension screenshot timeout",
+        "paths": {
+          "zh-CN": "wiki/zh-CN/operations/browser-selection.md",
+          "en": "wiki/en/operations/browser-selection.md"
+        }
+      },
+      {
+        "code": "F241-11",
+        "title": "pending without work identity",
+        "paths": {
+          "zh-CN": "wiki/zh-CN/faults/records.md",
+          "en": "wiki/en/faults/records.md"
+        }
+      },
+      {
+        "code": "F241-12",
+        "title": "session authorization isolation",
+        "paths": {
+          "zh-CN": "wiki/zh-CN/faults/records.md",
+          "en": "wiki/en/faults/records.md"
+        }
+      },
+      {
+        "code": "F241-13",
+        "title": "autoplay end evidence",
+        "paths": {
+          "zh-CN": "wiki/zh-CN/faults/page-controls.md",
+          "en": "wiki/en/faults/page-controls.md"
+        }
+      },
+      {
+        "code": "F241-14",
+        "title": "mixed keyword retrieval",
+        "paths": {
+          "zh-CN": "wiki/zh-CN/faults/records.md",
+          "en": "wiki/en/faults/records.md"
+        }
+      },
+      {
+        "code": "F241-15",
+        "title": "capture policy restriction",
+        "paths": {
+          "zh-CN": "wiki/zh-CN/faults/media.md",
+          "en": "wiki/en/faults/media.md"
+        }
+      },
+      {
+        "code": "F241-16",
+        "title": "Bilibili 412 classification",
+        "paths": {
+          "zh-CN": "wiki/zh-CN/faults/page-controls.md",
+          "en": "wiki/en/faults/page-controls.md"
+        }
+      },
+      {
+        "code": "F241-17",
+        "title": "player initialization",
+        "paths": {
+          "zh-CN": "wiki/zh-CN/faults/page-controls.md",
+          "en": "wiki/en/faults/page-controls.md"
+        }
+      },
+      {
+        "code": "I-1",
+        "title": "FFmpeg test discovery",
+        "paths": {
+          "zh-CN": "wiki/zh-CN/faults/install.md",
+          "en": "wiki/en/faults/install.md"
+        }
+      },
+      {
+        "code": "I-2",
+        "title": "scroll timeout/rendering",
+        "paths": {
+          "zh-CN": "wiki/zh-CN/faults/page-controls.md",
+          "en": "wiki/en/faults/page-controls.md"
+        }
+      },
+      {
+        "code": "I-3",
+        "title": "input value mismatch",
+        "paths": {
+          "zh-CN": "wiki/zh-CN/faults/page-controls.md",
+          "en": "wiki/en/faults/page-controls.md"
+        }
+      },
+      {
+        "code": "I-4",
+        "title": "transient blank Bilibili DOM",
+        "paths": {
+          "zh-CN": "wiki/zh-CN/faults/page-controls.md",
+          "en": "wiki/en/faults/page-controls.md"
+        }
+      },
+      {
+        "code": "I-5",
+        "title": "parsed Bilibili file 403",
+        "paths": {
+          "zh-CN": "wiki/zh-CN/faults/acquisition.md",
+          "en": "wiki/en/faults/acquisition.md"
+        }
+      },
+      {
+        "code": "I-6",
+        "title": "Conda installer lifetime",
+        "paths": {
+          "zh-CN": "wiki/zh-CN/faults/conda.md",
+          "en": "wiki/en/faults/conda.md"
+        }
+      },
+      {
+        "code": "I-7",
+        "title": "pip script-path warning",
+        "paths": {
+          "zh-CN": "wiki/zh-CN/faults/install.md",
+          "en": "wiki/en/faults/install.md"
+        }
+      },
+      {
+        "code": "I-8",
+        "title": "parser empty result",
+        "paths": {
+          "zh-CN": "wiki/zh-CN/faults/acquisition.md",
+          "en": "wiki/en/faults/acquisition.md"
+        }
+      },
+      {
+        "code": "O-1",
+        "title": "platform user-browser requirement",
+        "paths": {
+          "zh-CN": "wiki/zh-CN/operations/browser-selection.md",
+          "en": "wiki/en/operations/browser-selection.md"
+        }
+      },
+      {
+        "code": "O-2",
+        "title": "parser-first requirement",
+        "paths": {
+          "zh-CN": "wiki/zh-CN/faults/acquisition.md",
+          "en": "wiki/en/faults/acquisition.md"
+        }
+      },
+      {
+        "code": "O-3",
+        "title": "conditional login tabs",
+        "paths": {
+          "zh-CN": "wiki/zh-CN/operations/browser-selection.md",
+          "en": "wiki/en/operations/browser-selection.md"
+        }
+      },
+      {
+        "code": "O-4",
+        "title": "mandatory local Key wait",
+        "paths": {
+          "zh-CN": "wiki/zh-CN/bootstrap/key.md",
+          "en": "wiki/en/bootstrap/key.md"
+        }
+      },
+      {
+        "code": "O-5",
+        "title": "ordered first-setup routing",
+        "paths": {
+          "zh-CN": "wiki/zh-CN/bootstrap/first-run.md",
+          "en": "wiki/en/bootstrap/first-run.md"
+        }
+      },
+      {
+        "code": "browser.scroll_timeout",
+        "title": "browser.scroll_timeout",
+        "paths": {
+          "zh-CN": "wiki/zh-CN/faults/page-controls.md",
+          "en": "wiki/en/faults/page-controls.md"
+        }
+      },
+      {
+        "code": "browser.input_mismatch",
+        "title": "browser.input_mismatch",
+        "paths": {
+          "zh-CN": "wiki/zh-CN/faults/page-controls.md",
+          "en": "wiki/en/faults/page-controls.md"
+        }
+      },
+      {
+        "code": "browser.blank_dom",
+        "title": "browser.blank_dom",
+        "paths": {
+          "zh-CN": "wiki/zh-CN/faults/page-controls.md",
+          "en": "wiki/en/faults/page-controls.md"
+        }
+      },
+      {
+        "code": "browser.extension_offline",
+        "title": "browser.extension_offline",
+        "paths": {
+          "zh-CN": "wiki/zh-CN/operations/browser-recovery.md",
+          "en": "wiki/en/operations/browser-recovery.md"
+        }
+      },
+      {
+        "code": "browser.screenshot_timeout",
+        "title": "browser.screenshot_timeout",
+        "paths": {
+          "zh-CN": "wiki/zh-CN/operations/browser-recovery.md",
+          "en": "wiki/en/operations/browser-recovery.md"
+        }
+      },
+      {
+        "code": "browser.platform_iab",
+        "title": "browser.platform_iab",
+        "paths": {
+          "zh-CN": "wiki/zh-CN/operations/browser-selection.md",
+          "en": "wiki/en/operations/browser-selection.md"
+        }
+      },
+      {
+        "code": "install.native_stderr",
+        "title": "install.native_stderr",
+        "paths": {
+          "zh-CN": "wiki/zh-CN/faults/install.md",
+          "en": "wiki/en/faults/install.md"
+        }
+      },
+      {
+        "code": "install.conda_wait",
+        "title": "install.conda_wait",
+        "paths": {
+          "zh-CN": "wiki/zh-CN/faults/conda.md",
+          "en": "wiki/en/faults/conda.md"
+        }
+      },
+      {
+        "code": "acquire.no_result",
+        "title": "acquire.no_result",
+        "paths": {
+          "zh-CN": "wiki/zh-CN/faults/acquisition.md",
+          "en": "wiki/en/faults/acquisition.md"
+        }
+      },
+      {
+        "code": "acquire.file_403",
+        "title": "acquire.file_403",
+        "paths": {
+          "zh-CN": "wiki/zh-CN/faults/acquisition.md",
+          "en": "wiki/en/faults/acquisition.md"
+        }
+      },
+      {
+        "code": "key.missing",
+        "title": "key.missing",
+        "paths": {
+          "zh-CN": "wiki/zh-CN/bootstrap/key.md",
+          "en": "wiki/en/bootstrap/key.md"
+        }
+      },
+      {
+        "code": "fault.unknown",
+        "title": "fault.unknown",
+        "paths": {
+          "zh-CN": "wiki/zh-CN/faults/unknown.md",
+          "en": "wiki/en/faults/unknown.md"
+        }
+      },
+      {
+        "code": "install.ps5_modules",
+        "title": "PowerShell 5 module discovery",
+        "paths": {
+          "zh-CN": "wiki/zh-CN/faults/install.md",
+          "en": "wiki/en/faults/install.md"
+        }
+      }
+    ]
+  }
 }

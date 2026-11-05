@@ -4,9 +4,10 @@ Read only the required concept / 按任务读取概念正文。
 
 ## Start / 首次接入
 
-- [Clean-device test checklist](bootstrap/clean-test.md)
+- [Setup / 首次配置](bootstrap/first-run.md) — ordinary setup, no regression matrix.
+- [Fault index / 故障索引](faults/index.md) — exact routes, bounded recovery.
+
 - [Source and dependencies](bootstrap/dependencies.md)
-- [First use and recovery](bootstrap/first-run.md)
 - [Knowledge retrieval and recording](bootstrap/knowledge.md)
 - [WorkBuddy host integration](bootstrap/workbuddy.md)
 - [English execution reference](start.md)
@@ -39,3 +40,7 @@ Read only the required concept / 按任务读取概念正文。
 - [Cross-browser receipt extension](operations/onboarding-v2.md)
 
 - [Parser routes / 解析站回执](operations/parser-sites.md)
+
+## Maintenance / 明确要求后验收
+
+- [Acceptance matrix / 维护测试](bootstrap/clean-test.md)

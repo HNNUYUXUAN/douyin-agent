@@ -9,6 +9,12 @@ param(
     [string]$Receipt
 )
 $ErrorActionPreference='Stop'
+if($PSVersionTable.PSVersion.Major -eq 5){
+    # Resolve Windows PowerShell modules locally when a PS7 parent supplied PSModulePath.
+    foreach($module in @('Microsoft.PowerShell.Utility','Microsoft.PowerShell.Security')){
+        Import-Module (Join-Path $PSHOME "Modules\$module\$module.psd1") -Force -ErrorAction Stop
+    }
+}
 $Feed='https://static.workbuddy.cn/browser-computer-use/v1/browser-use/version.json'
 $ApprovedIds=@('kkjblpnnljnmbhaaakgcmfioipgamgii','ajnnogdfpilbhkeggdjlcokgglijmdde','ndbfelmlimfjklodckmbalfioaehegpc')
 

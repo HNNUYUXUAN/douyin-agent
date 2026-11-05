@@ -11,8 +11,8 @@
   ],
   "status": "active",
   "generated": {
-    "by": "douyin-agent/2.5.0",
-    "at": "2026-11-05T02:27:48.555869+00:00"
+    "by": "douyin-agent/2.5.1",
+    "at": "2026-11-05T09:57:06.630627+00:00"
   },
   "sources": [
     {
@@ -45,3 +45,9 @@ PYTHON SKILL/scripts/knowledge.py --workspace WORKSPACE validate
 record 要求新 ASCII id，已有案例不可覆盖；修订用新 id 并在动作中提及旧案例。保存状态始终 draft，不自动宣称已由人复核。中断后用 reindex 重建索引与日志；原问题事实和未决账本仍以工作区证据为准。私有案例不会自动上传或进入分发；需要公开的经验须单独脱敏审阅。
 
 本地 sources 中的 `workspace:qa/evidence.json` 是本项目约定：相对于当前工作区读取该 MD/JSON，允许移动整个工作区后继续定位；它不是公开 URL。通用消费者不认识该 URI 时应保留文本，按实际工作区重新解析，不能据此请求远端。
+
+## 精确故障路由
+
+`PYTHON SKILL/scripts/knowledge.py --workspace WORKSPACE route --code browser.scroll_timeout --language zh-CN`
+
+返回完整必读手册路径；未命中返回有边界的未知故障手册，不自动检索或修复。历史问题总映射见 [42 项](../../shared/acceptance/field-v251.md)。

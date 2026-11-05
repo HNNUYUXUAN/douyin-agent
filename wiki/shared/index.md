@@ -10,3 +10,5 @@
 - [install-entry](install-entry.md)
 - [recovery-protocol](recovery-protocol.md)
 - [v25](acceptance/v25.md)
+
+- [Field issue coverage](acceptance/field-v251.md) — 42 original source entries and current manuals.

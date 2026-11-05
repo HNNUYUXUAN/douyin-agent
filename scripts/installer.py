@@ -97,7 +97,7 @@ def prepare(w, conda, source=SOURCE, record=True):
              '--file', source / 'conda-win-64.lock'])
     run([py, '-B', '-c', "import sys; assert sys.version_info[:2]==(3,12), 'Expected Python 3.12'"])
     progress('dependencies', index_configured=bool(os.environ.get('PIP_INDEX_URL')), guidance='pip output is forwarded; network speed varies; explicit package source stays in process configuration')
-    run([py, '-B', '-m', 'pip', 'install', '-r', source / 'requirements.lock'])
+    run([py, '-B', '-m', 'pip', 'install', '--no-warn-script-location', '-r', source / 'requirements.lock'])
     env = plain(w / '.env')
     if not env.exists():
         # Exclusive creation preserves configuration created concurrently by the user.

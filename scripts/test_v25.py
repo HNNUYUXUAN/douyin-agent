@@ -92,7 +92,8 @@ class Tests(unittest.TestCase):
   legacy.write(self.w/'proof.json',{});r=self.observation();record=self.w/'record.json';legacy.write(record,r)
   result=onboarding.onboard(self.w,A(record=record),'2.5.0',legacy.read,legacy.write,lambda w:{})
   self.assertEqual(result['browser_choices']['youtube']['suggested_browser_id'],'edge')
-  self.assertEqual(result['browser_choices']['bilibili']['action'],'first_use_two_tabs')
+  self.assertEqual(result['browser_choices']['bilibili']['action'],'open_work_tab')
+  self.assertEqual(result['browser_choices']['bilibili']['login_action'],'not_needed')
   r['platform_bindings']={'bilibili':{'browser_id':'chrome','work_tab':'20','login_tab':'19','first_use_complete':True,'observed_at':r['browser_observations'][0]['observed_at'],'evidence':'proof.json'}}
   legacy.write(record,r);result=onboarding.onboard(self.w,A(record=record),'2.5.0',legacy.read,legacy.write,lambda w:{})
   self.assertEqual(result['browser_choices']['bilibili']['action'],'reuse_work_tab')

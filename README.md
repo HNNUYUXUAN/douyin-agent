@@ -1,5 +1,7 @@
 [English](README.en.md) · 简体中文
 
+> **v2.5.1 候选**：首启固定流程、Chrome／Edge 平台选择、Key 等待及故障手册已进入候选；异机普通安装和新聊天验证通过后发布。普通安装配置完成即收尾。
+
 ![douyin-agent：看懂视频，留下知识](docs/assets/hero-zh.png)
 
 # douyin-agent
@@ -12,10 +14,11 @@
 ## 用自然语言安装
 ```text
 帮我安装 https://github.com/HNNUYUXUAN/douyin-agent
-先读 AGENTS.md、AGENT_INSTALL.md，WorkBuddy 新设备再读 references/bootstrap/zh-CN/first-run.md。
+先读 AGENTS.md、SKILL.md 和当前语言首启必读包。
 终端优先已有 Git Bash，其次 PowerShell 7、Windows PowerShell 5.1。
 检查已有 Conda，准备独立 Python 3.12、FFmpeg/FFprobe、浏览器和 Agent Plan。
-需要登录、购买、Key 或系统授权时，打开相应页面或本地文件让我完成。
+平台页面使用用户 Chrome/Edge。缺 Key 停下等我本地填写。
+配置完成即收尾；作品等我另行开工，不运行维护测试或收费样例。
 ```
 [GitHub](https://github.com/HNNUYUXUAN/douyin-agent) · [GitCode](https://gitcode.com/yuxuan6426/douyin-agent) · [从零安装](wiki/zh-CN/bootstrap/first-run.md)
 
@@ -32,9 +35,9 @@ B --> C["Git Bash then PS7 then PS5.1"]
 C --> D["Conda Python 3.12 and FFmpeg"]
 D --> E["Choose workspace and host skill directory"]
 E --> F["Install and verify actual skill discovery"]
-F --> G["Connect browser and open platform"]
-G --> H["User login and local Agent Plan Key"]
-H --> I["Read-only checks then concrete authorized sample"]
+F --> G["Verify user Chrome or Edge DOM and capture"]
+G --> H["Wait for missing local Agent Plan Key"]
+H --> I["Finish local setup; await explicit task start"]
 ```
 
 读指南、准备环境、连接与服务分别验证；用户自行登录、购买和填写 Key。

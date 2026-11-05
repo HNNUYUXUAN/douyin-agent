@@ -11,8 +11,8 @@
   ],
   "status": "active",
   "generated": {
-    "by": "douyin-agent/2.5.0",
-    "at": "2026-11-05T02:27:48.555869+00:00"
+    "by": "douyin-agent/2.5.1",
+    "at": "2026-11-05T09:57:06.630627+00:00"
   },
   "sources": [
     {
@@ -70,3 +70,7 @@ raw 不可达时，先从 `https://api.github.com/repos/HNNUYUXUAN/douyin-agent/
 Miniconda 记录所选固定版本、官方 HTTPS 来源和实际安装器 SHA256。官方校验清单不可用时，确认 Authenticode 为 Valid 且签名者为 Anaconda 后方可使用，并标明未与官方摘要比对。FFmpeg 优先官方页面列出的构建；gyan.dev 不可达时可选同页 BtbN，按该构建发布的校验清单核验，不混用构建方摘要。
 
 宿主截图 API 不可用时先按浏览器恢复指南诊断。确需桌面证据且宿主支持时，可使用已安装 FFmpeg 的 gdigrab；只采集任务相关公开区域，保存所有权和清理记录，不为取证改系统安全策略。
+
+## 固定等待与恢复入口
+
+缺 Conda 时完整读 [校验与等待手册](../faults/conda.md)，使用 scripts/install-conda.ps1 封装命令，不直接调用 NSIS 后立即返回。先取得官方固定版本安装器、记录 SHA256 并校验签名；不覆盖已有半成品。FFmpeg 供应源失败按 [安装故障](../faults/install.md) 处理。普通安装不运行离线套件或收费样例。

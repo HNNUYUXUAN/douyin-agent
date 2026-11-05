@@ -1,26 +1,8 @@
 param([ValidateSet('install','setup')][string]$Mode,[string]$Workspace,[string]$SkillDir,[string]$Conda,[ValidateSet("codex","workbuddy")][string]$TargetHost="codex")
 $ErrorActionPreference='Stop'
 if($PSVersionTable.PSVersion.Major -lt 5){throw 'Windows PowerShell 5.1 or PowerShell 7 is required.'}
-$candidates=@()
-if($Conda){$candidates=@($Conda)}else{
- if($env:CONDA_EXE){$candidates+=$env:CONDA_EXE}
- $cmd=Get-Command conda -CommandType Application -ErrorAction SilentlyContinue | Select-Object -First 1
- if($cmd){$candidates+=$cmd.Source}
- foreach($root in @($env:USERPROFILE,$env:ProgramData,'D:\','C:\')){
-  if($root){foreach($name in @('miniconda3','anaconda3','miniforge3')){$candidates+=Join-Path $root "$name\Scripts\conda.exe"}}
- }
-}
-$found=$null
-foreach($candidate in $candidates){
- if(Test-Path -LiteralPath $candidate -PathType Leaf){
-  $candidate=$ExecutionContext.SessionState.Path.GetUnresolvedProviderPathFromPSPath($candidate)
-  if([IO.Path]::GetExtension($candidate) -eq '.bat'){
-   $exe=Join-Path (Split-Path (Split-Path $candidate -Parent) -Parent) 'Scripts\conda.exe'
-   if(Test-Path -LiteralPath $exe){$candidate=$exe}
-  }
-  $found=$candidate; break
- }
-}
+. (Join-Path $PSScriptRoot 'discovery.ps1')
+$found=Get-DAConda $Conda $Workspace
 if(-not $found){throw 'Conda not found. Install from https://www.anaconda.com/docs/getting-started/miniconda/install or pass -Conda CONDA_EXE.'}
 $savedPreference=$ErrorActionPreference
 try {$ErrorActionPreference='Continue'; $base=& $found info --base; $discoveryCode=$LASTEXITCODE}finally{$ErrorActionPreference=$savedPreference}

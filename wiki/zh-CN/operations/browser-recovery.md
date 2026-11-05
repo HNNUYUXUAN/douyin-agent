@@ -19,8 +19,8 @@
   ],
   "status": "active",
   "generated": {
-    "by": "douyin-agent/2.5.0",
-    "at": "2026-11-05T02:27:48.555869+00:00"
+    "by": "douyin-agent/2.5.1",
+    "at": "2026-11-05T09:57:06.630627+00:00"
   },
   "sources": [
     {
@@ -77,4 +77,8 @@
 签名、摘要、兼容性或路径校验失败时保留诊断；重跑先检查回执和状态。修复失败且产生了已记录变更，可用同一回执 `Rollback`；后续用户修改会阻止自动回滚。备份位于用户 `.workbuddy/bridge-backups/`，属于本地私人数据，不进入发布包。中断锁需核实原进程已结束后人工处理，再按记录恢复。两次有依据的修复仍失败时集中交接诊断，保留可用浏览器继续独立任务。
 
 
-错误路由：`provider invocation timed out` 且 DOM 正常时先走截图分支；`Current display surface not available for capture` 检查可见捕获表面；扩展显示“WorkBuddy 没有在运行”才进入连接／Native Messaging 检查。Check 未提供实际扩展 ID 时匹配状态为 null。Plan/Repair 必须显式选择实际使用的浏览器。
+错误路由必须按实际失败接口分类：截图调用超时才走截图分支；滚动／输入／首屏异常走 [页面控件](../faults/page-controls.md)，不能只凭相同超时报文重铺桥接；`Current display surface not available for capture` 检查可见捕获表面；扩展显示“WorkBuddy 没有在运行”才进入连接／Native Messaging 检查。Check 未提供实际扩展 ID 时匹配状态为 null。Plan/Repair 必须显式选择实际使用的浏览器。
+
+## 触发前分类、成功与停止
+
+记录实际失败接口，不能把所有 provider invocation timed out 都当截图故障。滚动、输入和瞬时空 DOM 走 [页面手册](../faults/page-controls.md)。成功必须分别观察连接、DOM、截图；静态 Check 健康不做 Repair。现有修复上限用完后走 [未知故障](../faults/unknown.md) 的有限官方检索；仍失败保存现场交接。恢复不重提收费请求，不结束用户浏览器。

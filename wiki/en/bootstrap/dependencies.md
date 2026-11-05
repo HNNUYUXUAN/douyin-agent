@@ -11,8 +11,8 @@
   ],
   "status": "active",
   "generated": {
-    "by": "douyin-agent/2.5.0",
-    "at": "2026-11-05T02:27:48.555869+00:00"
+    "by": "douyin-agent/2.5.1",
+    "at": "2026-11-05T09:57:06.630627+00:00"
   },
   "sources": [
     {
@@ -69,3 +69,7 @@ If raw is unreachable, obtain fetch.ps1 through `https://api.github.com/repos/HN
 For Miniconda record the selected fixed version, official HTTPS origin and actual installer SHA256. When official hashes are unavailable, require a Valid Authenticode signature from Anaconda and explicitly record the missing official digest comparison. Use FFmpeg builds listed by its official download page; BtbN is an alternative when gyan.dev is unavailable. Verify the matching publisher release checksum.
 
 Diagnose unavailable screenshot APIs using browser recovery first. Where host capabilities permit, installed FFmpeg gdigrab can provide scoped public desktop evidence with ownership/cleanup records. Do not change system security policy for screenshots.
+
+## Bounded wait and recovery entry
+
+For missing Conda, read [verification/wait](../faults/conda.md) completely and use scripts/install-conda.ps1 rather than launching NSIS and immediately returning. Obtain a fixed official installer, record SHA256 and validate signature; preserve partial existing destinations. Handle FFmpeg supplier failures through [installation faults](../faults/install.md). Ordinary setup runs neither offline matrices nor paid samples.

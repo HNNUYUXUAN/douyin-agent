@@ -1,60 +1,49 @@
 ---
 {
   "type": "Runbook",
-  "title": "Cross-browser selection and two-tab collaboration",
-  "description": "Cross-browser selection and two-tab collaboration — douyin-agent operational knowledge",
+  "title": "User browser selection and conditional login tabs",
+  "description": "User browser selection and conditional login tabs",
   "tags": [
+    "browser",
     "chrome",
     "edge",
-    "login",
-    "登录",
-    "双标签",
-    "browser"
+    "user_tabs",
+    "login"
   ],
-  "status": "active",
+  "status": "stable",
   "generated": {
-    "by": "douyin-agent/2.5.0",
-    "at": "2026-11-05T02:27:48.555869+00:00"
+    "by": "douyin-agent/2.5.1",
+    "at": "2026-11-05T09:57:06.630627+00:00"
   },
   "sources": [
     {
-      "resource": "https://github.com/GoogleCloudPlatform/knowledge-catalog/blob/62432a095456147ee71e70ac6e4dc0d2dea3ac30/okf/SPEC.md"
+      "resource": "https://www.codebuddy.cn/docs/workbuddy/From-Beginner-to-Expert-Guide/Function-Description/Right-Sidebar"
     }
   ],
   "applicability": {
-    "skill": "2.5.x",
-    "host": "capability-detected; see body for measured versions"
+    "skill": "2.5.1 candidate",
+    "host": "Windows x64; recheck current host capabilities"
   },
-  "verification_scope": "Documentation reviewed; runtime acceptance is recorded separately."
+  "verification_scope": "Candidate implementation; fixture, local and recipient results are recorded separately."
 }
 ---
 
-# Cross-browser selection and two-tab collaboration
-
-## Observe live capabilities
-
-Inventory all host-connected Chrome/Edge instances and visible tabs. Inspect existing selected-platform tabs first; open a public platform page in candidate instances when needed. Limit inspection to selected platforms. Record connection, DOM, screenshot and file-save independently. Do not inspect browser user-data directories, cookies or unconnected profiles.
-
-Use visible login/account controls and page state to classify `logged_in|logged_out|unknown`; record access separately as `passed|blocked|unverified`. An avatar or playback alone does not prove login. Login state is a time-specific observation.
-
-## Choose and reuse
-
-Honor explicit user choice. Otherwise recheck the previous binding, then prefer logged-in instances able to access the work. Use a sole candidate; ask once among equivalent candidates and save the choice. Without a logged-in instance, public-page access and parser acquisition may still work.
-
-`onboard --record` v2 stores opaque browser IDs, kind, four capabilities, per-platform login/access and tab bindings without account names. Returned `browser_choices` are historical suggestions requiring live recheck. Reobserve changed connection IDs and stale tabs.
-
-## First-use tabs
-
-For the selected platform's first use, create/reuse login tab A and work tab B in the same instance/Profile. A remains with the user for login, CAPTCHA or confirmation of existing login. B handles browsing and public link collection. Do not navigate A while the user signs in.
-
-Save `first_use_complete`, `browser_id`, `login_tab`, `work_tab` and evidence after actual setup. Later recheck and reuse the work tab. Close only unneeded agent-created probe tabs; retain user tabs and the login tab.
-
-Field evidence covers WorkBuddy 5.9.3 / extension 0.2.8: extension-session reuse worked and the built-in instance had login persistence problems. Detect current capabilities rather than generalizing this result to every built-in browser version.
+# User browser selection and conditional login tabs
 
 
-[桥接与截图恢复 / Bridge recovery](browser-recovery.md) · [v2 receipt example](../../../docs/agent/examples/onboard-v2.json)
-
-
-## Login handoff / 登录交接
-
-When login needs user takeover, use the actual host keep/handoff capability to retain the login tab. Do not navigate or close it while waiting.
+## Trigger and scope
+All platform pages, including public pages, short-link verification and login. Use Chrome/Edge user extension connections. IAB is auxiliary for public parsers/documentation.
+## Preconditions
+Inventory connected instances: family, kind, connection, DOM, screenshot and file saving. WorkBuddy must expose user_tabs; store host_capabilities in v2 observations. Missing legacy evidence requires a live recheck, not a missing-plugin diagnosis. Never read cookies, credentials, user-data folders or disconnected profiles.
+## Ordered procedure
+1. An explicit browser ID wins. If unavailable, return connect_user_browser and read recovery; never silently substitute another instance.
+   With working connection/DOM but blocked platform access, return platform_blocked and retain that instance. Follow the page/login branch rather than reinstall a healthy bridge.
+2. Otherwise live-check the last binding, then a logged-in instance that accesses the work. Choose once among equivalent instances. IAB is never a platform candidate.
+3. Without platform observations, probe_platform first. Connection or an avatar alone does not establish login. Record logged_in/logged_out/unknown separately from access; conflicting evidence stays unknown pending account-control verification.
+4. logged_in: reuse/create the work tab only (login_action=not_needed). logged_out/unknown: reserve/reuse login and work tabs in the same Profile (reserve_login_tab). Hand off the login tab without navigating/closing it. A supplied public link may enter parser acquisition without login.
+5. After confirmed login, release only a task-created login tab with completed handoff and no remaining purpose. Preserve pre-existing user tabs. Record ownership first; a suggested obsolete-tab ID is not deletion authorization.
+6. Recheck and reuse the work tab later. If an IAB parser redirects to a platform, verify there through the selected user browser.
+## Success and bounds
+Verify access, login, playback, capture and saving independently. Reuse selections. On failure read [recovery](browser-recovery.md) completely instead of repeatedly switching browsers.
+## Record and resume
+`onboard --check --host workbuddy --browser-id OPAQUE_ID --observed CURRENT_JSON` uses current observations; --record persists v1/v2 receipts. Local output remains advice: the host performs navigation and may bypass the workflow, which this script cannot intercept.

@@ -3,7 +3,7 @@ import json, os, re, shutil, sys
 from datetime import datetime, timezone
 from pathlib import Path
 
-CHECKS={'browser_connection','douyin_access','youtube_access','xiaohongshu_access','tiktok_access','bilibili_access','visual_inspection','agent_plan_call','search_available','file_save'}
+CHECKS={'skill_discovery','browser_connection','douyin_access','youtube_access','xiaohongshu_access','tiktok_access','bilibili_access','visual_inspection','agent_plan_call','search_available','file_save'}
 STATUSES={'passed','blocked','unverified','not_applicable'}
 LINKS={
  'browser':'https://learn.chatgpt.com/docs/chrome-extension',
@@ -36,8 +36,14 @@ def evidence_reference(w,evidence):
         if not resolved.is_file(): raise ValueError('Evidence file missing')
 
 def onboard(w,a,version,read,write,config):
-    if a.record:
-        record=read(Path(a.record))
+    if getattr(a,'browser_id',None):
+        from browser_state import identifier
+        identifier(a.browser_id)
+    observed=getattr(a,'observed',None)
+    if a.record and observed: raise ValueError('Use --record or --observed, not both')
+    live={}
+    if a.record or observed:
+        record=read(Path(a.record or observed))
         v=record.get('schema_version')
         allowed={'schema_version','checks'} if v==1 else {'schema_version','checks','browser_observations','platform_bindings'}
         if v not in (1,2) or set(record)-allowed or not isinstance(record.get('checks'),dict):
@@ -49,10 +55,14 @@ def onboard(w,a,version,read,write,config):
             stamp=datetime.fromisoformat(value['observed_at'].replace('Z','+00:00'))
             if stamp.tzinfo is None or stamp>datetime.now(timezone.utc): raise ValueError('Use actual system UTC time with timezone, at or before the current system clock')
             evidence_reference(w,value['evidence'])
-        saved=read(w/'onboarding.json') if (w/'onboarding.json').exists() else {'schema_version':1,'checks':{}}
         if v==2:
             from browser_state import validate
             validate(record,lambda e:evidence_reference(w,e))
+        live=record
+    saved=read(w/'onboarding.json') if (w/'onboarding.json').exists() else {'schema_version':1,'checks':{}}
+    if a.record:
+        record=live
+        if record['schema_version']==2:
             merged={r['id']:r for r in saved.get('browser_observations',[])}
             merged.update({r['id']:r for r in record.get('browser_observations',[])})
             saved['browser_observations']=list(merged.values())
@@ -66,10 +76,25 @@ def onboard(w,a,version,read,write,config):
     local={'python312':sys.version_info[:2]==(3,12),'config_present':(w/'.env').is_file(),
       'key_present':bool(config(w).get('VOLC_AGENT_API_KEY')),'ffmpeg':bool(shutil.which('ffmpeg')),'ffprobe':bool(shutil.which('ffprobe')),
       'curl':bool(shutil.which('curl.exe') or shutil.which('curl'))}
-    saved=read(w/'onboarding.json') if (w/'onboarding.json').exists() else {'schema_version':1,'checks':{}}
+    ws=read(w/'workspace.json') if (w/'workspace.json').exists() else {}
+    skill=Path(ws.get('skill_root',str(Path(__file__).resolve().parent.parent)))
+    host=getattr(a,'host',None) or ('workbuddy' if {'.workbuddy','.codebuddy'} & set(skill.parts) else 'codex')
+    installed=False
+    if (skill/'installed.json').is_file():
+        receipt=read(skill/'installed.json')
+        installed=bool(receipt.get('workspace')) and Path(receipt['workspace']).resolve()==w and receipt.get('version')==version
     from browser_state import choices
-    return {'schema_version':2,'local':local,'historical_host_observations':saved['checks'],
-      'browser_choices':choices(saved),
+    from setup_flow import route
+    flow=getattr(a,'flow','setup'); language=getattr(a,'language','zh-CN'); browser_id=getattr(a,'browser_id',None)
+    routing=route(local,live,installed,language,host,flow,browser_id)
+    if a.record:
+        write(w/'setup-progress.json',{'schema_version':1,'flow':flow,'phase':routing['phase'],
+            'next_action':routing['next_action'],'waiting_for':routing['waiting_for'],
+            'evidence':sorted({x['evidence'] for x in live.get('checks',{}).values()}|{x['evidence'] for x in live.get('browser_observations',[])}),
+            'updated_at':datetime.now(timezone.utc).isoformat()})
+    return {'schema_version':2,'flow':flow,'host':host,'local':local,'historical_host_observations':saved['checks'],
+      'browser_choices':choices(live if observed else saved,host,browser_id),**routing,
+      'local_config_path':str(w/'.env'),'live_observations_supplied':bool(live),
       'cloud_verified_by_this_check':False,'browser_verified_by_this_check':False,'links':LINKS,
-      'next_actions':['Resolve missing local prerequisites','Inventory connected Chrome/Edge; recheck selected platform, DOM, screenshot and file-save independently','First platform use: login and work tabs in the same profile; later reuse work tab','Search existing skills, then host search, then configured Yuanbao/Bocha for free parsers','Reuse configured Agent Plan; otherwise guide local setup','Preview a real task before authorized cloud validation'],
+      'next_actions':[routing['next_action']],
       'record_written':bool(a.record)}

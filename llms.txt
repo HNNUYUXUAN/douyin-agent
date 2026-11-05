@@ -1,6 +1,6 @@
 # douyin-agent
 
-> A Windows-first, host-orchestrated skill for evidence-based Douyin video/image understanding with Volcengine Agent Plan and text-only result retention. 面向 Windows Codex 的抖音理解技能，完成后保留 MD/JSON 并清理任务媒体。
+> Multi-platform host browsing, free-parser acquisition, Agent Plan understanding and text evidence. Ordinary setup finishes at local configuration; real works need explicit start. 多平台宿主浏览、解析站获取与文字证据；普通安装配置完成即收尾。
 
 ## Start here
 
@@ -11,7 +11,7 @@
 - [Chinese README](README.md): product overview.
 - [English README](README.en.md): product overview.
 
-- [Zero-start WorkBuddy (中文)](wiki/zh-CN/bootstrap/first-run.md) / [English](wiki/en/bootstrap/first-run.md): source, dependencies, host and clean-device acceptance.
+- [Zero-start WorkBuddy (中文)](wiki/zh-CN/bootstrap/first-run.md) / [English](wiki/en/bootstrap/first-run.md): ordered ordinary setup; maintenance acceptance is explicit and separate.
 - [OKF knowledge bundle](wiki/index.md): portable operational knowledge.
 - [Local knowledge operations (中文)](wiki/zh-CN/bootstrap/knowledge.md) / [English](wiki/en/bootstrap/knowledge.md): search and sanitized private case storage.
 
@@ -36,3 +36,5 @@ Read only what the current operation needs. Browser access and media acquisition
 Finite browsing / 有限浏览: docs/agent/zh-CN/browse.md | docs/agent/en/browse.md
 Vision / 视觉: docs/agent/zh-CN/vision.md | docs/agent/en/vision.md
 Platform controls / 控件: docs/agent/zh-CN/platforms.md | docs/agent/en/platforms.md
+
+- [Fault routing 中文](wiki/zh-CN/faults/index.md) / [English](wiki/en/faults/index.md): read a complete matched manual before bounded recovery.

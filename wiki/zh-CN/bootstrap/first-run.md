@@ -1,18 +1,18 @@
 ---
 {
   "type": "Runbook",
-  "title": "首次接入与恢复",
-  "description": "首次接入与恢复 — douyin-agent operational knowledge",
+  "title": "首次配置：固定步骤与停止条件",
+  "description": "首次配置：固定步骤与停止条件",
   "tags": [
-    "douyin-agent",
-    "zh-CN",
-    "bootstrap",
-    "first-run"
+    "setup",
+    "首次安装",
+    "first-run",
+    "gate"
   ],
-  "status": "active",
+  "status": "stable",
   "generated": {
-    "by": "douyin-agent/2.5.0",
-    "at": "2026-11-05T02:27:48.555869+00:00"
+    "by": "douyin-agent/2.5.1",
+    "at": "2026-11-05T09:57:06.630627+00:00"
   },
   "sources": [
     {
@@ -20,28 +20,49 @@
     }
   ],
   "applicability": {
-    "skill": "2.5.x",
-    "host": "capability-detected; see body for measured versions"
+    "skill": "2.5.1 candidate",
+    "host": "Windows x64; recheck current host capabilities"
   },
-  "verification_scope": "Documentation reviewed; runtime acceptance is recorded separately."
+  "verification_scope": "Candidate implementation; fixture, local and recipient results are recorded separately."
 }
 ---
 
-# 首次接入与恢复
-
-按以下顺序逐项核对；已有配置直接复用，只补缺失或失效的部分。每项分别记 passed / blocked / unverified。
-
-1. 探测现有 Git Bash → PowerShell 7 → Windows PowerShell 5.1，记录实际可执行文件和版本；检测架构、磁盘、可写短工作区和宿主会话目录。
-2. 取得同一发布提交的普通源码目录，复用 Conda、Python 3.12、FFmpeg/FFprobe；缺失按依赖指南准备。
-3. WorkBuddy 新安装使用当前用户 `.workbuddy/skills/douyin-agent`，已有安装沿用回执。实际调用技能后记录发现结果。
-4. 探测已有检索技能、宿主原生搜索以及文件保存能力。下载工具用于保存解析站结果。
-5. 用户选择本次平台后，再枚举所有已连接 Chrome/Edge，检查该平台可见标签和登录状态，完成首次双标签引导。其他平台按首次使用分别接入。
-6. 复用已配置 Agent Plan；缺配置时打开官方入口，让用户在本地填写 Key。首次配置不自动发起收费任务。
-7. 用户明确开工并确定模式与范围后，用具体样本预览，在既有授权范围内执行、复核、清理和记录。
-
-登录、验证码、购买和凭据输入交给用户。平台未登录仍可处理公开链接并访问解析站。历史通过记录需重新核对当前能力。
+# 首次配置：固定步骤与停止条件
 
 
-[依赖 / Dependencies](dependencies.md) · [WorkBuddy](workbuddy.md) · [浏览器 / Browsers](../operations/browser-selection.md) · [配置回执 / Receipts](../operations/onboarding.md) · [浏览 / Browse](../operations/browse.md)
+## 执行前完整阅读
 
-[文件保存探测与同轮标准传输恢复](../operations/parser-sites.md)。已有 curl 可以保存解析站公开文件链接；浏览器下载接口缺失时分别探测。
+只选当前语言。按顺序完整读取本页、[依赖](dependencies.md)、当前宿主 [WorkBuddy](workbuddy.md) 或 [Codex](codex.md)、[浏览器](../operations/browser-selection.md)、[Key](key.md)、[故障索引](../faults/index.md)。本次已读且内容未变时复用，不重复加载。机器清单见 docs/agent/index.json 的 setup_flow。
+
+## S0 判断意图
+
+普通安装／配置使用 setup；日常任务使用 use；只有用户明确要求维护验收才用 acceptance。普通安装不运行升级、中断、重复安装、全套测试、多平台作品或收费样例。
+
+## S1 只读自检
+
+从实际源码根运行 `scripts/preflight.ps1 -Workspace ABS_WORKSPACE -TargetHost workbuddy`（Codex 改为 codex）。Windows 自带 PowerShell 即可，不要求 Python；常规安装仍使用返回的 Git Bash → PowerShell 7 → 5.1。输出实际路径、版本、缺失依赖、安装回执和必读包。可写性标 unverified；首次真实写入由安装器检查。
+
+## S2 补缺和安装
+
+按 [依赖](dependencies.md) 补缺，再读 [安装步骤](../operations/install.md)，调用现有 install.sh／install.ps1。已有回执及配置先复用；安装成功不重复安装来“确认”。失败先读命中手册，保留环境和回执。
+
+## S3 宿主发现与连接
+
+记录技能实际发现；同一聊天与新聊天分别声明，不能自行新开聊天则保留该项待验收，不重装。按宿主指南核对 Chrome／Edge 扩展、DOM 与公开页面截图。只检查本次必要实例；不遍历五个平台。没有选平台时，不创建平台登录标签。
+
+## S4 Key 等待
+
+缺 Key 时按 [Key 手册](key.md) 输出本地路径与官方入口，保存等待状态并结束当前执行，等待用户填写。没有跳过入口，不继续作品下载、浏览会话或模型调用。
+
+## S5 配置收尾
+
+使用安装器返回的 Python 和技能根：`PYTHON SKILL/scripts/da.py --workspace WORKSPACE onboard --check --flow setup --host workbuddy --observed CURRENT_JSON`。CURRENT_JSON 是本次实际观察，格式见 [回执](../operations/onboarding.md)。返回一个 next_action；完成当前步骤后再检查。`--record CURRENT_JSON` 才保存观察和 setup-progress.json。
+
+finish_setup 时报告“本地配置已完成，真实服务尚未验证”，并结束。真实作品等待用户明确开工；不因持续额度授权自动创建样例。
+
+## 恢复与停止
+
+恢复先看 setup-progress.json、实际回执和当前缺项；重新取得实时宿主观察，不复制旧 passed。故障读对应完整手册，核验后记录；未知故障按 [交接](../faults/unknown.md)。分别记录依赖下载、安装、用户等待、故障及维护验收耗时；宿主积分和 Agent Plan 用量分列，未知不估算。
+
+
+预检明确调用方式：在实际源码根用 `powershell.exe -NoProfile -File ./scripts/preflight.ps1 -Workspace ABS_WORKSPACE -TargetHost workbuddy`。将 ABS_WORKSPACE 替换为本设备短路径并引用含空格参数；不要把 .ps1 当 Git Bash 脚本直接执行。预检返回必读包供首次完整阅读，后续 onboard 只返回当前阶段文档，已读内容复用。

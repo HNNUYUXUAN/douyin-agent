@@ -1,18 +1,20 @@
 ---
 {
   "type": "Runbook",
-  "title": "First use and configuration recovery",
-  "description": "First use and configuration recovery — douyin-agent operational knowledge",
+  "title": "Setup checks and current host observations",
+  "description": "Setup checks and current host observations",
   "tags": [
-    "douyin-agent",
-    "en",
-    "operations",
-    "onboarding"
+    "onboard",
+    "setup",
+    "record",
+    "skill_discovery",
+    "observed",
+    "key"
   ],
-  "status": "active",
+  "status": "stable",
   "generated": {
-    "by": "douyin-agent/2.5.0",
-    "at": "2026-11-05T02:27:48.555869+00:00"
+    "by": "douyin-agent/2.5.1",
+    "at": "2026-11-05T09:57:06.630627+00:00"
   },
   "sources": [
     {
@@ -20,115 +22,31 @@
     }
   ],
   "applicability": {
-    "skill": "2.5.x",
-    "host": "capability-detected; see body for measured versions"
+    "skill": "2.5.1 candidate",
+    "host": "Windows x64; recheck current host capabilities"
   },
-  "verification_scope": "Documentation reviewed; runtime acceptance is recorded separately."
+  "verification_scope": "Candidate implementation; fixture, local and recipient results are recorded separately."
 }
 ---
 
-
-# First use and configuration recovery
-
-[中文](../../zh-CN/operations/onboarding.md) · [Index](../../../docs/agent/index.json)
-
-## Applicable intent
-
-Prepare first use, or restore browser and Agent Plan configuration after invalidation or changes.
-
-## Prerequisites
-
-An installation and locatable workspace exist, and the host can guide browser connection. The user still completes login, purchase and local Key entry.
-
-## Minimum inputs
-
-Actual Python/skill/workspace paths, the selected browser and observations to record. Real-service validation additionally needs a concrete sample and authorization covering its usage.
-
-## Procedure
-
-Before installation, check the shell, Conda base interpreter, workspace Python 3.12, and FFmpeg separately. A working shell does not establish runtime readiness. See [installation](install.md).
-
-Bring connection, login, subscription and local Key entry into one guided session, then reuse valid configuration. The host checks capabilities and opens pages; an installer cannot prove browser connectivity. Skip steps already supported by valid evidence.
-
-### Check before guiding
-
-Run `PYTHON SKILL/scripts/da.py --workspace WORKSPACE onboard --check`. It is read-only: no record writes, browser opening or cloud calls. Follow the returned next steps. `doctor` checks the local environment and `status` inspects jobs; neither proves subscription availability.
-
-The host separately verifies browser connection, selected profile, Douyin access, any required login, local Agent Plan Key presence and actual service validation. One successful check does not imply another. Use `onboard --record FILE` to save non-sensitive host observations to workspace `onboarding.json` and update local `agent-context.json`. These support future routing and must not contain credentials or private page contents.
-
-### Browser
-
-For WorkBuddy use its [host connection guide](../bootstrap/workbuddy.md) and actual tools/settings; the Codex UI below applies to Codex only.
+# Setup checks and current host observations
 
 
-Prefer a connected Chrome on the tested device. If the user selects Edge, verify that browser's own profile and permissions. Follow the [official connection guide](https://learn.chatgpt.com/docs/chrome-extension): desktop Settings → Computer Use installs/manages the corresponding extension, and `@Chrome` or `@Edge` selects it in chat. Follow the actual host UI if labels change.
-
-Once connected, open [Douyin](https://www.douyin.com/) in that same profile. The user handles login, CAPTCHA and permission prompts where required. Record access as passed only after the host reads the actual page title or target work. Never request exported cookies. Without a connection, provide the official guide first, let the user connect, then open the remaining pages; do not claim inaccessible tabs were opened.
-
-### Agent Plan
-
-Open official pages for the steps still needed:
-
-| Page | User action |
-|---|---|
-| [Subscription page](https://www.volcengine.com/activity/agentplan) | Sign in and purchase the chosen plan, or reuse an existing subscription |
-| [Agent Plan console](https://ark.volcengine.com/region:cn-beijing/openManagement?LLM=%7B%7D&advancedActiveKey=agentPlan) | Obtain the dedicated Agent Plan Key and check actual entitlements |
-| [Official quickstart](https://docs.volcengine.com/docs/ark/agent-plan-personal-get-started?lang=zh) | Check product configuration guidance |
-
-The host prepares and opens the workspace `.env`; the user enters `VOLC_AGENT_API_KEY` locally. Never request a Key in chat, capture it in screenshots or echo it. Preserve the existing file. Process environment variables override workspace `.env`. Agent Plan uses a dedicated Key, distinct from ordinary Ark/Coding Plan Keys. The scripts already select Plan endpoints; the user need not change Codex's main model configuration.
-
-The user completes purchase, payment, login and verification. Current console terms determine prices, limits and entitlements; historical Small-plan evidence is not a guarantee for every account today. Do not automatically enable renewal or overage billing.
-
-### Validate and reuse
-
-After Key entry, perform local checks first. For a real-service test, use a specific acquired work and follow the [workflow](workflow.md): show usage before running within user authorization. Record errors using actual HTTP/protocol evidence; leave unknown states unknown. Save completed and outstanding steps. Recheck only missing, changed or invalid parts next time, and reverify after changing browser profiles.
-
-### Host-check receipt
-
-This is a format example, not test evidence: replace every observation. `status` allows `passed`, `blocked`, `unverified` and `not_applicable`; use the actual UTC `observed_at`. `evidence` is a verifiable public URL or workspace-relative JSON evidence path. Record only `browser_connection`, `douyin_access` and `agent_plan_call`; omit account and browser-profile names.
-
-```json
-{
-  "schema_version": 1,
-  "checks": {
-    "browser_connection": {
-      "status": "passed",
-      "observed_at": "2026-11-03T00:00:00Z",
-      "evidence": "https://www.douyin.com/"
-    },
-    "douyin_access": {
-      "status": "unverified",
-      "observed_at": "2026-11-03T00:00:00Z",
-      "evidence": "qa/onboarding-check.json"
-    },
-    "agent_plan_call": {
-      "status": "unverified",
-      "observed_at": "2026-11-03T00:00:00Z",
-      "evidence": "qa/onboarding-check.json"
-    }
-  }
-}
-```
-
-`onboard --record FILE` records host observations. A later `onboard --check` returns local checks and historical observations; an earlier pass does not prove current permissions or service availability.
-
-## Expected outputs and success evidence
-
-The read-only check returns local state and historical observations; recording writes non-sensitive onboarding.json and agent-context.json. Every pass has actual evidence, while missing steps remain pending. Historical state is not live availability proof.
-
-## Stop or recovery conditions
-
-Pause only actions depending on incomplete connection, login, verification or Key entry; local checks may continue. Follow [recovery](recovery.md) for real-request errors while retaining reservations.
-
-## Next links
-
-Once configured, read [acquisition](acquisition.md); with media already acquired, proceed to the [workflow](workflow.md).
-
-
-
-
-To convert a full acceptance record into host observations, map browser_bridge to browser_connection; retain observed douyin_access/youtube_access/xiaohongshu_access/tiktok_access/agent_plan_call under their names. Keep install/cleanup checks in the full acceptance artifact. Preserve each actual observed_at, and reference that existing acceptance JSON through a workspace-relative evidence path. Do not import null timestamps until observed. The host-record envelope contains only schema_version:1 and checks; do not pass the whole clean-device template.
-
-
-
-[Cross-browser receipt extension](onboarding-v2.md)
+## Fixed entry
+Read the [setup pack](../bootstrap/first-run.md) completely. Ordinary setup configures only; use awaits explicit start; acceptance is maintenance only. Missing Key stops execution until local entry; completion never launches a sample.
+## Command
+Use actual installer paths:
+`PYTHON SKILL/scripts/da.py --workspace WORKSPACE onboard --check --flow setup --host workbuddy --language en --observed CURRENT_JSON`
+Without --observed, output includes local checks and historical suggestions, requiring current host observations instead of reusing old passes. --browser-id OPAQUE_ID pins the user-selected instance; failure routes to connection recovery. For Codex use --host codex.
+Output contains one next_action, required_docs, blocking_reasons, waiting_for, phase and setup_status. next_actions remains a single-element compatibility list. Reading paths are skill-root relative. Execute/recheck the current step; the local script does not perform host actions.
+## Read-only and persistence
+--check/--observed neither write, open pages nor call services. --record CURRENT_JSON persists onboarding.json, agent-context.json and minimal setup-progress.json. Do not combine record/observed. Resume from phase/evidence/next_action after live verification. Progress contains no credentials, page bodies or account data.
+## Receipts
+v1 (schema_version/checks) and v2 (browser_observations/platform_bindings added) remain accepted. Each check has only status/observed_at/evidence; statuses are passed|blocked|unverified|not_applicable. New skill_discovery records actual host discovery; distinguish listing vs fresh-chat invocation in referenced evidence. Use actual system timestamps and existing workspace-relative MD/JSON or clean public HTTPS evidence. Do not import a full acceptance template: extract observed checks, map browser_bridge to browser_connection, keep installation/cleanup in the acceptance table.
+v2 still has four capabilities: connection/dom/screenshot/file_save. Optional host_capabilities stores actual host inventory names; WorkBuddy platform selection requires user_tabs, with missing legacy evidence reobserved. family=chrome|edge|other and kind=extension|iab|cdp; only Chrome/Edge user extensions qualify for platforms.
+CURRENT_JSON must reflect current observations, not copied old files with refreshed timestamps. The script validates format/provenance, not whether a host actually performed actions.
+## Outcome and stop
+When prerequisites, matching installation receipt, skill discovery, user-browser DOM/screenshot and local Key pass, return finish_setup. Cloud fields stay false; report local configuration completed and real service unverified. No paid sample. Probe platform login/file saving only for the subsequent start scope.
+Resolve prerequisites through routed manuals, browser failures through recovery, and missing Key by waiting. After local entry check once, remaining waiting if still missing.
+## Example
+[v2 receipt](../../../docs/agent/examples/onboard-v2.json) is illustrative and requires real observations. Use [conditional login tabs](browser-selection.md); never copy example passed values as evidence.

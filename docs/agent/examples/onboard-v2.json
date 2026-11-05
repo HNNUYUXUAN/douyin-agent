@@ -19,7 +19,13 @@
           "login_state": "unknown",
           "access": "unverified"
         }
-      }
+      },
+      "host_capabilities": [
+        "user_tabs",
+        "navigation",
+        "dom_cua",
+        "screenshot"
+      ]
     }
   ],
   "platform_bindings": {}

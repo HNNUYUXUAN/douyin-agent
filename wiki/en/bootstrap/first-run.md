@@ -1,18 +1,17 @@
 ---
 {
   "type": "Runbook",
-  "title": "First use and recovery",
-  "description": "First use and recovery — douyin-agent operational knowledge",
+  "title": "First setup: ordered steps and stop conditions",
+  "description": "First setup: ordered steps and stop conditions",
   "tags": [
-    "douyin-agent",
-    "en",
-    "bootstrap",
-    "first-run"
+    "setup",
+    "first-run",
+    "gate"
   ],
-  "status": "active",
+  "status": "stable",
   "generated": {
-    "by": "douyin-agent/2.5.0",
-    "at": "2026-11-05T02:27:48.555869+00:00"
+    "by": "douyin-agent/2.5.1",
+    "at": "2026-11-05T09:57:06.630627+00:00"
   },
   "sources": [
     {
@@ -20,28 +19,49 @@
     }
   ],
   "applicability": {
-    "skill": "2.5.x",
-    "host": "capability-detected; see body for measured versions"
+    "skill": "2.5.1 candidate",
+    "host": "Windows x64; recheck current host capabilities"
   },
-  "verification_scope": "Documentation reviewed; runtime acceptance is recorded separately."
+  "verification_scope": "Candidate implementation; fixture, local and recipient results are recorded separately."
 }
 ---
 
-# First use and recovery
-
-Reuse existing configuration and fill only missing/failed prerequisites. Record each check separately as passed / blocked / unverified.
-
-1. Discover existing Git Bash → PowerShell 7 → Windows PowerShell 5.1 and record actual executable/version. Check architecture, storage, short writable workspace and host session directory separately.
-2. Obtain one release commit as an ordinary source directory. Reuse Conda, Python 3.12 and FFmpeg/FFprobe; prepare missing dependencies using the guide.
-3. New WorkBuddy installations use the current user's `.workbuddy/skills/douyin-agent`; preserve existing receipt paths. Verify actual skill invocation.
-4. Discover existing search skills, host-native search and file-saving capabilities. Download tools save parser results.
-5. After the user selects a platform, inventory connected Chrome/Edge instances and visible platform tabs/login state. Complete first-use two-tab setup for that platform; onboard others when first selected.
-6. Reuse configured Agent Plan. Otherwise open official setup and let the user enter the Key locally. Setup itself makes no paid request.
-7. Start only after explicit user instruction and mode/scope selection. Preview a concrete sample and execute, review, clean and record within existing authorization.
-
-The user handles login, CAPTCHA, purchases and credentials. Public links/parsers can remain usable while logged out. Recheck current capabilities rather than trusting historical passed records.
+# First setup: ordered steps and stop conditions
 
 
-[依赖 / Dependencies](dependencies.md) · [WorkBuddy](workbuddy.md) · [浏览器 / Browsers](../operations/browser-selection.md) · [配置回执 / Receipts](../operations/onboarding.md) · [浏览 / Browse](../operations/browse.md)
+## Read completely before execution
 
-[File-save preflight and same-round standard transport](../operations/parser-sites.md). Existing curl can save public parser-result files; probe it separately from browser download APIs.
+Use one language. Read this page, [dependencies](dependencies.md), the current host [WorkBuddy](workbuddy.md) or [Codex](codex.md), [browser selection](../operations/browser-selection.md), [Key setup](key.md), and [fault index](../faults/index.md) in order. Reuse unchanged content already read during this setup. docs/agent/index.json setup_flow is the machine list.
+
+## S0 Select intent
+
+Use setup for ordinary installation/configuration, use for normal tasks, and acceptance only for explicitly requested maintenance. Ordinary setup does not run upgrade/interruption/repeat-install matrices, full tests, multi-platform works or paid samples.
+
+## S1 Read-only preflight
+
+From the actual source root: `scripts/preflight.ps1 -Workspace ABS_WORKSPACE -TargetHost workbuddy` (use codex for Codex). Windows PowerShell is sufficient, without Python. Run normal installation with the returned Git Bash → PowerShell 7 → 5.1 choice. Output covers actual paths, versions, missing dependencies, receipt and reading pack. Effective write permission remains unverified until the installer performs its first write.
+
+## S2 Prepare missing prerequisites and install
+
+Follow [dependencies](dependencies.md), then [installation](../operations/install.md), using existing install.sh/install.ps1. Reuse receipts/configuration. Do not repeat a successful install merely to confirm it. On failure, read the matching manual and preserve the environment/receipts.
+
+## S3 Host discovery and browser
+
+Record actual skill discovery; distinguish current-chat and fresh-chat results. If a fresh chat cannot be opened, leave that scope pending rather than reinstalling. Verify the connected Chrome/Edge extension, DOM and a public-page screenshot. Check only necessary instances, not all five platforms. Without a selected platform, do not create platform login tabs.
+
+## S4 Wait for Key
+
+If missing, follow [Key setup](key.md): show the local path and official page, save waiting progress, and end execution until the user fills it locally. There is no skip option. Do not continue to work acquisition, browse sessions or model calls.
+
+## S5 Finish configuration
+
+Use actual installer paths: `PYTHON SKILL/scripts/da.py --workspace WORKSPACE onboard --check --flow setup --host workbuddy --observed CURRENT_JSON`. CURRENT_JSON contains current host observations; see [receipts](../operations/onboarding.md). Execute the one next_action, then recheck. Only `--record CURRENT_JSON` persists observations and setup-progress.json.
+
+At finish_setup report “Local configuration completed; real service not yet verified”, and finish. Real works require the user's explicit start. Standing quota authorization does not start a sample.
+
+## Resume and stop
+
+Inspect setup-progress.json, actual receipts and missing items; obtain current host observations instead of copying old passes. Read a matched manual completely and record verified outcomes. Unknown faults follow [handoff](../faults/unknown.md). Track download, installation, human waiting, diagnosis and maintenance time separately; host credits and Agent Plan usage are separate, with unknown values left unknown.
+
+
+Explicit preflight invocation from the actual source root: `powershell.exe -NoProfile -File ./scripts/preflight.ps1 -Workspace ABS_WORKSPACE -TargetHost workbuddy`. Substitute the actual short workspace and quote spaces; do not execute .ps1 as a Bash script. Preflight returns the complete first-read pack; subsequent onboard checks return only current-phase documents, reusing content already read.

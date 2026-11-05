@@ -1,5 +1,7 @@
 [简体中文](README.md) · English
 
+> **v2.5.1 candidate**: ordered setup, Chrome/Edge platform selection, mandatory local Key wait and fault manuals. Recipient ordinary-setup/fresh-chat validation gates publication. Normal setup finishes at configuration.
+
 ![douyin-agent: Understand videos. Keep the knowledge.](docs/assets/hero-en.png)
 
 # douyin-agent
@@ -12,10 +14,11 @@ Supports Douyin, YouTube, Xiaohongshu, TikTok and Bilibili videos/public image p
 ## Install in natural language
 ```text
 Install https://github.com/HNNUYUXUAN/douyin-agent
-Read AGENTS.md and AGENT_INSTALL.md; for a new WorkBuddy device also read references/bootstrap/en/first-run.md.
+Read AGENTS.md, SKILL.md and the complete current-language setup pack.
 Prefer existing Git Bash, then PowerShell 7, then Windows PowerShell 5.1.
 Reuse Conda and prepare isolated Python 3.12, FFmpeg/FFprobe, browser and Agent Plan.
-Open pages/local files for me when login, purchase, Key entry or system approval is needed.
+Use user Chrome/Edge for platform pages. Wait for my local entry if Key is missing.
+Finish at configuration; await my explicit start, without maintenance tests or paid samples.
 ```
 [GitHub](https://github.com/HNNUYUXUAN/douyin-agent) · [GitCode](https://gitcode.com/yuxuan6426/douyin-agent) · [Zero-start](wiki/en/bootstrap/first-run.md)
 
@@ -32,9 +35,9 @@ B --> C["Git Bash then PS7 then PS5.1"]
 C --> D["Conda Python 3.12 and FFmpeg"]
 D --> E["Choose workspace and host skill directory"]
 E --> F["Install and verify actual skill discovery"]
-F --> G["Connect browser and open platform"]
-G --> H["User login and local Agent Plan Key"]
-H --> I["Read-only checks then concrete authorized sample"]
+F --> G["Verify user Chrome or Edge DOM and capture"]
+G --> H["Wait for missing local Agent Plan Key"]
+H --> I["Finish local setup; await explicit task start"]
 ```
 
 Read guides, prepare dependencies and verify browser/service separately. The user handles login, purchase and local Key entry.

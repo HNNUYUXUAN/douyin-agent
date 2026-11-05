@@ -11,8 +11,8 @@
   ],
   "status": "active",
   "generated": {
-    "by": "douyin-agent/2.5.0",
-    "at": "2026-11-05T02:27:48.555869+00:00"
+    "by": "douyin-agent/2.5.1",
+    "at": "2026-11-05T09:57:06.630627+00:00"
   },
   "sources": [
     {
@@ -91,8 +91,12 @@ Conda 顺序为显式 `-Conda` / `--conda` → `CONDA_EXE` → PATH → 用户�
 
 ## 下一步链接
 
-继续 [首次使用](onboarding.md)，就绪后进入 [取得作品](acquisition.md) 与 [任务流程](workflow.md)。
+继续 [首次配置](onboarding.md)，配置完成即收尾。用户后续明确开工才进入 [取得作品](acquisition.md) 与 [任务流程](workflow.md)。
 
 
 
 可先用 Windows 自带 PowerShell 执行 `scripts/terminal.ps1`，它只读返回首选终端的路径和版本；然后用返回的终端执行安装。
+
+## 普通安装的执行边界
+
+首次执行前完整读 [必读包](../bootstrap/first-run.md)。先 scripts/preflight.ps1；成功安装只执行一次，接 onboard --check --flow setup。Key 缺失必须等用户本地填好；配置完成不下载作品、不发收费请求。全套测试、升级／中断／重复安装只属明确触发的 [维护验收](../bootstrap/clean-test.md)。故障先读 [索引](../faults/index.md)。

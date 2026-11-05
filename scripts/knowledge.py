@@ -149,6 +149,14 @@ def search(roots, query):
                              'status': meta.get('status', 'unspecified'), 'score': score})
     return sorted(rows, key=lambda r: (-r['score'], r['path']))[:20]
 
+def route(code, language):
+    index=json.loads((BUNDLE.parent/'docs/agent/index.json').read_text(encoding='utf-8'))
+    row=next((x for x in index['setup_flow']['fault_routes'] if x['code'].casefold()==code.casefold()),None)
+    path=row['paths'][language] if row else f'wiki/{language}/faults/unknown.md'
+    return {'matched':row is not None,'code':row['code'] if row else None,
+            'required_docs':[path],'next_action':'read_matched_manual' if row else 'read_bounded_diagnosis_manual',
+            'historical_fix_is_not_current_success':True}
+
 def validate_bundle(root):
     rows=concepts(root)
     for path,meta,body in rows:
@@ -177,6 +185,7 @@ def main():
         sub.add_parser(name)
     sub.add_parser('search').add_argument('--query', required=True)
     sub.add_parser('record').add_argument('--file', type=Path, required=True)
+    q=sub.add_parser('route');q.add_argument('--code',required=True);q.add_argument('--language',choices=['zh-CN','en'],default='zh-CN')
     a = p.parse_args(); w = plain(a.workspace)
     if a.command in ('init', 'reindex'):
         out = reindex(plain(w / 'knowledge-private'))
@@ -184,6 +193,8 @@ def main():
         out = record(w, a.file)
     elif a.command == 'search':
         out = search([('public', BUNDLE), ('private', w / 'knowledge-private')], a.query)
+    elif a.command == 'route':
+        out = route(a.code,a.language)
     else:
         out = {'profile': 'OKF 0.2 JSON-compatible YAML frontmatter',
                'public_concepts': validate_bundle(BUNDLE), 'private_concepts': validate_bundle(w / 'knowledge-private')}

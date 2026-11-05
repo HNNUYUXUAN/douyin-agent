@@ -1,17 +1,15 @@
 ---
 {
   "type": "Runbook",
-  "title": "workbuddy",
-  "description": "workbuddy — douyin-agent operational knowledge",
+  "title": "操作入口",
+  "description": "操作入口",
   "tags": [
-    "douyin-agent",
-    "zh-CN",
-    "workbuddy"
+    "routing"
   ],
-  "status": "active",
+  "status": "stable",
   "generated": {
-    "by": "douyin-agent/2.5.0",
-    "at": "2026-11-05T02:27:48.555869+00:00"
+    "by": "douyin-agent/2.5.1",
+    "at": "2026-11-05T09:57:06.630627+00:00"
   },
   "sources": [
     {
@@ -19,13 +17,13 @@
     }
   ],
   "applicability": {
-    "skill": "2.5.x",
-    "host": "capability-detected; see body for measured versions"
+    "skill": "2.5.1 candidate",
+    "host": "Windows x64; recheck current host capabilities"
   },
-  "verification_scope": "Documentation reviewed; runtime acceptance is recorded separately."
+  "verification_scope": "Candidate implementation; fixture, local and recipient results are recorded separately."
 }
 ---
 
-# workbuddy
+# 操作入口
 
-[Read this operation / 读取操作正文](bootstrap/workbuddy.md)
+完整规则见 [guide](bootstrap/workbuddy.md).

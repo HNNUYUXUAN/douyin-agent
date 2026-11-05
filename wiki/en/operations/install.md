@@ -11,8 +11,8 @@
   ],
   "status": "active",
   "generated": {
-    "by": "douyin-agent/2.5.0",
-    "at": "2026-11-05T02:27:48.555869+00:00"
+    "by": "douyin-agent/2.5.1",
+    "at": "2026-11-05T09:57:06.630627+00:00"
   },
   "sources": [
     {
@@ -91,8 +91,12 @@ Stop overwriting on user-edit conflicts, unknown existing directories, missing e
 
 ## Next links
 
-Continue with [onboarding](onboarding.md), then [acquisition](acquisition.md) and the [workflow](workflow.md).
+Continue with [onboarding](onboarding.md), then finish at local configuration. [Acquisition](acquisition.md) and the [workflow](workflow.md) require a later explicit start.
 
 
 
 Use built-in Windows PowerShell to run read-only `scripts/terminal.ps1`; it returns the preferred executable and version. Execute installation through that returned shell.
+
+## Ordinary setup boundary
+
+Read the [setup pack](../bootstrap/first-run.md) completely first. Use scripts/preflight.ps1, install once successfully, then onboard --check --flow setup. Missing Key must wait for local entry. Configuration completion does not acquire works or make paid calls. Full tests, upgrade/interruption/repeat installs belong only to explicit [maintenance acceptance](../bootstrap/clean-test.md). Read the [fault index](../faults/index.md) before recovery.

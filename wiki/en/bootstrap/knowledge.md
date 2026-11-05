@@ -11,8 +11,8 @@
   ],
   "status": "active",
   "generated": {
-    "by": "douyin-agent/2.5.0",
-    "at": "2026-11-05T02:27:48.555869+00:00"
+    "by": "douyin-agent/2.5.1",
+    "at": "2026-11-05T09:57:06.630627+00:00"
   },
   "sources": [
     {
@@ -45,3 +45,9 @@ Search public concepts and local cases, then inspect live status, relevant guide
 record requires a new ASCII id and never overwrites a case. Use a new revision id and mention the old case when updating. New cases remain draft, without an automatic human-review claim. Rebuild indexes/logs with reindex after interruption. Runtime evidence and unresolved ledgers remain authoritative. Private cases are never automatically uploaded or distributed; publishing a generalized lesson requires separate sanitized review.
 
 A local source such as `workspace:qa/evidence.json` is a project convention: resolve the MD/JSON relative to the current workspace after relocation. It is not a public URL. Generic consumers should preserve unknown URIs and resolve them against the actual workspace rather than fetching them remotely.
+
+## Exact fault routing
+
+`PYTHON SKILL/scripts/knowledge.py --workspace WORKSPACE route --code browser.scroll_timeout --language en`
+
+Returns complete required manual paths. An unmatched code returns bounded unknown-fault guidance, without automatically searching/repairing. See [42 original entries](../../shared/acceptance/field-v251.md).

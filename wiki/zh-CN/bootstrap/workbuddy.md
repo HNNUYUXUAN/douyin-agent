@@ -1,34 +1,41 @@
 ---
 {
   "type": "Runbook",
-  "title": "WorkBuddy 宿主接入",
-  "description": "WorkBuddy 宿主接入 — douyin-agent operational knowledge",
+  "title": "Workbuddy 宿主配置",
+  "description": "Workbuddy 宿主配置",
   "tags": [
-    "douyin-agent",
-    "zh-CN",
-    "bootstrap",
-    "workbuddy"
+    "workbuddy",
+    "host",
+    "setup"
   ],
-  "status": "active",
+  "status": "stable",
   "generated": {
-    "by": "douyin-agent/2.5.0",
-    "at": "2026-11-05T02:27:48.555869+00:00"
+    "by": "douyin-agent/2.5.1",
+    "at": "2026-11-05T09:57:06.630627+00:00"
   },
   "sources": [
     {
-      "resource": "https://github.com/GoogleCloudPlatform/knowledge-catalog/blob/62432a095456147ee71e70ac6e4dc0d2dea3ac30/okf/SPEC.md"
+      "resource": "https://www.codebuddy.cn/docs/workbuddy/From-Beginner-to-Expert-Guide/Function-Description/Right-Sidebar"
     }
   ],
   "applicability": {
-    "skill": "2.5.x",
-    "host": "capability-detected; see body for measured versions"
+    "skill": "2.5.1 candidate",
+    "host": "Windows x64; recheck current host capabilities"
   },
-  "verification_scope": "Documentation reviewed; runtime acceptance is recorded separately."
+  "verification_scope": "Candidate implementation; fixture, local and recipient results are recorded separately."
 }
 ---
 
-# WorkBuddy 宿主接入
+# Workbuddy 宿主配置
 
-新安装使用当前用户 `.workbuddy/skills/douyin-agent`，已有安装沿用安装回执。运行工作区与宿主会话目录分开记录。实际调用技能后才记录发现通过。浏览器按实时连接能力、平台登录状态选择；首次每个平台采用同一 Profile 的登录／工作双标签。
 
-[Browser selection / 浏览器选择](../operations/browser-selection.md) · [Bridge / 桥接恢复](../operations/browser-recovery.md) · [Receipts / 回执](../operations/onboarding.md)
+## 触发与前置
+首次配置或连接失效。先读首启必读包，使用实际宿主工具，不能套用另一宿主的命令。
+## 执行
+新安装技能目录为当前用户 `.workbuddy/skills/douyin-agent`；已有安装沿用匹配回执。运行工作区和宿主会话目录分别记录。通过宿主技能列表／实际技能调用核对发现；新聊天未测试就单列待验收。
+平台页面只用用户 Chrome／Edge 扩展实例，内置实例只用于公开解析站／说明页。WorkBuddy 必须核对清单中的 extension 类型和 user_tabs，并在 v2 browser_observations 中记录 host_capabilities。
+读取一个公开页 DOM 并截图，分别记录连接、DOM、截图和文件保存能力。安装配置不需要试下载作品；文件保存可保持 unverified，开工前补探测。未选平台不遍历登录页。
+## 成功与上限
+静态注册不等于连接通过；实时 DOM 与截图各有证据才记录 passed。发现不刷新或连接失败先读故障索引，不能反复安装。登录和凭据由用户本地操作。
+## 停止与恢复
+连接异常按浏览器手册分支；不能连接时保留安装结果，集中交接。浏览器通过后进入 Key 手册，缺 Key 必须等待。

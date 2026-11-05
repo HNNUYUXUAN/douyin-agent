@@ -14,8 +14,8 @@
   ],
   "status": "active",
   "generated": {
-    "by": "douyin-agent/2.5.0",
-    "at": "2026-11-05T03:58:14.273533+00:00"
+    "by": "douyin-agent/2.5.1",
+    "at": "2026-11-05T09:57:06.630627+00:00"
   },
   "sources": [
     {
@@ -67,3 +67,7 @@ providers.previously_verified means latest success with route=parser; needs_live
 ## Discovery and retention
 
 Existing search skills/plugins → host-native search → configured Yuanbao/Bocha. If all are unavailable, guide installation/local configuration. Defer failures with user_import available. Clean only receipt-proven task-owned media with matching hashes. Preserve unknown downloads and user-import originals.
+
+## Additional WorkBuddy field evidence
+
+Windows Server 2022 / WorkBuddy 5.9.3 / extension 0.2.8, 2026-11-05: SnapAny returned the Bilibili result, curl received 403 and the page reported browser download unsupported; GreenVideo button saved the actual file through Chrome. Another Xiaohongshu post produced advertising only on GreenVideo. These are sample-specific observations. Follow [acquisition faults](../faults/acquisition.md) to separate no_result from parsed_download_failed. Saving parser results through browser-native downloading is not platform-native stream extraction. Rounds are per work: inspect remaining sites after the first failure, without a new round or false exhaustion.

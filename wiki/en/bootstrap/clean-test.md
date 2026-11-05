@@ -1,18 +1,17 @@
 ---
 {
   "type": "Runbook",
-  "title": "Clean-device test checklist",
-  "description": "Clean-device test checklist — douyin-agent operational knowledge",
+  "title": "Maintenance acceptance: clean-device matrix",
+  "description": "Maintenance acceptance: clean-device matrix",
   "tags": [
-    "douyin-agent",
-    "en",
-    "bootstrap",
+    "acceptance",
+    "maintenance",
     "clean-test"
   ],
-  "status": "active",
+  "status": "stable",
   "generated": {
-    "by": "douyin-agent/2.5.0",
-    "at": "2026-11-05T02:27:48.555869+00:00"
+    "by": "douyin-agent/2.5.1",
+    "at": "2026-11-05T09:57:06.630627+00:00"
   },
   "sources": [
     {
@@ -20,24 +19,26 @@
     }
   ],
   "applicability": {
-    "skill": "2.5.x",
-    "host": "capability-detected; see body for measured versions"
+    "skill": "2.5.1 candidate",
+    "host": "Windows x64; recheck current host capabilities"
   },
-  "verification_scope": "Documentation reviewed; runtime acceptance is recorded separately."
+  "verification_scope": "Candidate implementation; fixture, local and recipient results are recorded separately."
 }
 ---
 
-# Clean-device test checklist
+# Maintenance acceptance: clean-device matrix
 
-Starting condition: Windows x64 with only WorkBuddy and its browser extension; no user-installed Git, Conda, Python or FFmpeg. Do not transfer author configuration, caches or ASR results.
 
-1. Send the [first request](first-run.md). Record OS/architecture, WorkBuddy version, actual shell and missing dependencies.
-2. The host reads the repository, obtains an ordinary directory, verifies version and prepares dependencies or opens official installers. The user handles necessary OS/license/login/purchase steps.
-3. Install with workbuddy mode and verify actual discovery in the current working folder.
-4. Record extension, desktop bridge and actual Douyin page reading separately. Mark only the browser actually tested as passed.
-5. Open Agent Plan pages/local .env for user configuration. doctor/onboard are local checks; real calls need separate evidence.
-6. Acquire one short public video completely, present its concrete preview, run after authorization, review and finalize. Verify MD/JSON retention and user-original preservation.
-7. Restart WorkBuddy and ask about the existing report in the same working folder. Verify reading after cleanup. Introduce a harmless blocker in a separate test workspace, such as missing key, and verify Wiki search, local-case storage and retrieval.
-8. Use the [acceptance template](../../../docs/agent/examples/clean-device.json), with passed/blocked/unverified, actual timestamps and sanitized evidence. Send specific failures to maintainers rather than credentials or complete private logs.
-
-Repository preparation cannot prove another device passed. Only actual device evidence can update WorkBuddy, browser, cloud and other-device status.
+## Trigger and scope
+Read only for explicitly requested maintenance acceptance. Normal setup ends at configuration, without this matrix. Recipient devices install/debug/test/return evidence; only the maintainer modifies source/releases.
+## Preconditions
+Complete setup and reuse valid installation/configuration/evidence. Do not reset a device or reinstall dependencies to manufacture a clean start. Missing Key waits for local entry. Distinguish real clean-device, same-device relocation and fixtures.
+## Procedure
+1. Select explicitly scoped first/repeat/upgrade/interruption cases and actually installed terminals. Mark absent cases untested instead of installing another shell.
+2. Offline suite: `PYTHON SKILL/scripts/test_all.py --workspace WORKSPACE`. Bridge/source-fetch changes also run the PS5/PS7 fixtures required by repository AGENTS.
+3. Verify actual Chrome/Edge availability, explicit-instance failure, IAB exclusion, logged-in single work tab and logged-out/unknown login+work tabs. Never terminate user browsers.
+4. Simulate missing Key only in isolation, preserving main credentials. Verify waiting progress with no subsequent media/cloud requests; after local entry setup finishes without a sample.
+5. Work validation requires separate explicit start with mode/scope/usage authorization. Record acquisition, integrity, understanding, original review and cleanup separately; never resubmit pending calls.
+6. User must actually open a fresh chat for discovery validation. Give the verifier only the candidate folder and ordinary install instruction, without author history or expected pass answers. Record host/model versions.
+## Success, bounds and handoff
+Each result has time/evidence/scope. Supply original issue IDs rather than asking recipients to reconstruct them. Keep unavailable checks pending. Finish after proportionate affected checks; do not repeat unchanged tests. Return ordinary directories without credentials, original media or private logs.

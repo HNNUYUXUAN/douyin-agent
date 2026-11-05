@@ -19,13 +19,15 @@ def validate(record, evidence):
     if not isinstance(browsers,list): raise ValueError('browser_observations must be a list')
     seen=set()
     for row in browsers:
-        if set(row)!={'id','family','kind','observed_at','evidence','capabilities','platforms'}: raise ValueError('Invalid browser observation fields')
+        if set(row)-{'id','family','kind','observed_at','evidence','capabilities','platforms','host_capabilities'} or not {'id','family','kind','observed_at','evidence','capabilities','platforms'}<=set(row): raise ValueError('Invalid browser observation fields')
         identifier(row['id'])
         if row['id'] in seen: raise ValueError('Duplicate browser id')
         seen.add(row['id']); moment(row['observed_at']); evidence(row['evidence'])
         if row['family'] not in ('chrome','edge','other') or row['kind'] not in ('extension','iab','cdp'): raise ValueError('Unsupported browser family/kind')
         c=row['capabilities']
         if not isinstance(c,dict) or set(c)!=CAPABILITIES or any(v not in STATES for v in c.values()): raise ValueError('Record each browser capability separately')
+        if 'host_capabilities' in row and (not isinstance(row['host_capabilities'],list) or any(x not in {'navigation','screenshot','cua','batch','dom_cua','user_tabs','visibility','download'} for x in row['host_capabilities'])):
+            raise ValueError('Use observed host capability names only')
         if not isinstance(row['platforms'],dict) or set(row['platforms'])-PLATFORMS: raise ValueError('Unknown browser platform')
         for p in row['platforms'].values():
             if set(p)!={'login_state','access'} or p['login_state'] not in ('logged_in','logged_out','unknown') or p['access'] not in STATES:
@@ -39,18 +41,38 @@ def validate(record, evidence):
         if type(row['first_use_complete']) is not bool: raise ValueError('first_use_complete must be boolean')
         moment(row['observed_at']); evidence(row['evidence'])
 
-def choices(saved):
+def eligible(row,host='codex'):
+    """Platform pages require a user browser; IAB remains an auxiliary tool only."""
+    return (row.get('family') in ('chrome','edge') and row.get('kind')=='extension'
+            and row.get('capabilities',{}).get('connection')=='passed'
+            and row.get('capabilities',{}).get('dom')=='passed'
+            and (host!='workbuddy' or 'user_tabs' in row.get('host_capabilities',[])))
+
+def choices(saved,host='codex',browser_id=None):
     result={}; bindings=saved.get('platform_bindings',{})
     for platform in sorted(PLATFORMS):
-        rows=[r for r in saved.get('browser_observations',[]) if r['capabilities']['connection']=='passed' and r['capabilities']['dom']=='passed' and platform in r['platforms']]
+        connected=[r for r in saved.get('browser_observations',[]) if eligible(r,host)]
+        rows=[r for r in connected if r.get('platforms',{}).get(platform,{}).get('access')!='blocked'] or connected
         preferred=bindings.get(platform,{}).get('browser_id')
-        logged=[r for r in rows if r['platforms'][platform]=={'login_state':'logged_in','access':'passed'}]
-        candidates=logged or [r for r in rows if r['platforms'][platform]['access']=='passed'] or rows
-        selected=next((r for r in candidates if r['id']==preferred),None)
-        if selected is None and len(candidates)==1: selected=candidates[0]
+        logged=[r for r in rows if r.get('platforms',{}).get(platform)=={'login_state':'logged_in','access':'passed'}]
+        if browser_id:
+            identifier(browser_id)
+            candidates=[r for r in connected if r['id']==browser_id]
+            selected=candidates[0] if candidates else None
+        else:
+            selected=next((r for r in rows if r['id']==preferred and r.get('platforms',{}).get(platform,{}).get('access')=='passed'),None)
+            candidates=([selected] if selected else logged or [r for r in rows if r.get('platforms',{}).get(platform,{}).get('access')=='passed'] or rows)
+            if selected is None and len(candidates)==1: selected=candidates[0]
         binding=bindings.get(platform,{})
-        first=not (selected and selected['id']==preferred and binding.get('first_use_complete'))
+        observed=selected.get('platforms',{}).get(platform,{}) if selected else {}
+        reuse=selected and selected['id']==preferred and binding.get('first_use_complete')
+        action=('platform_blocked' if selected and observed.get('access')=='blocked' else
+                'probe_platform' if selected and observed.get('access')!='passed' else
+                'reuse_work_tab' if reuse else 'open_work_tab' if selected else
+                'connect_user_browser' if browser_id or not candidates else 'choose_browser')
         result[platform]={'candidate_ids':[r['id'] for r in candidates],'suggested_browser_id':selected['id'] if selected else None,
-                          'action':'reuse_work_tab' if selected and not first else 'first_use_two_tabs' if selected else 'choose_browser' if candidates else 'connect_or_public_link',
+                          'action':action,'requested_browser_id':browser_id,
+                          'login_action':'not_needed' if selected and observed.get('login_state')=='logged_in' else 'reserve_login_tab' if selected else 'wait_for_browser',
+                          'login_tab_to_release_if_task_owned':binding.get('login_tab') if selected and observed.get('login_state')=='logged_in' else None,
                           'requires_live_recheck':True,'historical_only':True}
     return result
