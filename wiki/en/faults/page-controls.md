@@ -42,3 +42,6 @@ Procedure:
 Success: verify actual DOM, value, viewport and playback progress independently; capture success and playback completion are separate evidence.
 Bounds: one input correction, two initialization checks, one alternate scroll and one work-page reload. No repeats without new evidence.
 Stop/resume: healthy static bridge configuration does not call for runtime redeployment. Preserve state and follow [unknown faults](unknown.md).
+
+
+Current runtime procedure / 当前运行流程：[v2.5.1](../operations/runtime-host.md).

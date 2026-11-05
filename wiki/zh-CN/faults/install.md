@@ -48,3 +48,6 @@
 
 
 补充可观察故障：PS7 父进程传入模块路径时，PS5 可能报 Get-FileHash 不存在。Windows 专有脚本在 PS5 进程内显式从 PSHOME/Modules 加载本机 Utility/Security；不改全局 PSModulePath。仍失败保留模块错误，不自行复制 PS7 模块。
+
+
+Current runtime procedure / 当前运行流程：[v2.5.1](../operations/transfer.md).

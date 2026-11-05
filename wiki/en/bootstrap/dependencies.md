@@ -75,3 +75,6 @@ Diagnose unavailable screenshot APIs using browser recovery first. Where host ca
 ## Bounded wait and recovery entry
 
 For missing Conda, read [verification/wait](../faults/conda.md) completely and use scripts/install-conda.ps1 rather than launching NSIS and immediately returning. Obtain a fixed official installer, record SHA256 and validate signature; preserve partial existing destinations. Handle FFmpeg supplier failures through [installation faults](../faults/install.md). Ordinary setup runs neither offline matrices nor paid samples.
+
+
+Dependency transfer / 依赖传输：固定官方 URL 与 SHA256；持续低速、超时或 TLS 失败时，读取[分段传输手册](../operations/transfer.md)，使用无需 Python 的 download-dependency.ps1。核验及安装完成后按所有权回执清理安装器、分段和解包暂存。 / For slow or failed downloads, read the bounded transfer manual and use the no-Python helper; clean verified owned staging after installation.

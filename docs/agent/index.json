@@ -210,6 +210,69 @@
         "zh-CN": "../../wiki/zh-CN/operations/parser-sites.md",
         "en": "../../wiki/en/operations/parser-sites.md"
       }
+    },
+    {
+      "id": "runtime-recovery",
+      "title": {
+        "zh-CN": "请求恢复与主动结束",
+        "en": "Request recovery and abandonment"
+      },
+      "paths": {
+        "zh-CN": "../../wiki/zh-CN/operations/recovery.md",
+        "en": "../../wiki/en/operations/recovery.md"
+      },
+      "keywords": {
+        "zh-CN": [
+          "请求恢复与主动结束",
+          "F251R"
+        ],
+        "en": [
+          "Request recovery and abandonment",
+          "F251R"
+        ]
+      }
+    },
+    {
+      "id": "runtime-transfer",
+      "title": {
+        "zh-CN": "依赖分段与解析文件回执",
+        "en": "Dependency ranges and parser file receipts"
+      },
+      "paths": {
+        "zh-CN": "../../wiki/zh-CN/operations/transfer.md",
+        "en": "../../wiki/en/operations/transfer.md"
+      },
+      "keywords": {
+        "zh-CN": [
+          "依赖分段与解析文件回执",
+          "F251R"
+        ],
+        "en": [
+          "Dependency ranges and parser file receipts",
+          "F251R"
+        ]
+      }
+    },
+    {
+      "id": "runtime-runtime-host",
+      "title": {
+        "zh-CN": "浏览器启动、截图与文件保存",
+        "en": "Browser startup, screenshots and file saving"
+      },
+      "paths": {
+        "zh-CN": "../../wiki/zh-CN/operations/runtime-host.md",
+        "en": "../../wiki/en/operations/runtime-host.md"
+      },
+      "keywords": {
+        "zh-CN": [
+          "浏览器启动、截图与文件保存",
+          "F251R"
+        ],
+        "en": [
+          "Browser startup, screenshots and file saving",
+          "F251R"
+        ]
+      }
     }
   ],
   "command_entry": "PYTHON SKILL/scripts/da.py --workspace WORKSPACE COMMAND",
@@ -218,7 +281,8 @@
     "status",
     "onboard --check",
     "preflight.ps1",
-    "onboard --check --flow setup --observed CURRENT_JSON"
+    "onboard --check --flow setup --observed CURRENT_JSON",
+    "requests status [--cache-id ID]"
   ],
   "local_record_command": "onboard --record FILE",
   "task_flow": [
@@ -262,6 +326,34 @@
         "Natural filename order requires host verification against the original work",
         "Preserve user-imported archives; register only proven task-owned copies"
       ]
+    },
+    {
+      "id": "parser_transfer",
+      "kind": "standalone_helper_not_da_subcommand",
+      "script_path": "../../scripts/transfer.py",
+      "arguments": "save --url-stdin --provider-receipt SOURCE.json --output out/file.mp4 --kind video",
+      "guide_id": "runtime-transfer"
+    },
+    {
+      "id": "download_watch",
+      "kind": "standalone_helper_not_da_subcommand",
+      "script_path": "../../scripts/save_watch.py",
+      "arguments": "before",
+      "guide_id": "runtime-runtime-host"
+    },
+    {
+      "id": "dependency_transfer",
+      "kind": "standalone_helper_not_da_subcommand",
+      "script_path": "../../scripts/download-dependency.ps1",
+      "arguments": "-Url OFFICIAL_URL -Output out/dependency.exe -Sha256 EXPECTED_SHA256",
+      "guide_id": "runtime-transfer"
+    },
+    {
+      "id": "browser_startup",
+      "kind": "standalone_helper_not_da_subcommand",
+      "script_path": "../../scripts/browser-ready.ps1",
+      "arguments": "-Browser Chrome -Mode Check",
+      "guide_id": "runtime-runtime-host"
     }
   ],
   "installation_entrypoints": {
@@ -781,7 +873,189 @@
           "zh-CN": "wiki/zh-CN/faults/install.md",
           "en": "wiki/en/faults/install.md"
         }
+      },
+      {
+        "code": "F251R-I-1",
+        "title": "Slow full download",
+        "paths": {
+          "zh-CN": "wiki/zh-CN/operations/transfer.md",
+          "en": "wiki/en/operations/transfer.md"
+        }
+      },
+      {
+        "code": "F251R-I-2",
+        "title": "Segment TLS",
+        "paths": {
+          "zh-CN": "wiki/zh-CN/operations/transfer.md",
+          "en": "wiki/en/operations/transfer.md"
+        }
+      },
+      {
+        "code": "F251R-I-3",
+        "title": "PowerShell browser arrays",
+        "paths": {
+          "zh-CN": "wiki/zh-CN/operations/runtime-host.md",
+          "en": "wiki/en/operations/runtime-host.md"
+        }
+      },
+      {
+        "code": "F251R-I-4",
+        "title": "onboard record plus check",
+        "paths": {
+          "zh-CN": "wiki/zh-CN/operations/runtime-host.md",
+          "en": "wiki/en/operations/runtime-host.md"
+        }
+      },
+      {
+        "code": "F251R-I-5",
+        "title": "Stopped user browser",
+        "paths": {
+          "zh-CN": "wiki/zh-CN/operations/runtime-host.md",
+          "en": "wiki/en/operations/runtime-host.md"
+        }
+      },
+      {
+        "code": "F251R-I-6",
+        "title": "Capture focus",
+        "paths": {
+          "zh-CN": "wiki/zh-CN/operations/runtime-host.md",
+          "en": "wiki/en/operations/runtime-host.md"
+        }
+      },
+      {
+        "code": "F251R-I-7",
+        "title": "Inline image versus export",
+        "paths": {
+          "zh-CN": "wiki/zh-CN/operations/runtime-host.md",
+          "en": "wiki/en/operations/runtime-host.md"
+        }
+      },
+      {
+        "code": "F251R-I-8",
+        "title": "Key waiting",
+        "paths": {
+          "zh-CN": "wiki/zh-CN/operations/runtime-host.md",
+          "en": "wiki/en/operations/runtime-host.md"
+        }
+      },
+      {
+        "code": "F251R-R-1",
+        "title": "Exact parser routes",
+        "paths": {
+          "zh-CN": "wiki/zh-CN/operations/transfer.md",
+          "en": "wiki/en/operations/transfer.md"
+        }
+      },
+      {
+        "code": "F251R-R-2",
+        "title": "Explicit Chrome preference",
+        "paths": {
+          "zh-CN": "wiki/zh-CN/operations/runtime-host.md",
+          "en": "wiki/en/operations/runtime-host.md"
+        }
+      },
+      {
+        "code": "F251R-R-3",
+        "title": "Login and playback separation",
+        "paths": {
+          "zh-CN": "wiki/zh-CN/operations/runtime-host.md",
+          "en": "wiki/en/operations/runtime-host.md"
+        }
+      },
+      {
+        "code": "F251R-R-4",
+        "title": "Raw file transport",
+        "paths": {
+          "zh-CN": "wiki/zh-CN/operations/transfer.md",
+          "en": "wiki/en/operations/transfer.md"
+        }
+      },
+      {
+        "code": "F251R-R-5",
+        "title": "No saved file",
+        "paths": {
+          "zh-CN": "wiki/zh-CN/operations/runtime-host.md",
+          "en": "wiki/en/operations/runtime-host.md"
+        }
+      },
+      {
+        "code": "F251R-R-6",
+        "title": "Empty parser result",
+        "paths": {
+          "zh-CN": "wiki/zh-CN/operations/transfer.md",
+          "en": "wiki/en/operations/transfer.md"
+        }
+      },
+      {
+        "code": "F251R-R-7",
+        "title": "Network classification",
+        "paths": {
+          "zh-CN": "wiki/zh-CN/operations/transfer.md",
+          "en": "wiki/en/operations/transfer.md"
+        }
+      },
+      {
+        "code": "F251R-R-8",
+        "title": "Vision timeout diagnostics",
+        "paths": {
+          "zh-CN": "wiki/zh-CN/operations/recovery.md",
+          "en": "wiki/en/operations/recovery.md"
+        }
+      },
+      {
+        "code": "F251R-R-9",
+        "title": "Unknown recovery lifecycle",
+        "paths": {
+          "zh-CN": "wiki/zh-CN/operations/recovery.md",
+          "en": "wiki/en/operations/recovery.md"
+        }
+      },
+      {
+        "code": "F251R-R-10",
+        "title": "One pipeline",
+        "paths": {
+          "zh-CN": "wiki/zh-CN/operations/recovery.md",
+          "en": "wiki/en/operations/recovery.md"
+        }
+      },
+      {
+        "code": "F251R-R-11",
+        "title": "Batch receipts and BOM",
+        "paths": {
+          "zh-CN": "wiki/zh-CN/operations/transfer.md",
+          "en": "wiki/en/operations/transfer.md"
+        }
+      },
+      {
+        "code": "F251R-R-12",
+        "title": "Unclosed sources",
+        "paths": {
+          "zh-CN": "wiki/zh-CN/operations/transfer.md",
+          "en": "wiki/en/operations/transfer.md"
+        }
+      },
+      {
+        "code": "F251R-R-13",
+        "title": "Stale nodes",
+        "paths": {
+          "zh-CN": "wiki/zh-CN/operations/runtime-host.md",
+          "en": "wiki/en/operations/runtime-host.md"
+        }
+      },
+      {
+        "code": "F251R-R-14",
+        "title": "Short acceptance pool",
+        "paths": {
+          "zh-CN": "wiki/zh-CN/operations/transfer.md",
+          "en": "wiki/en/operations/transfer.md"
+        }
       }
     ]
+  },
+  "request_commands": {
+    "status": "requests status [--cache-id ID]",
+    "reconcile": "requests reconcile --cache-id ID [--evidence RELATIVE.json]",
+    "retry": "requests retry --cache-id ID [--approve PREVIEW_ID]",
+    "abandon": "requests abandon --cache-id ID"
   }
 }

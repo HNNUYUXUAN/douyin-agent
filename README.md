@@ -132,3 +132,6 @@ J --> K["Clean only owned inactive task files"]
 [AGENTS.md](AGENTS.md)、[SKILL.md](SKILL.md)、[机器索引](docs/agent/index.json)、[llms.txt](llms.txt) 按意图路由。[OKF Wiki](wiki/index.md) 提供分块知识，私有案例留本地。原创代码采用 [MIT](LICENSE)，依赖见[第三方说明](THIRD_PARTY_NOTICES.md)；第三方作品保留其原有权利。
 
 本轮本机已通过抖音、YouTube、小红书及B站视频／指定分P／图文的解析站取得、理解、复核与清理；完整浏览播放证据单列。跨Chrome/Edge真实组合、WorkBuddy真实桥接修复与v2.5.0异机从零安装仍待验收，见[v2.5.0记录](wiki/shared/acceptance/v25.md)。
+
+
+v2.5.1 运行候选提供请求阶段诊断、正式恢复入口、解析文件回执与有界依赖分段恢复。参见[本轮映射](wiki/shared/acceptance/runfix-v251.md)及[请求恢复手册](wiki/zh-CN/operations/recovery.md)。候选验证与正式发布分别记录，v2.5.1 尚未打标签。

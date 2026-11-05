@@ -2,13 +2,19 @@
 [CmdletBinding()]
 param(
     [ValidateSet('Check','Plan','Repair','Rollback')][string]$Mode='Check',
-    [ValidateSet('Chrome','Edge')][string[]]$Browser=@(),
+    [string[]]$Browser=@(),
     [string]$WorkBuddyVersion,
     [string[]]$ExtensionId=@(),
     [string]$Root=(Join-Path $env:USERPROFILE '.workbuddy'),
     [string]$Receipt
 )
 $ErrorActionPreference='Stop'
+function Normalize-Browser($Values){
+    $result=@($Values | ForEach-Object {$_ -split ','} | ForEach-Object {$_.Trim()} | Select-Object -Unique)
+    foreach($value in $result){if($value -notin @('Chrome','Edge')){throw 'Browser must be Chrome or Edge'}}
+    return $result
+}
+$Browser=@(Normalize-Browser $Browser)
 if($PSVersionTable.PSVersion.Major -eq 5){
     # Resolve Windows PowerShell modules locally when a PS7 parent supplied PSModulePath.
     foreach($module in @('Microsoft.PowerShell.Utility','Microsoft.PowerShell.Security')){

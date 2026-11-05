@@ -76,3 +76,6 @@ Miniconda 记录所选固定版本、官方 HTTPS 来源和实际安装器 SHA25
 ## 固定等待与恢复入口
 
 缺 Conda 时完整读 [校验与等待手册](../faults/conda.md)，使用 scripts/install-conda.ps1 封装命令，不直接调用 NSIS 后立即返回。先取得官方固定版本安装器、记录 SHA256 并校验签名；不覆盖已有半成品。FFmpeg 供应源失败按 [安装故障](../faults/install.md) 处理。普通安装不运行离线套件或收费样例。
+
+
+Dependency transfer / 依赖传输：固定官方 URL 与 SHA256；持续低速、超时或 TLS 失败时，读取[分段传输手册](../operations/transfer.md)，使用无需 Python 的 download-dependency.ps1。核验及安装完成后按所有权回执清理安装器、分段和解包暂存。 / For slow or failed downloads, read the bounded transfer manual and use the no-Python helper; clean verified owned staging after installation.

@@ -21,3 +21,5 @@ Match a code/symptom, then read the entire matched manual before acting. Histori
 `PYTHON SKILL/scripts/knowledge.py --workspace WORKSPACE route --code browser.scroll_timeout --language en`
 
 See [42 original issue mappings](../../shared/acceptance/field-v251.md). Only unmatched faults use unknown: one official-search round, three primary sources and two distinct diagnostics, without repeating unchanged failures or opening another round.
+
+Latest feedback / 最新一轮：F251R-I-1～I-8、F251R-R-1～R-14，见 [coverage](../../shared/acceptance/runfix-v251.md)。

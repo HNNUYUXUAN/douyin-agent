@@ -4,7 +4,7 @@ from pathlib import Path
 from media_tools import configure
 
 TESTS=('test_da.py','test_onboarding.py','test_unpack_images.py','test_installer.py',
-       'test_knowledge.py','test_browsing.py','test_v25.py','test_v251.py')
+       'test_knowledge.py','test_browsing.py','test_v25.py','test_v251.py','test_runfix.py')
 
 def main():
     p=argparse.ArgumentParser(description=__doc__);p.add_argument('--workspace',required=True,type=Path);a=p.parse_args()

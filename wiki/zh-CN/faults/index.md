@@ -21,3 +21,5 @@
 `PYTHON SKILL/scripts/knowledge.py --workspace WORKSPACE route --code browser.scroll_timeout --language zh-CN`
 
 42 项原编号映射见 [字段回传归档](../../shared/acceptance/field-v251.md)。无匹配才按 unknown：最多一轮官方检索、三个一手来源、两个不同诊断动作；不重复同输入失败，不自动另开一轮。
+
+Latest feedback / 最新一轮：F251R-I-1～I-8、F251R-R-1～R-14，见 [coverage](../../shared/acceptance/runfix-v251.md)。

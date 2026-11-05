@@ -43,3 +43,6 @@ Procedure:
 Success: actual file, identity, integrity, duration/image order; separate parse and acquire results. route=parser requires provenance. Only actual user imports use user_import; a proposed import is not success.
 Bounds: three sites in the original round, one justified transport recovery per site. Do not repeat the same refusal. Pending paid calls follow their separate recovery contract.
 Stop/resume: defer with local-import entry when exhausted or no saving route; preserve originals.
+
+
+Current runtime procedure / 当前运行流程：[v2.5.1](../operations/transfer.md).

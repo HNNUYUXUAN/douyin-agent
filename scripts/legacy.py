@@ -69,7 +69,7 @@ def command(args): return subprocess.check_output([str(x) for x in args],stderr=
 
 def config(w):
     c=dict(dotenv_values(w/'.env',encoding='utf-8-sig'))
-    for k in ('VOLC_AGENT_API_KEY','VOLC_AGENT_MODEL','VOLC_AGENT_REASONING','BOCHA_API_KEY','TENCENTCLOUD_WSA_APIKEY'):
+    for k in ('VOLC_AGENT_API_KEY','VOLC_AGENT_MODEL','VOLC_AGENT_REASONING','VOLC_AGENT_CONNECT_TIMEOUT','VOLC_AGENT_READ_TIMEOUT','BOCHA_API_KEY','TENCENTCLOUD_WSA_APIKEY'):
         if k in os.environ: c[k]=os.environ[k]
     return c
 
@@ -115,49 +115,46 @@ def parse_packet(b):
 
 async def recognize(p,key):
     import websockets
-    pcm=command(['ffmpeg','-v','error','-i',p,'-ar','16000','-ac','1','-f','s16le','-'])
-    headers={'X-Api-Key':key,'X-Api-Resource-Id':'volc.seedasr.sauc.duration','X-Api-Connect-Id':str(uuid.uuid4())}
-    async with websockets.connect(ASR,additional_headers=headers,open_timeout=30,max_size=16*1024*1024) as ws:
-        payload={'user':{'uid':'douyin-agent'},'audio':{'format':'pcm','codec':'raw','rate':16000,'bits':16,'channel':1},'request':{'model_name':'bigmodel','enable_itn':True,'enable_punc':True,'show_utterances':True,'result_type':'full'}}
-        await ws.send(packet(1,1,json.dumps(payload).encode()))
-        async def receive():
-            while True:
-                d,final=parse_packet(await ws.recv())
-                if d.get('code',0) not in (0,1000,20000000): raise RuntimeError('ASR service code '+str(d['code']))
-                if final: return {'data':d,'log_id':ws.response.headers.get('X-Tt-Logid')}
-        task=asyncio.create_task(receive())
-        try:
+    from cloud_transport import Trace,SETTINGS
+    trace=Trace('asr');trace.data['phase']='decoding_audio';trace.begin()
+    task=None;upload_start=None;upload_end=None
+    try:
+        pcm=command(['ffmpeg','-v','error','-i',p,'-ar','16000','-ac','1','-f','s16le','-'])
+        headers={'X-Api-Key':key,'X-Api-Resource-Id':'volc.seedasr.sauc.duration','X-Api-Connect-Id':str(uuid.uuid4())}
+        trace.data['phase']='connecting'
+        async with websockets.connect(ASR,additional_headers=headers,open_timeout=SETTINGS['connect_timeout'],max_size=16*1024*1024) as ws:
+            trace.data.update(request_id=ws.response.headers.get('X-Tt-Logid'),response_headers_seconds=trace.elapsed(),phase='uploading_audio')
+            payload={'user':{'uid':'douyin-agent'},'audio':{'format':'pcm','codec':'raw','rate':16000,'bits':16,'channel':1},'request':{'model_name':'bigmodel','enable_itn':True,'enable_punc':True,'show_utterances':True,'result_type':'full'}}
+            await ws.send(packet(1,1,json.dumps(payload).encode()))
+            async def receive():
+                while True:
+                    d,final=parse_packet(await ws.recv())
+                    if trace.data['first_event_seconds'] is None:trace.data['first_event_seconds']=trace.elapsed()
+                    if d.get('code',0) not in (0,1000,20000000):raise RuntimeError('ASR service code '+str(d['code']))
+                    if final:return {'data':d,'log_id':ws.response.headers.get('X-Tt-Logid')}
+            task=asyncio.create_task(receive());upload_start=time.monotonic()
             for i,pos in enumerate(range(0,len(pcm),6400)):
                 await ws.send(packet(2,i+2,pcm[pos:pos+6400],pos+6400>=len(pcm)))
                 await asyncio.sleep(.2)
-            return await asyncio.wait_for(task,90)
-        finally:
-            if not task.done(): task.cancel()
+            upload_end=time.monotonic();trace.data['phase']='waiting_recognition'
+            result=await asyncio.wait_for(task,SETTINGS['read_timeout'])
+            trace.data.update(phase='completed',completed_seconds=trace.elapsed(),upload_seconds=upload_end-upload_start,recognition_wait_seconds=time.monotonic()-upload_end)
+            trace.finish();result['diagnostics']=trace.data;return result
+    except BaseException as exc:
+        trace.data.update(error_type=type(exc).__name__,upload_seconds=(upload_end or time.monotonic())-upload_start if upload_start else None,
+                          recognition_wait_seconds=time.monotonic()-upload_end if upload_end else None)
+        trace.finish();exc.response_data={'diagnostics':trace.data,'status':'transport_interrupted'};raise
+    finally:
+        trace.stop.set()
+        if task and not task.done():
+            task.cancel()
+            try:await task
+            except asyncio.CancelledError:pass
 
 
 def response(key,model,content,options=None):
-    # requests defaults to zero retries; redirect following disabled with credentials.
-    payload={'model':model,'input':[{'role':'user','content':content}],'max_output_tokens':16384,'store':False,'stream':True}
-    if options: payload.update(options)
-    r=requests.post(API,headers={'Authorization':'Bearer '+key},json=payload,stream=True,timeout=(30,90),allow_redirects=False)
-    if r.status_code!=200: raise RuntimeError('Responses HTTP '+str(r.status_code))
-    d={}; partial=''
-    try:
-        for line in r.iter_lines():
-            if not line.startswith(b'data:'): continue
-            payload=line[5:].strip()
-            if payload==b'[DONE]': break
-            event=json.loads(payload)
-            if event.get('type')=='response.output_text.delta': partial+=event.get('delta','')
-            if isinstance(event.get('response'),dict): d=event['response']
-            if event.get('type') in ('response.completed','response.incomplete','response.failed'): break
-    except Exception as e:
-        e.response_data={'response':d,'partial_text':partial,'status':'transport_interrupted'}; raise
-    finally: r.close()
-    text='\n'.join(c.get('text','') for o in d.get('output',[]) for c in o.get('content',[]) if c.get('type')=='output_text')
-    if not text or d.get('status') not in (None,'completed'):
-        e=RuntimeError('Incomplete Responses result'); e.response_data=d; raise e
-    return {'id':d.get('id'),'model':d.get('model'),'text':text,'usage':d.get('usage')}
+    from cloud_transport import response as call
+    return call(API,key,model,content,options)
 
 
 def search(w,job,query,submit=None):

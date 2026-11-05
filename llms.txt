@@ -38,3 +38,8 @@ Vision / 视觉: docs/agent/zh-CN/vision.md | docs/agent/en/vision.md
 Platform controls / 控件: docs/agent/zh-CN/platforms.md | docs/agent/en/platforms.md
 
 - [Fault routing 中文](wiki/zh-CN/faults/index.md) / [English](wiki/en/faults/index.md): read a complete matched manual before bounded recovery.
+
+- Request recovery: wiki/en/operations/recovery.md; wiki/zh-CN/operations/recovery.md
+- File transfer: wiki/en/operations/transfer.md; wiki/zh-CN/operations/transfer.md
+- Host recovery: wiki/en/operations/runtime-host.md; wiki/zh-CN/operations/runtime-host.md
+- Runtime coverage: wiki/shared/acceptance/runfix-v251.md

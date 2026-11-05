@@ -1,0 +1,104 @@
+{
+  "schema_version": 1,
+  "updated_at": "2026-11-05T15:16:14.604509+00:00",
+  "purpose": "Maintenance acceptance candidates; not a playback queue",
+  "limits": {
+    "video_min_seconds": 5,
+    "video_max_seconds": 30,
+    "images_max": 4,
+    "replacement_candidates_per_platform": 3
+  },
+  "selection_rule": "Check current public identity, duration/image count before adoption or paid preview. Reject stale/overlong candidates. A null slot or unverified duration is pending, never a passing sample. User-requested long works use their separate explicit scope.",
+  "platforms": {
+    "douyin": [
+      {
+        "url": "https://www.douyin.com/video/7574366810088148709",
+        "kind": "video",
+        "last_scope": "current parser identity observed; file HTTP403",
+        "historical_duration_seconds": 15.8,
+        "historical_images": null,
+        "requires_live_identity_and_size_check": true
+      },
+      {
+        "url": null,
+        "kind": "video",
+        "last_scope": "second short candidate pending host access",
+        "historical_duration_seconds": null,
+        "historical_images": null,
+        "requires_live_identity_and_size_check": true
+      }
+    ],
+    "bilibili": [
+      {
+        "url": "https://www.bilibili.com/video/BV1Lphuz7E6w/?p=2",
+        "kind": "video",
+        "last_scope": "current parser file, full decode, cloud analysis and sampled review completed",
+        "historical_duration_seconds": 21.12,
+        "historical_images": null,
+        "requires_live_identity_and_size_check": true
+      },
+      {
+        "url": "https://www.bilibili.com/opus/792155723808112674",
+        "kind": "images",
+        "last_scope": "historical one-image file; current run pending",
+        "historical_duration_seconds": null,
+        "historical_images": 1,
+        "requires_live_identity_and_size_check": true
+      }
+    ],
+    "xiaohongshu": [
+      {
+        "url": "https://www.xiaohongshu.com/explore/6aea848900000000030011bf",
+        "kind": "images",
+        "last_scope": "current page unavailable/App QR; GreenVideo explicitly cannot parse",
+        "historical_duration_seconds": null,
+        "historical_images": 1,
+        "requires_live_identity_and_size_check": true
+      },
+      {
+        "url": "https://www.xiaohongshu.com/explore/6ae45c160000000026025584",
+        "kind": "images",
+        "last_scope": "historical unavailable/App QR; needs replacement",
+        "historical_duration_seconds": null,
+        "historical_images": 1,
+        "requires_live_identity_and_size_check": true
+      }
+    ],
+    "youtube": [
+      {
+        "url": "https://www.youtube.com/watch?v=jNQXAC9IVRw",
+        "kind": "video",
+        "last_scope": "current 240p parser file, full decode, full ASR, vision, sampled review and cleanup completed",
+        "historical_duration_seconds": 19.063583,
+        "historical_images": null,
+        "requires_live_identity_and_size_check": true
+      },
+      {
+        "url": "https://youtu.be/zKYNITx17Mw",
+        "kind": "video",
+        "last_scope": "historical parser file; current run pending",
+        "historical_duration_seconds": 6.083628,
+        "historical_images": null,
+        "requires_live_identity_and_size_check": true
+      }
+    ],
+    "tiktok": [
+      {
+        "url": "https://www.tiktok.com/@charshimi_/video/7702788049889004821",
+        "kind": "video",
+        "last_scope": "public discovery link; page Please wait; duration unverified",
+        "historical_duration_seconds": null,
+        "historical_images": null,
+        "requires_live_identity_and_size_check": true
+      },
+      {
+        "url": "https://www.tiktok.com/@inzane_0707/video/7702370145750109447",
+        "kind": "video",
+        "last_scope": "public discovery link only; duration unverified",
+        "historical_duration_seconds": null,
+        "historical_images": null,
+        "requires_live_identity_and_size_check": true
+      }
+    ]
+  }
+}

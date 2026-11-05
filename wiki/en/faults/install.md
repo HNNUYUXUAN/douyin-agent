@@ -48,3 +48,6 @@ Stop/resume: see [Conda](conda.md), [bridge](../operations/browser-recovery.md),
 
 
 Additional observed fault: a PS7 parent module path may leave Get-FileHash unavailable in PS5. Windows-specific helpers explicitly import engine-local Utility/Security from PSHOME/Modules within PS5, without changing global PSModulePath. Preserve remaining module errors; do not copy PS7 modules into PS5.
+
+
+Current runtime procedure / 当前运行流程：[v2.5.1](../operations/transfer.md).

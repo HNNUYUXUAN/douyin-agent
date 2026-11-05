@@ -48,3 +48,6 @@
 页面访问、登录、播放、截图、文件保存分别核验。一次选定后复用；失效先完整读取 [恢复](browser-recovery.md)，不能靠反复换浏览器试错。
 ## 记录和恢复
 `onboard --check --host workbuddy --browser-id OPAQUE_ID --observed CURRENT_JSON` 使用本次观察；`--record` 保存 v1／v2 回执。结果依然是建议，实际导航由宿主执行；本地脚本不能拦截宿主绕过流程的网页动作。
+
+
+Current runtime procedure / 当前运行流程：[v2.5.1](runtime-host.md).

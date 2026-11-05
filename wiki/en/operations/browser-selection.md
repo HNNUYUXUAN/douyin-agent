@@ -47,3 +47,6 @@ Inventory connected instances: family, kind, connection, DOM, screenshot and fil
 Verify access, login, playback, capture and saving independently. Reuse selections. On failure read [recovery](browser-recovery.md) completely instead of repeatedly switching browsers.
 ## Record and resume
 `onboard --check --host workbuddy --browser-id OPAQUE_ID --observed CURRENT_JSON` uses current observations; --record persists v1/v2 receipts. Local output remains advice: the host performs navigation and may bypass the workflow, which this script cannot intercept.
+
+
+Current runtime procedure / 当前运行流程：[v2.5.1](runtime-host.md).

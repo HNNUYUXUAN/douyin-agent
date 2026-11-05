@@ -132,3 +132,6 @@ Historical real [short-video](docs/cases/short.en.md), [long-video](docs/cases/l
 [AGENTS.md](AGENTS.md), [SKILL.md](SKILL.md), [machine index](docs/agent/index.json) and [llms.txt](llms.txt) route by intent. The [OKF Wiki](wiki/index.md) provides modular knowledge; private cases stay local. Original code uses [MIT](LICENSE); see [third-party notices](THIRD_PARTY_NOTICES.md). Third-party works retain their existing rights.
 
 This run verified parser acquisition, understanding, review and cleanup for Douyin, YouTube, Xiaohongshu and Bilibili video/selected part/image post. Full-playback evidence is listed separately. Real Chrome/Edge combinations, WorkBuddy bridge repair and v2.5.0 clean-device installation remain pending; see [v2.5.0 evidence](wiki/shared/acceptance/v25.md).
+
+
+The v2.5.1 runtime candidate adds stage diagnostics, explicit request recovery, parser-file receipts and bounded dependency Range recovery. See [runtime coverage](wiki/shared/acceptance/runfix-v251.md) and [request recovery](wiki/en/operations/recovery.md). Candidate verification and release gates are separate; v2.5.1 is not yet tagged.
