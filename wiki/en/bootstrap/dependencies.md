@@ -12,7 +12,7 @@
   "status": "active",
   "generated": {
     "by": "douyin-agent/2.5.1",
-    "at": "2026-11-05T09:57:06.630627+00:00"
+    "at": "2026-11-05T10:08:30.970159+00:00"
   },
   "sources": [
     {
@@ -32,14 +32,16 @@
 
 Prerequisites: inspect actual host file, terminal, network-reading and browser capabilities; do not invent tool names. This path targets Windows x64; other systems/architectures need separate validation.
 
+A user-specified commit/version takes precedence. Replace every REF below with the supplied full commit SHA (or an existing tag); never execute literal REF or fall back to fetch.ps1’s default release. A candidate can be installed from its remote immutable commit without a release tag.
+
 ## Obtain an ordinary directory without Git/Python/Conda
 
 Read repository `fetch.ps1` through the browser/network tool and save it at a new short path. It uses Windows PowerShell 5.1/7 to download only delivery.json allowlisted files from a fixed release tag; it does not execute downloaded code. Git and archives are unnecessary.
 
 ```powershell
-Invoke-WebRequest -UseBasicParsing 'https://raw.githubusercontent.com/HNNUYUXUAN/douyin-agent/v2.5.0/fetch.ps1' -OutFile './fetch.ps1'
+Invoke-WebRequest -UseBasicParsing 'https://raw.githubusercontent.com/HNNUYUXUAN/douyin-agent/REF/fetch.ps1' -OutFile './fetch.ps1'
 # Inspect the script before execution; replace the destination with the selected path.
-./fetch.ps1 -Destination 'D:\da\repo' -Ref 'v2.5.0'
+./fetch.ps1 -Destination 'D:\da\repo' -Ref 'REF'
 ```
 
 Without D:, choose a writable short user-directory path. If downloading is blocked, the host can obtain delivery.json and its files individually from the same GitCode version, or reuse available Git. Record the actual source/version; do not mix mirrors. A failed fetch may leave an incomplete new directory; preserve it for inspection and retry in a different new directory. Review the public tag and scripts before installation.
@@ -61,7 +63,7 @@ Install through the [WorkBuddy guide](workbuddy.md), then run doctor and onboard
 Installer arguments: [official Conda Windows guide](https://docs.conda.io/projects/conda/en/stable/user-guide/install/windows.html) and [Constructor options](https://conda.github.io/constructor/cli-options/).
 
 
-If raw is unreachable, obtain fetch.ps1 through `https://api.github.com/repos/HNNUYUXUAN/douyin-agent/contents/fetch.ps1?ref=v2.5.0`, decode Base64 content and review before execution. The script resolves a fixed commit and falls back to the official codeload ZIP, extracts allowlisted files and removes the temporary archive. Retry into a new directory, retaining the failed state. pip output is forwarded; PIP_INDEX_URL can explicitly choose a trusted source. Record its sanitized origin locally, never credential-bearing values.
+If raw is unreachable, obtain fetch.ps1 through `https://api.github.com/repos/HNNUYUXUAN/douyin-agent/contents/fetch.ps1?ref=REF`, decode Base64 content and review before execution. The script resolves a fixed commit and falls back to the official codeload ZIP, extracts allowlisted files and removes the temporary archive. Retry into a new directory, retaining the failed state. pip output is forwarded; PIP_INDEX_URL can explicitly choose a trusted source. Record its sanitized origin locally, never credential-bearing values.
 
 
 ## Official distribution unavailable

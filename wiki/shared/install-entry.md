@@ -43,4 +43,4 @@ After installation, use returned Python/skill paths with `onboard --check --flow
 
 Ordinary setup does not run repeat/upgrade/interruption/full tests. Only explicit maintenance enters [中文验收](../zh-CN/bootstrap/clean-test.md) / [English acceptance](../en/bootstrap/clean-test.md). Missing or failed capabilities route to the exact manual; preserve config and evidence. A fresh-chat invocation must be actually observed before claiming it passed.
 
-Candidate v2.5.1 has no public tag yet. Install the supplied ordinary directory; do not fetch a nonexistent tag. Public repositories: [GitHub](https://github.com/HNNUYUXUAN/douyin-agent), [GitCode](https://gitcode.com/yuxuan6426/douyin-agent).
+Candidate v2.5.1 is awaiting recipient verification. Install the user-specified immutable remote commit or supplied ordinary directory; do not fetch a nonexistent release tag or silently use the default older release. Public repositories: [GitHub](https://github.com/HNNUYUXUAN/douyin-agent), [GitCode](https://gitcode.com/yuxuan6426/douyin-agent).

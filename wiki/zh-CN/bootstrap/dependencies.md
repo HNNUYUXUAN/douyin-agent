@@ -12,7 +12,7 @@
   "status": "active",
   "generated": {
     "by": "douyin-agent/2.5.1",
-    "at": "2026-11-05T09:57:06.630627+00:00"
+    "at": "2026-11-05T10:08:30.969092+00:00"
   },
   "sources": [
     {
@@ -32,15 +32,17 @@
 
 前置条件：宿主实际具备本地文件、终端、联网读取和浏览器工具；先检查这些能力，不猜工具名。此链路面向 Windows x64；其他系统或架构需独立验证。
 
+用户提供固定提交／版本时必须优先使用该值。下方命令中的 REF 全部替换为本次指定的完整提交 SHA（或已存在的标签），不可原样执行 REF，也不可回落到 fetch.ps1 的默认发布版。候选可从远端固定提交安装，不要求已发布标签。
+
 ## 无 Git、Python、Conda 时获取普通目录
 
 宿主通过浏览器或联网读取取得仓库的 `fetch.ps1`，检查源码后保存到一个新建短路径。该脚本仅依赖 Windows PowerShell 5.1/7，从固定发布标签下载 delivery.json 白名单文件；不执行下载的代码。无需 Git，也不创建压缩包。
 
 ```powershell
 # 在实际选定目录执行；ROOT 由宿主替换为短路径
-Invoke-WebRequest -UseBasicParsing 'https://raw.githubusercontent.com/HNNUYUXUAN/douyin-agent/v2.5.0/fetch.ps1' -OutFile './fetch.ps1'
+Invoke-WebRequest -UseBasicParsing 'https://raw.githubusercontent.com/HNNUYUXUAN/douyin-agent/REF/fetch.ps1' -OutFile './fetch.ps1'
 # 先读取并核对脚本，再执行
-./fetch.ps1 -Destination 'D:\da\repo' -Ref 'v2.5.0'
+./fetch.ps1 -Destination 'D:\da\repo' -Ref 'REF'
 ```
 
 没有 D 盘时使用用户目录下可写短路径；不得照抄作者路径。下载受阻时，宿主从 GitCode 同版本逐文件取得 delivery.json 与白名单文件，或复用已有 Git 克隆；记录实际来源与版本，不混用镜像文件。脚本失败可能留下不完整新目录，保留并检查，重试使用另一新目录。下载完成不等于来源验证；对照公开标签、检查脚本后安装。
@@ -62,7 +64,7 @@ Invoke-WebRequest -UseBasicParsing 'https://raw.githubusercontent.com/HNNUYUXUAN
 安装参数依据：[Conda 官方 Windows 安装](https://docs.conda.io/projects/conda/en/stable/user-guide/install/windows.html) 和 [Constructor 参数](https://conda.github.io/constructor/cli-options/)。
 
 
-raw 不可达时，先从 `https://api.github.com/repos/HNNUYUXUAN/douyin-agent/contents/fetch.ps1?ref=v2.5.0` 取得脚本，解码 JSON 的 Base64 content，审阅后执行。脚本将标签解析为固定提交，回退 codeload 的官方 ZIP，仅解包白名单并清理临时归档。重试选择新目录，保留失败现场。pip 日志直接转发；可显式使用 PIP_INDEX_URL 指定可信包源，并在本地脱敏记录来源，避免输出含凭据的配置值。
+raw 不可达时，先从 `https://api.github.com/repos/HNNUYUXUAN/douyin-agent/contents/fetch.ps1?ref=REF` 取得脚本，解码 JSON 的 Base64 content，审阅后执行。脚本将标签解析为固定提交，回退 codeload 的官方 ZIP，仅解包白名单并清理临时归档。重试选择新目录，保留失败现场。pip 日志直接转发；可显式使用 PIP_INDEX_URL 指定可信包源，并在本地脱敏记录来源，避免输出含凭据的配置值。
 
 
 ## 官方供应源受阻
