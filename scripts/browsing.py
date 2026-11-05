@@ -4,7 +4,7 @@ from pathlib import Path
 from datetime import datetime,timezone
 from legacy import read,write,digest,now,within
 
-PLATFORMS={'douyin','youtube','xiaohongshu','tiktok'}
+PLATFORMS={'douyin','youtube','xiaohongshu','tiktok','bilibili'}
 LIMITS={'requests','images','audio_seconds','search_requests'}
 
 def number(v, positive=False):
@@ -16,7 +16,8 @@ def root(w,sid):
 
 def load(w,sid,active=False):
     p=root(w,sid); s=read(p/'session.json')
-    if digest(s['config'])[:24]!=s['approval_id']: raise ValueError('Session configuration changed; create a new authorization')
+    expected=digest({'session':s['id'],'config':s['config']})[:24] if s.get('schema_version',1)>=2 else digest(s['config'])[:24]
+    if expected!=s['approval_id']: raise ValueError('Session configuration changed; create a new authorization')
     if active:
         if s['status']!='active': raise ValueError('Session requires explicit approval/resume')
         elapsed=(datetime.now(timezone.utc)-datetime.fromisoformat(s['started_at'])).total_seconds()
@@ -38,7 +39,7 @@ def create(w,c):
     if not isinstance(c['limits'],dict) or set(c['limits'])!=LIMITS or any(not number(v) for v in c['limits'].values()): raise ValueError('Explicit nonnegative cloud limits required')
     if any(type(c['limits'][k])!=int for k in ('requests','images','search_requests')): raise ValueError('Request/image limits must be integers')
     sid=uuid.uuid4().hex[:12]; p=root(w,sid)
-    s={'id':sid,'config':c,'approval_id':digest(c)[:24],'status':'awaiting_approval','created_at':now(),'items':[],'host_tokens':'unknown'}
+    s={'schema_version':2,'id':sid,'config':c,'approval_id':digest({'session':sid,'config':c})[:24],'status':'awaiting_approval','created_at':now(),'items':[],'pending':[],'host_tokens':'unknown'}
     write(p/'session.json',s); return s
 
 def change(w,sid,action,approval=None):
@@ -66,7 +67,18 @@ def record(w,sid,item):
     p,s=load(w,sid,True)
     from legacy import source
     info=source(item['source']); platform=info.get('platform','douyin')
-    if info['kind']=='unresolved' or platform not in s['config']['platforms']: raise ValueError('Resolve source on a selected platform first')
+    if platform not in s['config']['platforms']: raise ValueError('Choose a selected platform')
+    if info['kind']=='unresolved':
+        if item.get('status')!='deferred' or not isinstance(item.get('reason'),str) or not item['reason'].strip():
+            raise ValueError('Unresolved sources require deferred status and a reason')
+        # A platform/login blockage is not a viewed work and cannot authorize media analysis.
+        row={'pending_id':uuid.uuid4().hex[:12],'platform':platform,'status':'deferred',
+             'entry_id':info['id'],'entry_url':info['entry_url'],'reason':item['reason'][:2000],'recorded_at':now(),
+             'evidence_basis':'host_observed_not_script_measured'}
+        pending=s.setdefault('pending',[])
+        if any(x.get('platform')==platform and x.get('entry_id')==info['id'] for x in pending):
+            raise ValueError('Entry already deferred; retain original observation')
+        pending.append(row); write(p/'session.json',s); return row
     key=platform+':'+info['id']
     if any(x['identity']==key for x in s['items']): raise ValueError('Item already recorded; retain original observation')
     cap=s['config']['max_items']

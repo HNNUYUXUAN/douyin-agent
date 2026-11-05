@@ -17,8 +17,8 @@
         "en": "Install and upgrade"
       },
       "paths": {
-        "zh-CN": "zh-CN/install.md",
-        "en": "en/install.md"
+        "zh-CN": "../../wiki/zh-CN/operations/install.md",
+        "en": "../../wiki/en/operations/install.md"
       },
       "keywords": {
         "zh-CN": [
@@ -48,8 +48,8 @@
         "en": "First use and configuration recovery"
       },
       "paths": {
-        "zh-CN": "zh-CN/onboarding.md",
-        "en": "en/onboarding.md"
+        "zh-CN": "../../wiki/zh-CN/operations/onboarding.md",
+        "en": "../../wiki/en/operations/onboarding.md"
       }
     },
     {
@@ -59,8 +59,8 @@
         "en": "Search, acquisition and completeness"
       },
       "paths": {
-        "zh-CN": "zh-CN/acquisition.md",
-        "en": "en/acquisition.md"
+        "zh-CN": "../../wiki/zh-CN/operations/acquisition.md",
+        "en": "../../wiki/en/operations/acquisition.md"
       },
       "keywords": {
         "zh-CN": [
@@ -94,8 +94,8 @@
         "en": "Understand and deliver"
       },
       "paths": {
-        "zh-CN": "zh-CN/workflow.md",
-        "en": "en/workflow.md"
+        "zh-CN": "../../wiki/zh-CN/operations/workflow.md",
+        "en": "../../wiki/en/operations/workflow.md"
       }
     },
     {
@@ -105,8 +105,8 @@
         "en": "Recovery, cleanup and migration"
       },
       "paths": {
-        "zh-CN": "zh-CN/recovery.md",
-        "en": "en/recovery.md"
+        "zh-CN": "../../wiki/zh-CN/operations/recovery.md",
+        "en": "../../wiki/en/operations/recovery.md"
       }
     },
     {
@@ -116,15 +116,15 @@
         "en": "Maintenance, acceptance and release"
       },
       "paths": {
-        "zh-CN": "zh-CN/maintenance.md",
-        "en": "en/maintenance.md"
+        "zh-CN": "../../wiki/zh-CN/operations/maintenance.md",
+        "en": "../../wiki/en/operations/maintenance.md"
       }
     },
     {
       "id": "browse",
       "paths": {
-        "zh-CN": "zh-CN/browse.md",
-        "en": "en/browse.md"
+        "zh-CN": "../../wiki/zh-CN/operations/browse.md",
+        "en": "../../wiki/en/operations/browse.md"
       },
       "keywords": {
         "zh-CN": [
@@ -144,8 +144,8 @@
     {
       "id": "vision",
       "paths": {
-        "zh-CN": "zh-CN/vision.md",
-        "en": "en/vision.md"
+        "zh-CN": "../../wiki/zh-CN/operations/vision.md",
+        "en": "../../wiki/en/operations/vision.md"
       },
       "keywords": {
         "zh-CN": [
@@ -165,8 +165,8 @@
     {
       "id": "platforms",
       "paths": {
-        "zh-CN": "zh-CN/platforms.md",
-        "en": "en/platforms.md"
+        "zh-CN": "../../wiki/zh-CN/operations/platforms.md",
+        "en": "../../wiki/en/operations/platforms.md"
       },
       "keywords": {
         "zh-CN": [
@@ -181,6 +181,34 @@
           "controls",
           "platform"
         ]
+      }
+    },
+    {
+      "id": "browser-selection",
+      "paths": {
+        "zh-CN": "../../wiki/zh-CN/operations/browser-selection.md",
+        "en": "../../wiki/en/operations/browser-selection.md"
+      }
+    },
+    {
+      "id": "browser-recovery",
+      "paths": {
+        "zh-CN": "../../wiki/zh-CN/operations/browser-recovery.md",
+        "en": "../../wiki/en/operations/browser-recovery.md"
+      }
+    },
+    {
+      "id": "bilibili",
+      "paths": {
+        "zh-CN": "../../wiki/zh-CN/platforms/bilibili.md",
+        "en": "../../wiki/en/platforms/bilibili.md"
+      }
+    },
+    {
+      "id": "parser-sites",
+      "paths": {
+        "zh-CN": "../../wiki/zh-CN/operations/parser-sites.md",
+        "en": "../../wiki/en/operations/parser-sites.md"
       }
     }
   ],

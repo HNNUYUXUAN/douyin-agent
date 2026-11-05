@@ -96,8 +96,8 @@ class Tests(unittest.TestCase):
  def test_cleaned_preview_needs_no_media(self):
   self.owned(); self.text_results(); da.finalize(self.w,A(job=self.j)); p=da.preview(self.w,A(jobs=[self.j],question='cached')); self.assertEqual(p['new_usage']['requests'],0)
  def test_truncated_video_rejected(self):
-  video=self.w/'short.mp4'; da.core.command(['ffmpeg','-v','error','-f','lavfi','-i','color=c=blue:s=64x64:d=1','-c:v','libx264',video]); rec=self.w/'r.json'; da.write(rec,{'identity_verified':True,'page_duration':30,'head_tail_verified':True})
-  result=da.adopt(self.w,A(source='https://www.douyin.com/video/123456789',media=[video],receipt=rec,title='',author='')); self.assertIn('duration_mismatch',result['integrity']['errors'])
+  video=self.w/'short.mp4'; da.core.command(['ffmpeg','-v','error','-f','lavfi','-i','color=c=blue:s=64x64:d=1','-c:v','libx264',video]); rec=self.w/'r.json'; da.write(rec,{'route':'user_import','identity_verified':True,'page_duration':30,'head_tail_verified':True})
+  result=da.adopt(self.w,A(source='https://www.douyin.com/video/1234567890123456789',media=[video],receipt=rec,title='',author='')); self.assertIn('duration_mismatch',result['integrity']['errors'])
  def test_full_silent_video_no_audio(self):
   video=self.w/'silent.mp4'; da.core.command(['ffmpeg','-v','error','-f','lavfi','-i','color=c=blue:s=64x64:d=1','-c:v','libx264',video]); rec=self.w/'r.json'; da.write(rec,{'identity_verified':True,'page_duration':1,'head_tail_verified':True})
   result=da.adopt(self.w,A(source=str(video),media=[video],receipt=rec,title='',author='')); p=da.preview(self.w,A(jobs=[Path(result['job'])],question='test')); self.assertEqual(p['new_usage']['audio_seconds'],0)

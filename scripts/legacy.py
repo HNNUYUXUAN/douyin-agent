@@ -4,7 +4,7 @@
 from __future__ import annotations
 
 
-import argparse, asyncio, base64, gzip, hashlib, json, os, re, shutil, struct, subprocess, sys, time, uuid
+import argparse, asyncio, base64, gzip, hashlib, json, math, os, re, shutil, struct, subprocess, sys, time, uuid
 
 
 from pathlib import Path
@@ -88,7 +88,13 @@ def source(s):
 
 def probe(p):
     d=json.loads(command(['ffprobe','-v','error','-show_format','-show_streams','-of','json',p]))
-    return {'duration':float(d.get('format',{}).get('duration',0)), 'has_audio':any(s['codec_type']=='audio' for s in d['streams']), 'has_video':any(s['codec_type']=='video' for s in d['streams'])}
+    result={'duration':float(d.get('format',{}).get('duration',0)), 'has_audio':any(s['codec_type']=='audio' for s in d['streams']), 'has_video':any(s['codec_type']=='video' for s in d['streams'])}
+    video=next((s for s in d['streams'] if s['codec_type']=='video'),{})
+    try:
+        start=float(video.get('start_time',0))-float(d.get('format',{}).get('start_time',0)); duration=float(video['duration'])
+        if math.isfinite(start+duration) and duration>0: result['video_end']=start+duration
+    except (KeyError,ValueError,TypeError): pass
+    return result
 
 
 def packet(kind,seq,payload,final=False):

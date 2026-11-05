@@ -50,6 +50,11 @@
       "status": "unverified",
       "observed_at": null,
       "evidence": null
+    },
+    "bilibili_access": {
+      "status": "unverified",
+      "observed_at": null,
+      "evidence": null
     }
   },
   "note": "Template only. Do not submit as an onboarding --record receipt."

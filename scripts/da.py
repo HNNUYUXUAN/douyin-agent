@@ -6,7 +6,7 @@ import legacy as core
 from media_tools import configure as configure_media
 from legacy import read, write, sha, digest, now, config, within, source, probe, response, recognize
 
-VERSION='2.4.1'
+VERSION='2.5.0'
 MEDIA={'.mp4','.mov','.mkv','.webm','.mp3','.wav','.pcm','.aac','.jpg','.jpeg','.png','.webp','.bmp'}
 
 def process_token(pid):
@@ -89,42 +89,98 @@ def public_url(url):
     if u.scheme!='https' or not u.hostname or u.username or u.password or u.query or u.fragment: raise ValueError('Use clean public HTTPS entry URL without query/credentials')
     return url
 
+def parser_url(value):
+    public_url(value)
+    from urllib.parse import urlsplit
+    host=urlsplit(value).hostname.lower()
+    platforms={'douyin.com','iesdouyin.com','douyinvod.com','bilibili.com','b23.tv','hdslb.com','youtube.com','youtu.be','googlevideo.com','xiaohongshu.com','xhscdn.com','xhslink.com','xhslink.cn','rednote.com','tiktok.com','tiktokcdn.com'}
+    if any(host==p or host.endswith('.'+p) for p in platforms): raise ValueError('Use a third-party parser entry, not a platform/CDN acquisition route')
+    return value
+
+def provider_site(value):
+    from urllib.parse import urlsplit
+    return (urlsplit(value).hostname or '').lower().removeprefix('www.')
+
 def provider(w,a):
     p=w/'providers.json'; rows=read(p) if p.exists() else []
-    if not a.receipt: return {'providers':sorted(rows,key=lambda r:r.get('last_success',''),reverse=True),'max_sources_per_round':3,'host_action':'free verified parser first; existing search skills, host search, then configured Yuanbao/Bocha; all attempts count'}
+    if not a.receipt:
+        output=[]
+        for r in rows:
+            valid=True
+            try: parser_url(r['url'])
+            except ValueError: valid=False
+            output.append({**r,'previously_verified':valid and r.get('route')=='parser' and r.get('outcome')=='success' and bool(r.get('last_success')),'needs_live_validation':True})
+        return {'providers':sorted(output,key=lambda r:(r['previously_verified'],r.get('last_success','')),reverse=True),'max_sources_per_round':3,'host_action':'parser only; verify file-save capability first; discover via existing search skills, host search, then configured Yuanbao/Bocha; record attempting before access; all attempts count; user_import if blocked'}
     r=read(a.receipt)
-    allowed={'url','host','search_source','instructions','types','outcome','job','round_id'}
+    allowed={'url','host','search_source','instructions','types','outcome','job','round_id','route'}
     if set(r)-allowed: raise ValueError('Unexpected provider receipt fields')
-    public_url(r['url']); public_url(r['search_source'])
-    if r['outcome'] not in ('success','failed','quota_exhausted','unavailable','login_required','captcha_required','parsed_download_failed'): raise ValueError('Unknown provider outcome')
+    parser_url(r['url']); public_url(r['search_source'])
+    if r.get('route','parser')!='parser': raise ValueError('Providers describe parser routes only')
+    r['route']='parser'
+    if r['outcome'] not in ('attempting','success','failed','quota_exhausted','unavailable','login_required','captcha_required','parsed_download_failed'): raise ValueError('Unknown provider outcome')
     history_path=w/'provider-history.json'; history=read(history_path) if history_path.exists() else []
     if r.get('round_id'):
-        attempted={x['url'] for x in history if x.get('round_id')==r['round_id'] and x['host']==r['host']}
-        if r['url'] not in attempted and len(attempted)>=3: raise ValueError('Three provider sources exhausted for this round')
+        attempted={provider_site(x['url']) for x in history if x.get('round_id')==r['round_id']}
+        if provider_site(r['url']) not in attempted and len(attempted)>=3: raise ValueError('Three provider sources exhausted for this round')
     previous=next((x for x in rows if (x['url'],x['host'])==(r['url'],r['host'])),{})
     if r['outcome']=='success':
         job=within(w,Path(r['job'])); proof=read(job/'integrity.json')
         if proof['status']!='passed': raise ValueError('Provider success requires verified media')
+        acquisition=read(job/'acquisition.json') if (job/'acquisition.json').exists() else {}
+        if acquisition.get('route') is not None and (acquisition['route']!='parser' or acquisition.get('provider')!=r['url'] or acquisition.get('round_id')!=r.get('round_id') or acquisition.get('host')!=r['host']):
+            raise ValueError('Provider success must match the parser acquisition receipt')
         r['last_success']=now()
     else: r['last_failure']=now()
     history.append({**r,'at':now()}); write(history_path,history)
     r={**previous,**r}; rows=[x for x in rows if (x['url'],x['host'])!=(r['url'],r['host'])]+[r]; write(p,rows); return r
 
 def adopt(w,a):
+    from installer import plain
     info=source(a.source); files=[Path(p).resolve() for p in a.media]
     if not files or not all(p.is_file() for p in files): raise ValueError('Actual media required')
     job=w/'out/jobs'/f"{info['id']}-v2-{uuid.uuid4().hex[:6]}"; within(w,job); work=job/'work'
     receipt=read(a.receipt) if a.receipt else {}
-    if set(receipt)-{'source_id','identity_verified','page_duration','expected_images','order_verified','head_tail_verified','method','host','provider','owned_downloads','owned_artifacts'}: raise ValueError('Unexpected acquisition receipt fields')
+    if set(receipt)-{'source_id','identity_verified','page_duration','expected_images','order_verified','head_tail_verified','method','host','provider','round_id','route','import_manifest','owned_downloads','owned_artifacts'}: raise ValueError('Unexpected acquisition receipt fields')
     if receipt.get('source_id') not in (None,info['id']): raise ValueError('Wrong source identity')
+    if info['kind']=='unresolved': raise ValueError('Resolve the public work identity before adopting media')
+    route=receipt.get('route','user_import' if info['kind']=='local' else None)
+    if route not in ('parser','user_import'): raise ValueError('New acquisitions require route=parser or user_import')
+    if route=='parser':
+        parser_url(receipt.get('provider',''))
+        history=read(w/'provider-history.json') if (w/'provider-history.json').exists() else []
+        if not receipt.get('round_id') or not any(x['url']==receipt['provider'] and x['host']==receipt.get('host') and x.get('round_id')==receipt['round_id'] for x in history):
+            raise ValueError('Parser acquisition requires a recorded provider attempt in this round')
+    if route=='user_import' and receipt.get('owned_downloads'): raise ValueError('User import originals must be preserved')
+    receipt['route']=route
+    protected=set()
+    if route=='user_import':
+        protected=set(files)
+        if receipt.get('import_manifest'):
+            manifest_path=within(w,plain(w/receipt['import_manifest']))
+            manifest=read(manifest_path); archive=plain(manifest['archive']['path'])
+            if manifest.get('schema_version')!=1 or archive.suffix.lower()!='.zip' or sha(archive)!=manifest['archive']['sha256']:
+                raise ValueError('Import archive manifest mismatch')
+            copies=set()
+            for index,row in enumerate(manifest['images'],1):
+                p=plain(row['path']).resolve()
+                if row['index']!=index or p.parent!=manifest_path.parent or p.stem!=f'i{index:03}' or sha(p)!=row['sha256']:
+                    raise ValueError('Imported image manifest mismatch')
+                copies.add(p)
+            if copies!=set(files): raise ValueError('Use the complete verified imported image set')
+            protected={archive.resolve()}
+        receipt['preserved_imports']=[{'path':str(p),'sha256':sha(p)} for p in sorted(protected)]
     owned=[]; images=all(p.suffix.lower() in MEDIA- {'.mp4','.mov','.mkv','.webm','.mp3','.wav','.pcm','.aac'} for p in files)
     if not images and len(files)!=1: raise ValueError('One video per job')
     for r in receipt.get('owned_downloads',[]):
-        p=Path(r['path']).resolve()
+        from installer import plain
+        raw=Path(r['path'])
+        if not raw.is_absolute(): raise ValueError('Download receipts require absolute paths')
+        p=plain(raw).resolve()
         if p not in files or r.get('sha256')!=sha(p) or r.get('created_by_task') is not True: raise ValueError('Unproven download ownership')
         owned.append({'path':str(p),'sha256':sha(p),'kind':'browser_download'})
     for r in receipt.get('owned_artifacts',[]):
         raw=Path(r['path']); p=raw.resolve()
+        if p in protected: raise ValueError('User import originals must be preserved')
         if (not raw.is_absolute() or not p.is_file() or p.suffix.lower() not in MEDIA|{'.zip'}
             or any(q.is_symlink() or (hasattr(q,'is_junction') and q.is_junction()) for q in [raw,*raw.parents])
             or r.get('sha256')!=sha(p) or r.get('created_by_task') is not True):
@@ -169,7 +225,9 @@ def sample(job):
     if m['kind']=='images': times=list(range(len(m['assets'])))
     else:
         d=m['duration']; interval=sampling_interval(d)
-        uniform=[i*interval for i in range(math.ceil(d/interval))]+[max(0,d-.1)]
+        stream=probe(job/m['assets'][0]); end=min(d,stream.get('video_end',d))
+        tail=round(max(0,end-.1),3)
+        uniform=[i*interval for i in range(math.ceil(end/interval)) if i*interval<=tail]+[tail]
         proc=subprocess.run(['ffmpeg','-hide_banner','-i',str(job/m['assets'][0]),'-vf',"select='gt(scene,0.3)',showinfo",'-an','-f','null','-'],capture_output=True)
         scenes=[float(v) for v in re.findall(rb'pts_time:([0-9.]+)',proc.stderr)]
         # Spread scene candidates over every minute, rather than taking earliest scenes.
@@ -178,18 +236,38 @@ def sample(job):
             candidates=[s for s in scenes if start<=s<start+60]; extra+=candidates[::max(1,math.ceil(len(candidates)/4))]
         requested=read(job/'extra-frames.json') if (job/'extra-frames.json').exists() else []
         if any(not isinstance(t,(int,float)) or not 0<=t<d for t in requested): raise ValueError('Invalid supplemental frame time')
-        times=sorted(set(round(min(t,max(0,d-.1)),3) for t in uniform+extra+requested))
+        times=sorted(set(round(t,3) for t in uniform+extra+requested if t<=tail))
+        if any(t>tail for t in requested): raise ValueError('Supplemental frame exceeds decodable video interval')
+    sampling_notes=[]
     last=None
     for t in times:
         dest=work/f'f{len(rows)+1:05}.jpg'
+        if dest.exists():
+            if not any(r['kind']=='derived' and r['path']==str(dest.resolve()) and r['sha256']==sha(dest) for r in read(job/'ownership.json')):
+                raise ValueError('Existing sample frame is not unchanged task-owned output')
+            dest.unlink()
         if m['kind']=='images':
             with Image.open(job/m['assets'][t]) as im: im.convert('RGB').save(dest)
-        else: core.command(['ffmpeg','-v','error','-y','-ss',str(t),'-i',job/m['assets'][0],'-frames:v','1','-vf','scale=960:-2',dest])
+        else:
+            try:
+                core.command(['ffmpeg','-v','error','-y','-ss',str(t),'-i',job/m['assets'][0],'-frames:v','1','-vf','scale=960:-2',dest])
+                if not dest.is_file() or not dest.stat().st_size: raise ValueError('No frame produced')
+            except (subprocess.CalledProcessError,ValueError):
+                # Only a missing final frame may degrade; middle/requested-frame failures remain fatal.
+                if t!=times[-1] or t in requested or not rows:
+                    if dest.is_file(): own(job,dest)
+                    raise
+                check=subprocess.run(['ffmpeg','-v','error','-xerror','-i',str(job/m['assets'][0]),'-f','null','-'],capture_output=True)
+                if check.returncode: raise ValueError('Video decode failed during tail-frame recovery')
+                if dest.exists(): dest.unlink()
+                sampling_notes.append({'time':t,'reason':'tail_frame_skipped'}); continue
+        own(job,dest)
         with Image.open(dest) as im: thumb=im.convert('L').resize((64,64))
         duplicate=last is not None and ImageStat.Stat(ImageChops.difference(thumb,last)).mean[0]<1
         if duplicate and m['kind']!='images' and t not in {round(v,3) for v in requested} and t!=times[-1] and rows and int(t//60)==int(rows[-1]['time']//60): dest.unlink(); continue
         last=thumb; rows.append({'id':f'f{len(rows)+1:05}','time':t if m['kind']=='video' else None,'index':len(rows)+1,'path':str(dest.relative_to(job)).replace('\\','/'),'sha256':sha(dest)})
-    for r in rows: own(job,job/r['path'])
+    if not rows: raise ValueError('No usable sample frames')
+    write(job/'sampling.json',{'notes':sampling_notes,'source_timeline_preserved':True})
     write(job/'frames.json',rows); return rows
 
 def sampling_interval(duration): return max(.5,min(15,math.sqrt(duration/30)))
@@ -303,16 +381,21 @@ def run(w,a):
 
 def clean_owned(w,job):
     errors=[]
+    receipt=read(job/'acquisition.json') if (job/'acquisition.json').exists() else {}
+    protected={Path(r['path']).resolve() for r in receipt.get('preserved_imports',[])}
     for r in read(job/'ownership.json'):
         p=Path(r['path'])
         if not p.exists(): continue
         try:
+            if p.resolve() in protected: raise ValueError('Preserve imported original')
             if p.is_symlink() or p.resolve()!=p.absolute(): raise ValueError('Path redirection')
             if r['kind']=='derived': p.resolve().relative_to(job.resolve())
             elif r['kind']=='browser_download':
                 receipt=read(job/'acquisition.json')
                 candidates=receipt.get('owned_downloads',[])+receipt.get('owned_artifacts',[])
-                if not any(x.get('created_by_task') is True and x.get('path')==str(p) and x.get('sha256')==r['sha256'] for x in candidates): raise ValueError('Download receipt mismatch')
+                from installer import plain
+                target=plain(p)
+                if not any(x.get('created_by_task') is True and os.path.normcase(str(plain(x.get('path',''))))==os.path.normcase(str(target)) and x.get('sha256')==r['sha256'] for x in candidates): raise ValueError('Download receipt mismatch')
             else: raise ValueError('Not owned')
             if sha(p)!=r['sha256']: raise ValueError('Ownership hash mismatch')
             p.unlink()

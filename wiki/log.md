@@ -1,4 +1,5 @@
-# Knowledge bundle log
+# Bundle history
 
-## 2026-11-04
-- **Creation**: Added bilingual clean-device, WorkBuddy, pending-request and retention concepts. WorkBuddy other-device execution remains unverified.
+## 2026-11-05
+
+- v2.5.0: parser acquisition, Bilibili, browser selection/recovery and canonical OKF operational concepts. Runtime verification is tracked separately.

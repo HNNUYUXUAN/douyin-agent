@@ -1,11 +1,3 @@
-# 视觉辅助
+# Guide / 操作指南
 
-优先实时 DOM；需要截图判断时使用已配置 Agent Plan，不要求切换宿主模型。
-
-`inspect --session SID --image PAGE_PNG_OR_JPEG --snapshot SNAPSHOT_ID --goal QUESTION`
-
-命令前缀同 [会话指南](browse.md)。先选择并批准会话额度。该命令会发起收费视觉请求（1 请求、1 图片，最大输出 2048 token），计入同一会话；只截本次任务必要页面区域，避免账号和私人标签。输出 observation、candidates、uncertainty 以及原快照 ID、哈希、尺寸；宿主核对当前页面和候选后才操作，模型输出不授予权限。原输入文件保留；宿主对自己生成的临时截图记录路径/哈希并在任务结束后逐文件清理。失败响应或 schema 不符不自动重提；账本保留已提交请求。
-
-无 Key、额度不足、未决或无截图能力时，保留待处理项，继续可独立完成的 DOM 流程；全部路线受阻时集中申请用户协助。
-
-模型可能给出归一化或越界坐标；候选只是定位建议，优先解析语义标签，核对当前快照、实际尺寸和可见目标后再操作。JSON 外层单一代码围栏可以本地去除，原响应保留，解析恢复不重发请求。
+[Read the current OKF guide / 读取当前 OKF 正文](../../../wiki/zh-CN/operations/vision.md)

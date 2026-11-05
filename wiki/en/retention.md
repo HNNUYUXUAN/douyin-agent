@@ -1,34 +1,31 @@
 ---
 {
   "type": "Runbook",
-  "title": "Results after cleanup and case recording",
-  "description": "After review, finalize validates text and removes owned media. Reuse text; reacquire for new visuals. Cases retain sanitized facts and evidence references.",
+  "title": "retention",
+  "description": "retention — douyin-agent operational knowledge",
   "tags": [
-    "cleanup",
-    "finalize",
-    "MD",
-    "JSON",
-    "wiki",
-    "记录",
-    "检索"
+    "douyin-agent",
+    "en",
+    "retention"
   ],
-  "status": "draft",
+  "status": "active",
   "generated": {
-    "by": "douyin-agent/2.3.0",
-    "at": "2026-11-04T10:31:25.339054+00:00"
+    "by": "douyin-agent/2.5.0",
+    "at": "2026-11-05T02:27:48.555869+00:00"
   },
   "sources": [
     {
-      "resource": "https://github.com/HNNUYUXUAN/douyin-agent/blob/main/references/bootstrap/en/knowledge.md"
+      "resource": "https://github.com/GoogleCloudPlatform/knowledge-catalog/blob/62432a095456147ee71e70ac6e4dc0d2dea3ac30/okf/SPEC.md"
     }
-  ]
+  ],
+  "applicability": {
+    "skill": "2.5.x",
+    "host": "capability-detected; see body for measured versions"
+  },
+  "verification_scope": "Documentation reviewed; runtime acceptance is recorded separately."
 }
 ---
 
-# Results after cleanup and case recording
+# retention
 
-After review, finalize validates text and removes owned media. Reuse text; reacquire for new visuals. Cases retain sanitized facts and evidence references.
-
-[执行指南 / Execution guide](https://github.com/HNNUYUXUAN/douyin-agent/blob/main/references/bootstrap/en/knowledge.md).
-
-[其他问题 / Other topics](index.md).
+[Read this operation / 读取操作正文](operations/maintenance.md)

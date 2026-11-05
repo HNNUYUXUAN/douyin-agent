@@ -149,6 +149,25 @@ def search(roots, query):
                              'status': meta.get('status', 'unspecified'), 'score': score})
     return sorted(rows, key=lambda r: (-r['score'], r['path']))[:20]
 
+def validate_bundle(root):
+    rows=concepts(root)
+    for path,meta,body in rows:
+        if path.stat().st_size>8192: raise ValueError('Split oversized OKF concept: '+path.name)
+        for source in meta.get('sources',[]):
+            if not isinstance(source,dict) or not isinstance(source.get('resource'),str) or not source['resource'].strip():
+                raise ValueError('Invalid OKF source: '+path.name)
+        for name in ('generated','verified'):
+            entry=meta.get(name)
+            if isinstance(entry,dict) and entry.get('at'):
+                stamp=datetime.fromisoformat(entry['at'].replace('Z','+00:00'))
+                if stamp.tzinfo is None: raise ValueError('OKF timestamps need an explicit timezone')
+    for path in root.rglob('*.md') if root.exists() else []:
+        for ref in re.findall(r'\[[^\]]*\]\(([^)]+)\)',path.read_text(encoding='utf-8')):
+            if ref.startswith(('https://','http://','#','mailto:')): continue
+            target=(path.parent/ref.split('#',1)[0]).resolve()
+            if not target.is_file(): raise ValueError('Broken OKF link: '+path.name+' -> '+ref)
+    return len(rows)
+
 
 def main():
     p = argparse.ArgumentParser(description=__doc__)
@@ -167,7 +186,7 @@ def main():
         out = search([('public', BUNDLE), ('private', w / 'knowledge-private')], a.query)
     else:
         out = {'profile': 'OKF 0.2 JSON-compatible YAML frontmatter',
-               'public_concepts': len(concepts(BUNDLE)), 'private_concepts': len(concepts(w / 'knowledge-private'))}
+               'public_concepts': validate_bundle(BUNDLE), 'private_concepts': validate_bundle(w / 'knowledge-private')}
     print(json.dumps(out, ensure_ascii=False, indent=2))
 
 

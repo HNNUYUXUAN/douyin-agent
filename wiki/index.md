@@ -1,10 +1,12 @@
 ---
 okf_version: "0.2"
 ---
-# douyin-agent knowledge / 操作知识包
+# douyin-agent OKF knowledge
 
-- [中文概念](zh-CN/index.md) - 安装、宿主、恢复与清理
-- [English concepts](en/index.md) - Installation, host, recovery and retention
-- [更新记录](log.md) - Public bundle history
+- [中文](zh-CN/index.md)
+- [English](en/index.md)
+- [Shared contracts](shared/index.md)
 
-This bundle uses the [Google OKF specification](https://github.com/GoogleCloudPlatform/knowledge-catalog/blob/62432a095456147ee71e70ac6e4dc0d2dea3ac30/okf/SPEC.md). Concepts use JSON-compatible YAML frontmatter. Runtime instructions live in linked execution guides; local cases stay in workspace knowledge-private and never modify this public bundle automatically.
+Concept bodies contain the executable guidance. Load indexes first, then relevant concepts. Private observations remain outside this bundle.
+
+Specification: https://github.com/GoogleCloudPlatform/knowledge-catalog/blob/62432a095456147ee71e70ac6e4dc0d2dea3ac30/okf/SPEC.md

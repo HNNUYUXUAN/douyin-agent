@@ -55,7 +55,7 @@ class Tests(unittest.TestCase):
   cases=[('https://youtu.be/abcdefghijk?si=secret','youtube'),('https://www.xiaohongshu.com/explore/0123456789abcdef01234567?xsec_token=secret','xiaohongshu'),('https://www.tiktok.com/@example/video/7581709508896984366','tiktok'),('https://www.douyin.com/video/7581709508896984366','douyin')]
   for url,p in cases:
    x=source(url);self.assertEqual(x['platform'],p);self.assertNotIn('secret',json.dumps(x))
-  for host in ('v.douyin.com','vm.tiktok.com','xhslink.com'):self.assertEqual(source('https://'+host+'/abc')['kind'],'unresolved')
+  for host in ('v.douyin.com','vm.tiktok.com','xhslink.com','xhslink.cn'):self.assertEqual(source('https://'+host+'/abc')['kind'],'unresolved')
   with self.assertRaises(ValueError):source('https://www.youtube.com.evil.test/watch?v=abcdefghijk')
  def test_prefixed_knowledge_evidence(self):
   import knowledge as k

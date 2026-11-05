@@ -1,37 +1,31 @@
 ---
 {
-  "type": "Playbook",
-  "title": "WorkBuddy skill and browser",
-  "description": "Select WorkBuddy explicitly, verify skill discovery in the current working folder, and separately check extension, bridge, tab and Douyin access.",
+  "type": "Runbook",
+  "title": "workbuddy",
+  "description": "workbuddy — douyin-agent operational knowledge",
   "tags": [
-    "WorkBuddy",
-    "Chrome",
-    "Edge",
-    "bridge",
-    "连接",
-    "技能发现",
-    ".workbuddy"
+    "douyin-agent",
+    "en",
+    "workbuddy"
   ],
-  "status": "draft",
+  "status": "active",
   "generated": {
-    "by": "douyin-agent/2.3.0",
-    "at": "2026-11-04T10:31:25.340650+00:00"
+    "by": "douyin-agent/2.5.0",
+    "at": "2026-11-05T02:27:48.555869+00:00"
   },
   "sources": [
     {
-      "resource": "https://github.com/HNNUYUXUAN/douyin-agent/blob/main/references/bootstrap/en/workbuddy.md"
-    },
-    {
-      "resource": "https://www.codebuddy.cn/docs/workbuddy/From-Beginner-to-Expert-Guide/Function-Description/Project"
+      "resource": "https://github.com/GoogleCloudPlatform/knowledge-catalog/blob/62432a095456147ee71e70ac6e4dc0d2dea3ac30/okf/SPEC.md"
     }
-  ]
+  ],
+  "applicability": {
+    "skill": "2.5.x",
+    "host": "capability-detected; see body for measured versions"
+  },
+  "verification_scope": "Documentation reviewed; runtime acceptance is recorded separately."
 }
 ---
 
-# WorkBuddy skill and browser
+# workbuddy
 
-Select WorkBuddy explicitly, verify skill discovery in the current working folder, and separately check extension, bridge, tab and Douyin access.
-
-[执行指南 / Execution guide](https://github.com/HNNUYUXUAN/douyin-agent/blob/main/references/bootstrap/en/workbuddy.md).
-
-[其他问题 / Other topics](index.md).
+[Read this operation / 读取操作正文](bootstrap/workbuddy.md)

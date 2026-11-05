@@ -1,7 +1,3 @@
-# Platform control index
+# Guide / 操作指南
 
-Load only the current platform guide. Use live DOM/semantic labels; use screenshot vision when semantics are insufficient. Revalidate changed pages; never reuse stale indexes or absolute coordinates.
-- [douyin](platforms/douyin.md)
-- [youtube](platforms/youtube.md)
-- [xiaohongshu](platforms/xiaohongshu.md)
-- [tiktok](platforms/tiktok.md)
+[Read the current OKF guide / 读取当前 OKF 正文](../../../wiki/en/operations/platforms.md)
